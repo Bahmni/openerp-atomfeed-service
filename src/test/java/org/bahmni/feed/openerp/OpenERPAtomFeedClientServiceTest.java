@@ -4,7 +4,7 @@ import com.sun.syndication.feed.atom.Entry;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import org.bahmni.feed.openerp.event.EventWorkerFactory;
-import org.bahmni.feed.openerp.event.OpenERPEventWorker;
+import org.bahmni.feed.openerp.event.OpenERPServiceEventWorker;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.repository.AllMarkers;
@@ -51,7 +51,7 @@ public class OpenERPAtomFeedClientServiceTest {
     @Test
     public void shouldCallOpenERPEventWorkerOnProcessingFeed() throws URISyntaxException {
         Feed feed = setupFeed();
-        OpenERPEventWorker openERPEventWorker = new OpenERPEventWorker();
+        OpenERPServiceEventWorker openERPEventWorker = new OpenERPServiceEventWorker();
         when(atomFeedProperties.getFeedUri()).thenReturn("http://www.openerp.com");
         when(workerFactory.getWorker("openerp.service")).thenReturn(openERPEventWorker);
         when(allFeedsMock.getFor(feedUri)).thenReturn(feed);
@@ -61,7 +61,7 @@ public class OpenERPAtomFeedClientServiceTest {
         OpenERPAtomFeedClientService feedClientService = new OpenERPAtomFeedClientService(atomFeedProperties,atomFeedClient,workerFactory);
         feedClientService.processFeed();
 
-        verify(atomFeedClient, atLeastOnce()).processEvents(new URI("http://www.openerp.com"),(EventWorker)openERPEventWorker);
+        verify(atomFeedClient, atLeastOnce()).processEvents(new URI("http://www.openerp.com"), openERPEventWorker);
     }
 
 
