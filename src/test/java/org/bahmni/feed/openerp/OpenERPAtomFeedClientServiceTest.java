@@ -26,9 +26,7 @@ public class OpenERPAtomFeedClientServiceTest {
     private String feedLink = "feedLink";
     private URI feedUri;
     private AllFeeds allFeedsMock;
-    private AllMarkers allMarkersMock;
     private AllFailedEvents allFailedEvents;
-    private EventWorker eventWorker;
     private Entry entry1;
     private Entry entry2;
     private AtomFeedProperties atomFeedProperties;
@@ -38,9 +36,7 @@ public class OpenERPAtomFeedClientServiceTest {
     @Before
     public void setUp() throws URISyntaxException {
         feedUri = new URI("http://myFeedUri");
-        eventWorker = mock(EventWorker.class);
         allFeedsMock = mock(AllFeeds.class);
-        allMarkersMock = mock(AllMarkers.class);
         allFailedEvents = mock(AllFailedEvents.class);
         atomFeedProperties = mock(AtomFeedProperties.class);
         workerFactory = mock(EventWorkerFactory.class);
