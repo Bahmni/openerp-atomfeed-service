@@ -4,12 +4,11 @@ import com.sun.syndication.feed.atom.Entry;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import org.bahmni.feed.openerp.event.EventWorkerFactory;
-import org.bahmni.feed.openerp.event.OpenERPServiceEventWorker;
+import org.bahmni.feed.openerp.event.OpenERPCustomerServiceEventWorker;
+import org.bahmni.openerp.web.client.OpenERPClient;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
-import org.ict4h.atomfeed.client.repository.AllMarkers;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
-import org.ict4h.atomfeed.client.service.EventWorker;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +30,7 @@ public class OpenERPAtomFeedClientServiceTest {
     private Entry entry2;
     private AtomFeedProperties atomFeedProperties;
     private EventWorkerFactory workerFactory;
+    private OpenERPClient openERPClient;
 
 
     @Before
@@ -41,20 +41,21 @@ public class OpenERPAtomFeedClientServiceTest {
         atomFeedProperties = mock(AtomFeedProperties.class);
         workerFactory = mock(EventWorkerFactory.class);
         atomFeedClient = mock(AtomFeedClient.class);
+        openERPClient = mock(OpenERPClient.class);
 
     }
 
     @Test
     public void shouldCallOpenERPEventWorkerOnProcessingFeed() throws URISyntaxException {
         Feed feed = setupFeed();
-        OpenERPServiceEventWorker openERPEventWorker = new OpenERPServiceEventWorker();
+        OpenERPCustomerServiceEventWorker openERPEventWorker = new OpenERPCustomerServiceEventWorker("www.openmrs.com",openERPClient);
         when(atomFeedProperties.getFeedUri()).thenReturn("http://www.openerp.com");
-        when(workerFactory.getWorker("openerp.service")).thenReturn(openERPEventWorker);
+        when(workerFactory.getWorker("openerp.customer.service", "http://www.openerp.com", openERPClient)).thenReturn(openERPEventWorker);
         when(allFeedsMock.getFor(feedUri)).thenReturn(feed);
         when(allFailedEvents.getNumberOfFailedEvents(feedUri.toString())).thenReturn(0);
 
 
-        OpenERPAtomFeedClientService feedClientService = new OpenERPAtomFeedClientService(atomFeedProperties,atomFeedClient,workerFactory);
+        OpenERPAtomFeedClientService feedClientService = new OpenERPAtomFeedClientService(atomFeedProperties,atomFeedClient,workerFactory,openERPClient);
         feedClientService.processFeed();
 
         verify(atomFeedClient, atLeastOnce()).processEvents(new URI("http://www.openerp.com"), openERPEventWorker);
