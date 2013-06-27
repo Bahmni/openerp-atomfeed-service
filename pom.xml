@@ -4,25 +4,24 @@
 
 	<groupId>openerp-atomfeed-service</groupId>
 	<artifactId>openerp-atomfeed-service</artifactId>
-	<version>1.0</version>
+	<version>0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>openerp-atomfeed-service</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<java.version>1.6</java.version>
-		<spring.version>3.1.0.RELEASE</spring.version>
+		<java.version>1.7</java.version>
+		<spring.version>3.0.5.RELEASE</spring.version>
 		<cglib.version>2.2.2</cglib.version>
-        <spring.version>3.1.0.RELEASE</spring.version>
         <quartz.version>2.1.7</quartz.version>
         <atomfeed.version>0.9.2-SNAPSHOT</atomfeed.version>
-        <db.server>localhost</db.server>
-        <db.name>atomfeed</db.name>
+        <db.server>192.168.33.12</db.server>
+        <db.name>openerp</db.name>
         <db.port>5432</db.port>
         <db.user>postgres</db.user>
-        <db.password></db.password>
-        <db.schema>atomfeed</db.schema>
+        <db.password>postgres</db.password>
+        <db.schema>public</db.schema>
 
     </properties>
 
@@ -30,7 +29,7 @@
 		<!-- Spring core & mvc -->
         <dependency>
             <groupId>org.ict4h</groupId>
-            <artifactId>atomfeed-client-spring</artifactId>
+            <artifactId>atomfeed-client</artifactId>
             <version>${atomfeed.version}</version>
         </dependency>
         <dependency>
@@ -63,19 +62,94 @@
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+        <!--
+        Make all spring dependencies provided
+        -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
@@ -138,6 +212,16 @@
             <version>1.9.5</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>2.0.3</version>
+        </dependency>
 
     </dependencies>
 
@@ -161,6 +245,29 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
-		</plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>2.0.1</version>
+                <configuration>
+                    <changeLogFile>src/main/resources/sql/db_migrations.xml</changeLogFile>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>jdbc:postgresql://${db.server}/${db.name}</url>
+                    <username>${db.user}</username>
+                    <password>${db.password}</password>
+                    <defaultSchemaName>${db.schema}</defaultSchemaName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>run-postgres-change-sets</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
 	</build>
+
 </project>

@@ -34,13 +34,16 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
     private OpenERPRequest mapRequest(Event event) throws IOException {
         List<Parameter> parameters = new ArrayList<Parameter>();
 
-        System.out.println(event.getContent());
-
         HashMap<String,Object> paramMap = new ObjectMapper().readValue(event.getContent(), HashMap.class) ;
 
         parameters.add(createParameter("name",(String)paramMap.get("name"),"string"));
         parameters.add(createParameter("ref",(String)paramMap.get("ref"),"string"));
         parameters.add(createParameter("village", (String)paramMap.get("village"), "string"));
+
+        parameters.add(createParameter("category", "create.customer", "string"));
+        parameters.add(createParameter("feed_uri", feedUrl, "string"));
+        parameters.add(createParameter("last_read_entry_id", event.getId(), "string"));
+        parameters.add(createParameter("feed_uri_for_last_read_entry", event.getFeedUri(), "string"));
 
         return new OpenERPRequest("atom.event.worker","process_event",parameters);
     }

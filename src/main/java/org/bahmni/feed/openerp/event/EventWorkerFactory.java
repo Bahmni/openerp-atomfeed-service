@@ -8,7 +8,7 @@ public class EventWorkerFactory {
     private AtomFeedProperties atomFeedProperties;
 
     public EventWorker getWorker(String workerName, String feedUrl, OpenERPClient openERPClient) {
-        if(workerName.equals("openerp.service"))
+        if(workerName.equals("openerp.customer.service"))
             return new OpenERPCustomerServiceEventWorker(feedUrl,openERPClient);
         return new EmptyWorker();
     }

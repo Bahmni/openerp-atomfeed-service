@@ -30,15 +30,22 @@ public class OpenERPCustomerServiceEventWorkerTest {
         Event event = new Event(createEntry(),"www.openmrs.com");
         customerServiceEventWorker.process(event);
 
-        verify(openERPClient).execute(createOpenERPRequest());
+        verify(openERPClient).execute(createOpenERPRequest(event));
 
     }
 
-    private OpenERPRequest createOpenERPRequest() {
+    private OpenERPRequest createOpenERPRequest(Event event) {
         List<Parameter> parameters = new ArrayList<Parameter>();
         parameters.add(createParameter("name","Ram Singh","string"));
         parameters.add(createParameter("ref","GAN111111","string"));
         parameters.add(createParameter("village", "Ganiyari", "string"));
+        parameters.add(createParameter("category", "create.customer", "string"));
+
+        parameters.add(createParameter("feed_uri", "www.openmrs.com", "string"));
+        parameters.add(createParameter("last_read_entry_id", event.getId(), "string"));
+        parameters.add(createParameter("feed_uri_for_last_read_entry", event.getFeedUri(), "string"));
+
+
         return new OpenERPRequest("atom.event.worker","process_event",parameters);
     }
 
