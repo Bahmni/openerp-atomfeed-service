@@ -49,7 +49,7 @@ public class OpenERPCustomerFeedClientServiceTest {
     public void shouldCallOpenERPEventWorkerOnProcessingFeed() throws URISyntaxException {
         Feed feed = setupFeed();
         OpenERPCustomerServiceEventWorker openERPEventWorker = new OpenERPCustomerServiceEventWorker("www.openmrs.com",openERPClient);
-        when(atomFeedProperties.getFeedUri()).thenReturn("http://www.openerp.com");
+        when(atomFeedProperties.getFeedUri("customer.feed.generator.uri")).thenReturn("http://www.openerp.com");
         when(workerFactory.getWorker("openerp.customer.service", "http://www.openerp.com", openERPClient)).thenReturn(openERPEventWorker);
         when(allFeedsMock.getFor(feedUri)).thenReturn(feed);
         when(allFailedEvents.getNumberOfFailedEvents(feedUri.toString())).thenReturn(0);

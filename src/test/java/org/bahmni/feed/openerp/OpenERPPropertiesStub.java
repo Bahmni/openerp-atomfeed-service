@@ -10,7 +10,7 @@ public class OpenERPPropertiesStub implements OpenERPProperties {
 
     @Override
     public int getPort() {
-        return 8089;
+        return 8069;
     }
 
     @Override

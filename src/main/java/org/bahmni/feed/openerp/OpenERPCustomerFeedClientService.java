@@ -13,8 +13,9 @@ import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.jdbc.PropertiesJdbcConnectionProvider;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.net.URI;
 
 @Service
 public class OpenERPCustomerFeedClientService {
@@ -23,7 +24,9 @@ public class OpenERPCustomerFeedClientService {
     private AtomFeedProperties atomFeedProperties;
     private EventWorkerFactory workerFactory;
     private OpenERPClient openERPClient;
+    private String feedName;
     Logger logger = Logger.getLogger(OpenERPCustomerFeedClientService.class);
+
 
     OpenERPCustomerFeedClientService(AtomFeedProperties atomFeedProperties, AtomFeedClient atomFeedClient, EventWorkerFactory workerFactory, OpenERPClient openERPClient) {
         this.workerFactory = workerFactory;
@@ -44,15 +47,19 @@ public class OpenERPCustomerFeedClientService {
         return new AtomClientFactory().create(allMarkersJdbc, new AllFailedEventsJdbcImpl(jdbcConnectionProvider));
     }
 
-    @Scheduled(fixedDelay=3000)
     public void processFeed()  {
-        EventWorker eventWorker = workerFactory.getWorker("openerp.customer.service", atomFeedProperties.getFeedUri(),openERPClient);
+        EventWorker eventWorker = workerFactory.getWorker("openerp.customer.service", atomFeedProperties.getFeedUri(feedName),openERPClient);
         try {
             logger.info("Processing Customer Feed "+ DateTime.now());
-//            atomFeedClient.processEvents(new URI(atomFeedProperties.getFeedUri()), eventWorker);
+            atomFeedClient.processEvents(new URI(atomFeedProperties.getFeedUri(feedName)), eventWorker);
         } catch (Exception e) {
             logger.error("failed customer feed execution " + e);
-        // throw new RuntimeException(e);
         }
     }
+
+    public void setFeedName(String feedName) {
+        this.feedName = feedName;
+    }
+
+
 }

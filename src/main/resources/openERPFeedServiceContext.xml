@@ -24,6 +24,15 @@
     <context:annotation-config/>
     <context:component-scan base-package="org.bahmni.feed.openerp"/>
 
+    <task:scheduled-tasks>
+        <task:scheduled ref="openerpFeedClientService" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>
+    </task:scheduled-tasks>
+
+    <bean id="openerpFeedClientService" class="org.bahmni.feed.openerp.OpenERPCustomerFeedClientService" >
+        <constructor-arg ref="atomFeedProperties"/>
+        <constructor-arg ref="openERPClient"/>
+        <property name="feedName" value="customer.feed.generator.uri"/>
+    </bean>
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${jdbc.driverClassName}"/>

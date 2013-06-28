@@ -6,13 +6,17 @@ import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import org.bahmni.feed.openerp.event.EventWorkerFactory;
 import org.bahmni.openerp.web.client.OpenERPClient;
+import org.ict4h.atomfeed.Configuration;
+import org.ict4h.atomfeed.client.domain.Marker;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
 import org.ict4h.atomfeed.client.service.FeedEnumerator;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
+import org.ict4h.atomfeed.jdbc.JdbcUtils;
 import org.ict4h.atomfeed.jdbc.PropertiesJdbcConnectionProvider;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,10 +26,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -47,13 +57,16 @@ public class OpenERPCustomerFeedClientServiceIT {
     Feed first;
     Feed second;
     Feed last;
+    OpenERPAllMarkersJdbcImpl allMarkersJdbc;
+    private JdbcConnectionProvider jdbcConnectionProvider;
+
 
     @Before
     public void setUp() throws URISyntaxException {
         atomFeedProperties = mock(AtomFeedProperties.class);
         allFeedsMock = mock(AllFeeds.class);
-        JdbcConnectionProvider jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
-        AllMarkersJdbcImpl allMarkersJdbc = new AllMarkersJdbcImpl(jdbcConnectionProvider);
+        jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
+        allMarkersJdbc = new OpenERPAllMarkersJdbcImpl(jdbcConnectionProvider);
 
         atomFeedClient =  new AtomFeedClient(allFeedsMock,allMarkersJdbc,new AllFailedEventsJdbcImpl(jdbcConnectionProvider),false);
 
@@ -76,6 +89,11 @@ public class OpenERPCustomerFeedClientServiceIT {
 
         first.setOtherLinks(Arrays.asList(new Link[]{getLink("next-archive", secondFeedUri),getLink("self", firstFeedUri)}));
 
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        allMarkersJdbc.delete(notificationsUri);
     }
 
     private Link getLink(String archiveType, URI uri) {
@@ -106,16 +124,19 @@ public class OpenERPCustomerFeedClientServiceIT {
 
     @Test
     public void shouldCreateCustomerInOpenERP() throws URISyntaxException {
-        when(atomFeedProperties.getFeedUri()).thenReturn("http://host/patients/notifications");
+        when(atomFeedProperties.getFeedUri("customer.feed.generator.uri")).thenReturn("http://host/patients/notifications");
         when(allFeedsMock.getFor(notificationsUri)).thenReturn(last);
         when(allFeedsMock.getFor(recentFeedUri)).thenReturn(last);
         when(allFeedsMock.getFor(secondFeedUri)).thenReturn(second);
         when(allFeedsMock.getFor(firstFeedUri)).thenReturn(first);
-        when(allFeedsMock.getFor(new URI("https://github.com/ICT4H/atomfeed"))).thenReturn(last);
 
 
         OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(atomFeedProperties,atomFeedClient,new EventWorkerFactory(),openERPClient);
+        feedClientService.setFeedName("customer.feed.generator.uri");
         feedClientService.processFeed();
+
+        Marker marker = allMarkersJdbc.get(notificationsUri);
+        assertThat(marker.getLastReadEntryId(), is("9") );
 
     }
 
@@ -129,6 +150,31 @@ public class OpenERPCustomerFeedClientServiceIT {
         entry.setContents(contents);
 
         return entry;
+    }
+
+    class OpenERPAllMarkersJdbcImpl extends AllMarkersJdbcImpl{
+        public OpenERPAllMarkersJdbcImpl(JdbcConnectionProvider connectionProvider) {
+            super(connectionProvider);
+        }
+
+        public void delete(URI feedUri) throws SQLException {
+            Connection connection = null;
+            PreparedStatement stmt = null;
+            ResultSet resultSet = null;
+            try {
+                connection = jdbcConnectionProvider.getConnection();
+                String sql = String.format("delete from %s where feed_uri = ?",
+                        JdbcUtils.getTableName(Configuration.getInstance().getSchema(), "markers"));
+                stmt = connection.prepareStatement(sql);
+                stmt.setString(1, feedUri.toString());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } finally {
+                connection.close();
+            }
+        }
+
     }
 
 }
