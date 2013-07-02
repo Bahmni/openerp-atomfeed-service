@@ -25,4 +25,32 @@
             <column name="event_content" type="varchar(4000)"/>
         </createTable>
     </changeSet>
+    <changeSet id="101" author="ict4h" >
+        <createTable tableName="chunking_history" schemaName="public">
+            <column name="id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="chunk_length" type="BIGINT"/>
+            <column name="start" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!--<modifyDataType tableName="chunking_history" columnName="id" newDataType="int"/>-->
+        <addAutoIncrement tableName="chunking_history" columnName="id" columnDataType="int"/>
+        <!--<modifyDataType tableName="event_records" columnName="id" newDataType="int"/>-->
+        <!--<addAutoIncrement tableName="event_records" columnName="id" columnDataType="int"/>-->
+    </changeSet>
+    <changeSet id="102" author="ict4h">
+        <insert tableName="chunking_history" schemaName="public">
+            <column name="chunk_length" valueNumeric="5"></column>
+            <column name="start" valueNumeric="1"></column>
+        </insert>
+    </changeSet>
+    <!--<changeSet id="103" author="ict4h">-->
+        <!--<addColumn tableName="event_records" schemaName="atomfeed">-->
+            <!--<column name="category" type="varchar(255)"></column>-->
+        <!--</addColumn>-->
+    <!--</changeSet>-->
+
 </databaseChangeLog>

@@ -14,6 +14,7 @@
 
     <context:property-placeholder location="classpath:atomfeed.properties"/>
     <import resource="classpath:applicationContext-openerp-service.xml"/>
+    <import resource="classpath:atomFeedContext.xml"/>
 
     <context:component-scan base-package="org.bahmni.feed.openerp" use-default-filters="false">
         <context:include-filter expression="org.springframework.stereotype.Service" type="annotation"/>
@@ -23,6 +24,7 @@
     <context:spring-configured/>
     <context:annotation-config/>
     <context:component-scan base-package="org.bahmni.feed.openerp"/>
+    <context:component-scan base-package="org.ict4h.atomfeed.spring.resource"/>
 
     <task:scheduled-tasks>
         <task:scheduled ref="openerpFeedClientService" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>
