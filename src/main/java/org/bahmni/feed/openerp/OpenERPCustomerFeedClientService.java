@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 
-@Service
+
 public class OpenERPCustomerFeedClientService {
 
     private AtomFeedClient atomFeedClient;
@@ -28,6 +28,9 @@ public class OpenERPCustomerFeedClientService {
     Logger logger = Logger.getLogger(OpenERPCustomerFeedClientService.class);
 
 
+    public    OpenERPCustomerFeedClientService (){
+
+    }
     OpenERPCustomerFeedClientService(AtomFeedProperties atomFeedProperties, AtomFeedClient atomFeedClient, EventWorkerFactory workerFactory, OpenERPClient openERPClient) {
         this.workerFactory = workerFactory;
         this.atomFeedProperties = atomFeedProperties;
@@ -35,6 +38,7 @@ public class OpenERPCustomerFeedClientService {
         this.workerFactory = new EventWorkerFactory();
         this.openERPClient = openERPClient;
     }
+
 
     @Autowired
     public OpenERPCustomerFeedClientService(AtomFeedProperties atomFeedProperties, OpenERPClient openERPClient) {

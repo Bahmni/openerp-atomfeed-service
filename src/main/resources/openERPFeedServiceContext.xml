@@ -15,10 +15,12 @@
     <context:property-placeholder location="classpath:atomfeed.properties"/>
     <import resource="classpath:applicationContext-openerp-service.xml"/>
     <import resource="classpath:atomFeedContext.xml"/>
+<!--
 
     <context:component-scan base-package="org.bahmni.feed.openerp" use-default-filters="false">
         <context:include-filter expression="org.springframework.stereotype.Service" type="annotation"/>
     </context:component-scan>
+-->
 
 
     <context:spring-configured/>
@@ -29,6 +31,12 @@
     <task:scheduled-tasks>
         <task:scheduled ref="openerpFeedClientService" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>
     </task:scheduled-tasks>
+
+    <!--<bean id="atomFeedProperties" class="org.bahmni.feed.openerp.AtomFeedProperties" >
+        <constructor-arg value="classpath:atomfeed.properties"/>
+    </bean>-->
+
+
 
     <bean id="openerpFeedClientService" class="org.bahmni.feed.openerp.OpenERPCustomerFeedClientService" >
         <constructor-arg ref="atomFeedProperties"/>
@@ -50,5 +58,6 @@
     </bean>
 
     <task:annotation-driven />
+
 
 </beans>
