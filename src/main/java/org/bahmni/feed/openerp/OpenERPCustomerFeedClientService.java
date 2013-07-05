@@ -13,11 +13,13 @@ import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.jdbc.PropertiesJdbcConnectionProvider;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.net.URI;
 
-
+@Controller
+@RequestMapping(value = "/openerp")
 public class OpenERPCustomerFeedClientService {
 
     private AtomFeedClient atomFeedClient;

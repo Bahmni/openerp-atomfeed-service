@@ -11,6 +11,10 @@
     </context:component-scan>
 
     <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
+    <!--<mvc:resources mapping="/resources/**" location="/"/>-->
+
     <!--<task:annotation-driven />-->
+
 
 </beans>
