@@ -12,9 +12,11 @@
 
     <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
-    <!--<mvc:resources mapping="/resources/**" location="/"/>-->
+    <mvc:resources mapping="/resources/**" location="/"/>
+    <context:component-scan base-package="org.bahmni.feed.openerp"/>
+    <context:component-scan base-package="org.ict4h.atomfeed.spring.resource"/>
 
-    <!--<task:annotation-driven />-->
+    <task:annotation-driven />
 
 
 </beans>
