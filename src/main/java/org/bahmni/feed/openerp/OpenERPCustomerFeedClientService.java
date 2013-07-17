@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.net.URI;
 
 @Controller
-@RequestMapping(value = "/openerp")
+@RequestMapping(value = "/openerp/**")
 public class OpenERPCustomerFeedClientService {
 
     private AtomFeedClient atomFeedClient;
