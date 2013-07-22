@@ -23,14 +23,7 @@ import java.net.URISyntaxException;
 @Controller
 @RequestMapping(value = "/openerp/**")
 public class OpenERPCustomerFeedClientService {
-
     private AtomFeedClient atomFeedClient;
-/*
-    private AtomFeedProperties atomFeedProperties;
-    private EventWorkerFactory workerFactory;
-    private OpenERPClient openERPClient;
-    private String feedName;
-*/
 
     private static Logger logger = Logger.getLogger(OpenERPCustomerFeedClientService.class);
 
@@ -49,6 +42,15 @@ public class OpenERPCustomerFeedClientService {
                 new AllFeeds(), new AllMarkersJdbcImpl(jdbcConnectionProvider), new AllFailedEventsJdbcImpl(jdbcConnectionProvider));
     }
 
+    public void processFeed()  {
+        try {
+            logger.info("Processing Customer Feed "+ DateTime.now());
+            atomFeedClient.processEvents();
+        } catch (Exception e) {
+            logger.error("failed customer feed execution " + e);
+        }
+    }
+
     private static AtomFeedClient getFeedClient(AtomFeedProperties atomFeedProperties, String feedName,
                                                 OpenERPClient openERPClient, EventWorkerFactory eventWorkerFactory,
                                                 AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents) {
@@ -59,15 +61,6 @@ public class OpenERPCustomerFeedClientService {
         } catch (URISyntaxException e) {
             logger.error(e);
             throw new RuntimeException("error for uri:" + feedUri);
-        }
-    }
-
-    public void processFeed()  {
-        try {
-            logger.info("Processing Customer Feed "+ DateTime.now());
-            atomFeedClient.processEvents();
-        } catch (Exception e) {
-            logger.error("failed customer feed execution " + e);
         }
     }
 
