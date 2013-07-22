@@ -62,4 +62,14 @@ public class AtomFeedProperties implements OpenERPProperties {
     public String getPassword() {
         return resourceBundle.getString("openerp.password");
     }
+
+    @Override
+    public int getConnectionTimeoutInMilliseconds() {
+        return Integer.parseInt(resourceBundle.getString("openerp.connectionTimeoutInMilliseconds"));
+    }
+
+    @Override
+    public int getReplyTimeoutInMilliseconds() {
+        return Integer.parseInt(resourceBundle.getString("openerp.replyTimeoutInMilliseconds"));
+    }
 }

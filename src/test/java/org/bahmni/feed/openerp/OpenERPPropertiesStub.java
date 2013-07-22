@@ -27,4 +27,14 @@ public class OpenERPPropertiesStub implements OpenERPProperties {
     public String getPassword() {
         return "password";
     }
+
+    @Override
+    public int getConnectionTimeoutInMilliseconds() {
+        return -1;
+    }
+
+    @Override
+    public int getReplyTimeoutInMilliseconds() {
+        return -1;
+    }
 }
