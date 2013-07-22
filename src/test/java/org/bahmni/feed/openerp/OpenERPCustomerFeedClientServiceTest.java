@@ -17,7 +17,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class OpenERPCustomerFeedClientServiceTest {
 
@@ -42,7 +43,6 @@ public class OpenERPCustomerFeedClientServiceTest {
         workerFactory = mock(EventWorkerFactory.class);
         atomFeedClient = mock(AtomFeedClient.class);
         openERPClient = mock(OpenERPClient.class);
-
     }
 
     @Test
@@ -55,7 +55,8 @@ public class OpenERPCustomerFeedClientServiceTest {
         when(allFailedEvents.getNumberOfFailedEvents(feedUri.toString())).thenReturn(0);
 
 
-        OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(atomFeedProperties,atomFeedClient,workerFactory,openERPClient);
+        OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(
+                atomFeedProperties,workerFactory,openERPClient,"customer.feed.generator.uri",allFeedsMock, null,allFailedEvents);
         feedClientService.processFeed();
 
 //        verify(atomFeedClient, atLeastOnce()).processEvents(new URI("http://www.openerp.com"), openERPEventWorker);

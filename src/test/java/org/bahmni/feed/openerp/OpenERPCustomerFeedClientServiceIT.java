@@ -11,7 +11,6 @@ import org.ict4h.atomfeed.client.domain.Marker;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
-import org.ict4h.atomfeed.client.service.AtomFeedClient;
 import org.ict4h.atomfeed.client.service.FeedEnumerator;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.jdbc.JdbcUtils;
@@ -48,8 +47,6 @@ public class OpenERPCustomerFeedClientServiceIT {
     @Autowired
     private OpenERPClient openERPClient;
 
-    private AtomFeedClient atomFeedClient;
-
     private URI notificationsUri;
     private URI firstFeedUri;
     private URI secondFeedUri;
@@ -67,8 +64,6 @@ public class OpenERPCustomerFeedClientServiceIT {
         allFeedsMock = mock(AllFeeds.class);
         jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
         allMarkersJdbc = new OpenERPAllMarkersJdbcImpl(jdbcConnectionProvider);
-
-        atomFeedClient =  new AtomFeedClient(allFeedsMock,allMarkersJdbc,new AllFailedEventsJdbcImpl(jdbcConnectionProvider),false);
 
         first = new Feed();
         second = new Feed();
@@ -88,7 +83,6 @@ public class OpenERPCustomerFeedClientServiceIT {
         second.setOtherLinks(Arrays.asList(getLink("prev-archive", firstFeedUri), getLink("next-archive", recentFeedUri),getLink("self", secondFeedUri)));
 
         first.setOtherLinks(Arrays.asList(new Link[]{getLink("next-archive", secondFeedUri),getLink("self", firstFeedUri)}));
-
     }
 
     @After
@@ -121,7 +115,6 @@ public class OpenERPCustomerFeedClientServiceIT {
         return entryIds;
     }
 
-
     @Test
     public void shouldCreateCustomerInOpenERP() throws URISyntaxException {
         when(atomFeedProperties.getFeedUri("customer.feed.generator.uri")).thenReturn("http://host/patients/notifications");
@@ -130,14 +123,12 @@ public class OpenERPCustomerFeedClientServiceIT {
         when(allFeedsMock.getFor(secondFeedUri)).thenReturn(second);
         when(allFeedsMock.getFor(firstFeedUri)).thenReturn(first);
 
-
-        OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(atomFeedProperties,atomFeedClient,new EventWorkerFactory(),openERPClient);
-        feedClientService.setFeedName("customer.feed.generator.uri");
+        OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(atomFeedProperties,
+                new EventWorkerFactory(),openERPClient, "customer.feed.generator.uri", allFeedsMock, allMarkersJdbc, new AllFailedEventsJdbcImpl(jdbcConnectionProvider));
         feedClientService.processFeed();
 
         Marker marker = allMarkersJdbc.get(notificationsUri);
         assertThat(marker.getLastReadEntryId(), is("9") );
-
     }
 
     private Entry createEntry() {

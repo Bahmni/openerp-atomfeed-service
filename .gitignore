@@ -1,2 +1,4 @@
 target
 openerp-atomfeed-service.iml
+.idea
+logs
