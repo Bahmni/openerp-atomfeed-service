@@ -29,7 +29,6 @@ public class AtomFeedProperties implements OpenERPProperties {
         this(DEFAULT_PROPERTY_FILENAME);
     }
 
-
     public String getSchedulerDelay() {
         return resourceBundle.getString("scheduler.fixed.delay");
     }

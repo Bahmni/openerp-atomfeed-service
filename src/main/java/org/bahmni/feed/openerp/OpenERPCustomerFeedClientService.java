@@ -27,19 +27,19 @@ public class OpenERPCustomerFeedClientService {
 
     private static Logger logger = Logger.getLogger(OpenERPCustomerFeedClientService.class);
 
-    public OpenERPCustomerFeedClientService (){
+    public OpenERPCustomerFeedClientService() {
+    }
+
+    @Autowired
+    public OpenERPCustomerFeedClientService(AtomFeedProperties atomFeedProperties, OpenERPClient openERPClient, String feedName, JdbcConnectionProvider jdbcConnectionProvider) {
+        this(atomFeedProperties, new EventWorkerFactory(), openERPClient, feedName,
+                getAllFeeds(atomFeedProperties), new AllMarkersJdbcImpl(jdbcConnectionProvider), new AllFailedEventsJdbcImpl(jdbcConnectionProvider));
     }
 
     OpenERPCustomerFeedClientService(AtomFeedProperties atomFeedProperties, EventWorkerFactory workerFactory,
                                      OpenERPClient openERPClient, String feedName,
                                      AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents) {
         this.atomFeedClient = getFeedClient(atomFeedProperties, feedName, openERPClient, workerFactory, allFeeds, allMarkers, allFailedEvents);
-    }
-
-    @Autowired
-    public OpenERPCustomerFeedClientService(AtomFeedProperties atomFeedProperties, OpenERPClient openERPClient, String feedName, JdbcConnectionProvider jdbcConnectionProvider) {
-        this(atomFeedProperties, new EventWorkerFactory(), openERPClient, feedName,
-                new AllFeeds(), new AllMarkersJdbcImpl(jdbcConnectionProvider), new AllFailedEventsJdbcImpl(jdbcConnectionProvider));
     }
 
     public void processFeed()  {
@@ -49,6 +49,13 @@ public class OpenERPCustomerFeedClientService {
         } catch (Exception e) {
             logger.error("failed customer feed execution " + e);
         }
+    }
+
+    private static AllFeeds getAllFeeds(AtomFeedProperties atomFeedProperties) {
+        org.ict4h.atomfeed.client.factory.AtomFeedProperties feedProperties = new org.ict4h.atomfeed.client.factory.AtomFeedProperties();
+        feedProperties.setConnectTimeout(atomFeedProperties.getConnectionTimeoutInMilliseconds());
+        feedProperties.setReadTimeout(atomFeedProperties.getReplyTimeoutInMilliseconds());
+        return new AllFeeds(feedProperties);
     }
 
     private static AtomFeedClient getFeedClient(AtomFeedProperties atomFeedProperties, String feedName,
