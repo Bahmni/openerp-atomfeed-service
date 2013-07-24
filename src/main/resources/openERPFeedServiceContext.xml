@@ -42,7 +42,8 @@
         <constructor-arg value="customer.feed.generator.uri"/>
     </bean>
 
-    <bean id="jdbcConnectionProvider" class="org.ict4h.atomfeed.jdbc.PropertiesJdbcConnectionProvider">
+    <bean id="jdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.SpringJdbcConnectionProvider">
+        <constructor-arg ref="dataSource"/>
     </bean>
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">

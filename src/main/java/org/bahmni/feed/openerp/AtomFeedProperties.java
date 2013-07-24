@@ -8,14 +8,6 @@ import java.util.ResourceBundle;
 @Component
 public class AtomFeedProperties implements OpenERPProperties {
 
-//    private @Value("${feed.generator.uri}") String feedUri;
-//    private @Value("${openerp.host}") String host;
-//    private @Value("${openerp.port}") int port;
-//    private @Value("${openerp.database}") String database;
-//    private @Value("${openerp.user}") String user;
-//    private @Value("${openerp.password}") String password;
-//    private @Value("${scheduler.fixed.delay}") String schedulerDelay;
-
 
     public static final String DEFAULT_PROPERTY_FILENAME = "atomfeed";
 
