@@ -9,6 +9,8 @@ import org.bahmni.openerp.web.client.OpenERPClient;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
+import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
+import org.ict4h.atomfeed.jdbc.PropertiesJdbcConnectionProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +31,7 @@ public class OpenERPCustomerFeedClientServiceTest {
     private AllFailedEvents allFailedEvents;
     private Entry entry1;
     private Entry entry2;
-    private AtomFeedProperties atomFeedProperties;
+    private OpenERPAtomFeedProperties atomFeedProperties;
     private EventWorkerFactory workerFactory;
     private OpenERPClient openERPClient;
 
@@ -39,7 +41,7 @@ public class OpenERPCustomerFeedClientServiceTest {
         feedUri = new URI("http://myFeedUri");
         allFeedsMock = mock(AllFeeds.class);
         allFailedEvents = mock(AllFailedEvents.class);
-        atomFeedProperties = mock(AtomFeedProperties.class);
+        atomFeedProperties = mock(OpenERPAtomFeedProperties.class);
         workerFactory = mock(EventWorkerFactory.class);
         atomFeedClient = mock(AtomFeedClient.class);
         openERPClient = mock(OpenERPClient.class);
@@ -54,9 +56,11 @@ public class OpenERPCustomerFeedClientServiceTest {
         when(allFeedsMock.getFor(feedUri)).thenReturn(feed);
         when(allFailedEvents.getNumberOfFailedEvents(feedUri.toString())).thenReturn(0);
 
+        JdbcConnectionProvider jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
 
-        OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(
-                atomFeedProperties,workerFactory,openERPClient,"customer.feed.generator.uri",allFeedsMock, null,allFailedEvents);
+        OpenERPCustomerFeedClientService feedClientService =
+                new OpenERPCustomerFeedClientService(
+                atomFeedProperties,jdbcConnectionProvider,workerFactory,openERPClient,"customer.feed.generator.uri",allFeedsMock, null,allFailedEvents);
         feedClientService.processFeed();
 
 //        verify(atomFeedClient, atLeastOnce()).processEvents(new URI("http://www.openerp.com"), openERPEventWorker);

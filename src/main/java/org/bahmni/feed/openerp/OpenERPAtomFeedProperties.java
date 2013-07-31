@@ -6,18 +6,18 @@ import org.springframework.stereotype.Component;
 import java.util.ResourceBundle;
 
 @Component
-public class AtomFeedProperties implements OpenERPProperties {
+public class OpenERPAtomFeedProperties implements OpenERPProperties {
 
 
     public static final String DEFAULT_PROPERTY_FILENAME = "atomfeed";
 
     private ResourceBundle resourceBundle;
 
-    AtomFeedProperties(String propertyFilename) {
+    OpenERPAtomFeedProperties(String propertyFilename) {
         this.resourceBundle = ResourceBundle.getBundle(propertyFilename);
     }
 
-    public AtomFeedProperties() {
+    public OpenERPAtomFeedProperties() {
         this(DEFAULT_PROPERTY_FILENAME);
     }
 

@@ -32,7 +32,7 @@
 
 
     <bean id="openerpFeedClientService" class="org.bahmni.feed.openerp.OpenERPCustomerFeedClientService" >
-        <constructor-arg ref="atomFeedProperties"/>
+        <constructor-arg ref="openERPAtomFeedProperties"/>
         <constructor-arg ref="openERPClient"/>
         <constructor-arg ref="feedName" />
         <constructor-arg ref="jdbcConnectionProvider" />

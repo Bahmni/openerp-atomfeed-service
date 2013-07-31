@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -42,7 +43,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(locations = {"classpath*:applicationContext-openerpTest.xml"})
 public class OpenERPCustomerFeedClientServiceIT {
     private   AllFeeds allFeedsMock;
-    private AtomFeedProperties atomFeedProperties;
+    private OpenERPAtomFeedProperties atomFeedProperties;
 
     @Autowired
     private OpenERPClient openERPClient;
@@ -60,7 +61,7 @@ public class OpenERPCustomerFeedClientServiceIT {
 
     @Before
     public void setUp() throws URISyntaxException {
-        atomFeedProperties = mock(AtomFeedProperties.class);
+        atomFeedProperties = mock(OpenERPAtomFeedProperties.class);
         allFeedsMock = mock(AllFeeds.class);
         jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
         allMarkersJdbc = new OpenERPAllMarkersJdbcImpl(jdbcConnectionProvider);
@@ -78,11 +79,11 @@ public class OpenERPCustomerFeedClientServiceIT {
         secondFeedUri = new URI("http://host/patients/2");
         firstFeedUri = new URI("http://host/patients/1");
 
-        last.setOtherLinks(Arrays.asList(new Link[]{getLink("prev-archive", secondFeedUri),getLink("self", recentFeedUri)}));
+        last.setOtherLinks(Arrays.asList(new Link[]{getLink("prev-archive", secondFeedUri),getLink("self", recentFeedUri),getLink("via", recentFeedUri)}));
 
-        second.setOtherLinks(Arrays.asList(getLink("prev-archive", firstFeedUri), getLink("next-archive", recentFeedUri),getLink("self", secondFeedUri)));
+        second.setOtherLinks(Arrays.asList(getLink("prev-archive", firstFeedUri), getLink("next-archive", recentFeedUri),getLink("self", secondFeedUri),getLink("via", secondFeedUri)));
 
-        first.setOtherLinks(Arrays.asList(new Link[]{getLink("next-archive", secondFeedUri),getLink("self", firstFeedUri)}));
+        first.setOtherLinks(Arrays.asList(new Link[]{getLink("next-archive", secondFeedUri),getLink("via", firstFeedUri)}));
     }
 
     @After
@@ -123,11 +124,12 @@ public class OpenERPCustomerFeedClientServiceIT {
         when(allFeedsMock.getFor(secondFeedUri)).thenReturn(second);
         when(allFeedsMock.getFor(firstFeedUri)).thenReturn(first);
 
-        OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(atomFeedProperties,
+        OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(atomFeedProperties,jdbcConnectionProvider,
                 new EventWorkerFactory(),openERPClient, "customer.feed.generator.uri", allFeedsMock, allMarkersJdbc, new AllFailedEventsJdbcImpl(jdbcConnectionProvider));
         feedClientService.processFeed();
 
         Marker marker = allMarkersJdbc.get(notificationsUri);
+        assertNotNull(marker);
         assertThat(marker.getLastReadEntryId(), is("9") );
     }
 
