@@ -31,6 +31,10 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         }
     }
 
+    @Override
+    public void cleanUp(Event event) {
+    }
+
     private OpenERPRequest mapRequest(Event event) throws IOException {
         List<Parameter> parameters = new ArrayList<Parameter>();
 

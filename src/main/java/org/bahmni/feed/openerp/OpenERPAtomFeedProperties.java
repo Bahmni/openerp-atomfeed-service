@@ -63,4 +63,8 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     public int getReplyTimeoutInMilliseconds() {
         return Integer.parseInt(resourceBundle.getString("openerp.replyTimeoutInMilliseconds"));
     }
+
+    public int getMaxFailedEvents() {
+        return Integer.parseInt(resourceBundle.getString("openerp.maxFailedEvents"));
+    }
 }

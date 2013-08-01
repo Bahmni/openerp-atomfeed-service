@@ -56,6 +56,7 @@ public class OpenERPCustomerFeedClientService {
         AtomFeedProperties feedProperties = new org.ict4h.atomfeed.client.factory.AtomFeedProperties();
         feedProperties.setConnectTimeout(atomFeedProperties.getConnectionTimeoutInMilliseconds());
         feedProperties.setReadTimeout(atomFeedProperties.getReplyTimeoutInMilliseconds());
+        feedProperties.setMaxFailedEvents(atomFeedProperties.getMaxFailedEvents());
         return new AllFeeds(feedProperties);
     }
 
