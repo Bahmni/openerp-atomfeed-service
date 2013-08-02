@@ -22,7 +22,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Controller
-@RequestMapping(value = "/openerp/**")
 public class OpenERPCustomerFeedClientService {
     private AtomFeedClient atomFeedClient;
 
