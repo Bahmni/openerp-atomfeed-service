@@ -40,14 +40,14 @@ public class AtomFeedServerIT extends IntegrationTest {
     private AtomFeedClient atomFeedClient;
     String contents ="  <entry>\n" +
             "    <title>Hello, DiscWorld6</title>\n" +
-            "    <category term=\"Product\" />\n" +
+            "    <category term=\"product\" />\n" +
             "    <id>tag:atomfeed.ict4h.org:062df21f-62e7-405b-9c80-93d7e7a7b4f6</id>\n" +
             "    <updated>2013-07-02T03:16:30Z</updated>\n" +
             "    <content type=\"application/vnd.atomfeed+xml\"><![CDATA[{\"category\": \"All products\", \"list_price\": 2, \"id\": 215, \"manufacturer\": \"cipla3\"}]]></content>\n" +
             "  </entry>\n" +
             "  <entry>\n" +
             "    <title>Hello, DiscWorld7</title>\n" +
-            "    <category term=\"Product\" />\n" +
+            "    <category term=\"product\" />\n" +
             "    <id>tag:atomfeed.ict4h.org:4db7d280-8f64-4470-9d2b-180316034753</id>\n" +
             "    <updated>2013-07-02T03:16:30Z</updated>\n" +
             "    <content type=\"application/vnd.atomfeed+xml\"><![CDATA[{\"category\": \"All products\", \"list_price\": 2, \"id\": 215, \"manufacturer\": \"cipla3\"}]]></content>\n" +
@@ -93,7 +93,7 @@ public class AtomFeedServerIT extends IntegrationTest {
         List<EventRecord> events = createEvents(7, "Hello, DiscWorld");
        String responseAsString = null;
         MVCTestUtils.mockMvc(eventResource)
-                .perform(get("/feed/Product/recent"))
+                .perform(get("/feed/product/recent"))
                 .andExpect(compareContent());
     }
 
