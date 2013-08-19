@@ -32,6 +32,7 @@
         <constructor-arg ref="openERPClient"/>
         <constructor-arg ref="feedName" />
         <constructor-arg ref="jdbcConnectionProvider" />
+        <constructor-arg ref="customerFeedClientMonitor" />
     </bean>
 
     <bean id="feedName" class="java.lang.String">
@@ -40,6 +41,10 @@
 
     <bean id="jdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.SpringJdbcConnectionProvider">
         <constructor-arg ref="dataSource"/>
+    </bean>
+
+    <bean id="customerFeedClientMonitor" class="org.bahmni.feed.openerp.TaskMonitor">
+        <constructor-arg value="OpenERPCustomerFeedClientService"/>
     </bean>
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">

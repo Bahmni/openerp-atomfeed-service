@@ -60,7 +60,7 @@ public class OpenERPCustomerFeedClientServiceTest {
 
         OpenERPCustomerFeedClientService feedClientService =
                 new OpenERPCustomerFeedClientService(
-                atomFeedProperties,jdbcConnectionProvider,workerFactory,openERPClient,"customer.feed.generator.uri",allFeedsMock, null,allFailedEvents);
+                atomFeedProperties,jdbcConnectionProvider,workerFactory,openERPClient,"customer.feed.generator.uri",allFeedsMock, null,allFailedEvents, mock(TaskMonitor.class));
         feedClientService.processFeed();
 
 //        verify(atomFeedClient, atLeastOnce()).processEvents(new URI("http://www.openerp.com"), openERPEventWorker);

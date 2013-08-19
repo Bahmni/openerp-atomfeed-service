@@ -16,7 +16,6 @@ import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,28 +25,37 @@ public class OpenERPCustomerFeedClientService {
     private AtomFeedClient atomFeedClient;
 
     private static Logger logger = Logger.getLogger(OpenERPCustomerFeedClientService.class);
+    private TaskMonitor taskMonitor;
 
     public OpenERPCustomerFeedClientService() {
     }
 
     @Autowired
-    public OpenERPCustomerFeedClientService(OpenERPAtomFeedProperties atomFeedProperties, OpenERPClient openERPClient, String feedName, JdbcConnectionProvider jdbcConnectionProvider) {
+    public OpenERPCustomerFeedClientService(OpenERPAtomFeedProperties atomFeedProperties, OpenERPClient openERPClient,
+                                            String feedName, JdbcConnectionProvider jdbcConnectionProvider,
+                                            org.bahmni.feed.openerp.TaskMonitor customerFeedClientMonitor) {
         this(atomFeedProperties,jdbcConnectionProvider, new EventWorkerFactory(), openERPClient, feedName,
-                getAllFeeds(atomFeedProperties), new AllMarkersJdbcImpl(jdbcConnectionProvider), new AllFailedEventsJdbcImpl(jdbcConnectionProvider));
+                getAllFeeds(atomFeedProperties), new AllMarkersJdbcImpl(jdbcConnectionProvider),
+                new AllFailedEventsJdbcImpl(jdbcConnectionProvider), customerFeedClientMonitor);
     }
 
-    OpenERPCustomerFeedClientService(OpenERPAtomFeedProperties atomFeedProperties,JdbcConnectionProvider jdbcConnectionProvider, EventWorkerFactory workerFactory,
+    OpenERPCustomerFeedClientService(OpenERPAtomFeedProperties atomFeedProperties, JdbcConnectionProvider jdbcConnectionProvider, EventWorkerFactory workerFactory,
                                      OpenERPClient openERPClient, String feedName,
-                                     AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents) {
+                                     AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, TaskMonitor taskMonitor) {
+        this.taskMonitor = taskMonitor;
         this.atomFeedClient = getFeedClient(atomFeedProperties,jdbcConnectionProvider, feedName, openERPClient, workerFactory, allFeeds, allMarkers, allFailedEvents);
     }
 
     public void processFeed()  {
         try {
+            taskMonitor.startTask();
+
             logger.info("Processing Customer Feed "+ DateTime.now());
             atomFeedClient.processEvents();
         } catch (Exception e) {
             logger.error("failed customer feed execution " + e);
+        } finally {
+            taskMonitor.endTask();
         }
     }
 

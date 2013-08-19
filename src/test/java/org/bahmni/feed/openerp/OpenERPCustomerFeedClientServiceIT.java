@@ -125,7 +125,7 @@ public class OpenERPCustomerFeedClientServiceIT {
         when(allFeedsMock.getFor(firstFeedUri)).thenReturn(first);
 
         OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(atomFeedProperties,jdbcConnectionProvider,
-                new EventWorkerFactory(),openERPClient, "customer.feed.generator.uri", allFeedsMock, allMarkersJdbc, new AllFailedEventsJdbcImpl(jdbcConnectionProvider));
+                new EventWorkerFactory(),openERPClient, "customer.feed.generator.uri", allFeedsMock, allMarkersJdbc, new AllFailedEventsJdbcImpl(jdbcConnectionProvider), mock(TaskMonitor.class));
         feedClientService.processFeed();
 
         Marker marker = allMarkersJdbc.get(notificationsUri);
