@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 
 @Controller
 public class OpenERPCustomerFeedClientService {
@@ -64,7 +65,7 @@ public class OpenERPCustomerFeedClientService {
         feedProperties.setConnectTimeout(atomFeedProperties.getConnectionTimeoutInMilliseconds());
         feedProperties.setReadTimeout(atomFeedProperties.getReplyTimeoutInMilliseconds());
         feedProperties.setMaxFailedEvents(atomFeedProperties.getMaxFailedEvents());
-        return new AllFeeds(feedProperties);
+        return new AllFeeds(feedProperties, new HashMap<String, String>());
     }
 
     private static AtomFeedClient getFeedClient(OpenERPAtomFeedProperties atomFeedProperties,JdbcConnectionProvider jdbcConnectionProvider,
