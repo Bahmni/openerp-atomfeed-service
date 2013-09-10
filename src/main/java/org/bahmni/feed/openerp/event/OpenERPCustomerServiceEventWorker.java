@@ -31,11 +31,34 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         }
     }
 
+    public void processFailedEvents(Event event) {
+        try {
+            openERPClient.execute(mapFailedEventRequest(event));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    private OpenERPRequest mapFailedEventRequest(Event event) throws IOException {
+        List<Parameter> parameters = mapParameters(event);
+        HashMap<String,Object> paramMap = new ObjectMapper().readValue(event.getContent(), HashMap.class) ;
+        parameters.add(createParameter("is_failed_event","True","boolean"));
+
+        return new OpenERPRequest("atom.event.worker","process_event",parameters);
+    }
+
     @Override
     public void cleanUp(Event event) {
     }
 
     private OpenERPRequest mapRequest(Event event) throws IOException {
+        List<Parameter> parameters = mapParameters(event);
+
+        return new OpenERPRequest("atom.event.worker","process_event",parameters);
+    }
+
+    private List<Parameter> mapParameters(Event event) throws IOException {
         List<Parameter> parameters = new ArrayList<Parameter>();
 
         HashMap<String,Object> paramMap = new ObjectMapper().readValue(event.getContent(), HashMap.class) ;
@@ -48,8 +71,7 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         parameters.add(createParameter("feed_uri", feedUrl, "string"));
         parameters.add(createParameter("last_read_entry_id", event.getId(), "string"));
         parameters.add(createParameter("feed_uri_for_last_read_entry", event.getFeedUri(), "string"));
-
-        return new OpenERPRequest("atom.event.worker","process_event",parameters);
+        return parameters;
     }
 
     private Parameter createParameter(String name, String value, String type) {
