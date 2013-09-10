@@ -13,7 +13,7 @@
        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
     <context:property-placeholder location="classpath:atomfeed.properties"/>
-    <import resource="classpath:applicationContext-openerp-service.xml"/>
+    <import resource="classpath:applicationContext-openerp-client.xml"/>
     <import resource="classpath:atomFeedContext.xml"/>
 
     <context:spring-configured/>
