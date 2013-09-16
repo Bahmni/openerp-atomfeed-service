@@ -67,4 +67,16 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     public int getMaxFailedEvents() {
         return Integer.parseInt(resourceBundle.getString("openerp.maxFailedEvents"));
     }
+
+    public String getAuthenticationURI() {
+        return resourceBundle.getString("openmrs.auth.uri");
+    }
+
+    public String getOpenMRSUser() {
+        return resourceBundle.getString("openmrs.user");
+    }
+
+    public String getOpenMRSPassword() {
+        return resourceBundle.getString("openmrs.password");
+    }
 }

@@ -1,0 +1,221 @@
+{
+        "uuid": "d6729333-bc31-4886-a864-0a6e7ae570a9",
+        "display": "GAN200066 - mareez naam",
+        "identifiers": [
+        {
+        "display": "JSS = GAN200066",
+        "uuid": "a9505d5d-5cbf-467b-a820-340c1ec93d4f",
+        "identifier": "GAN200066",
+        "identifierType": {
+        "uuid": "284c931e-9d21-11e2-8137-0800271c1b75",
+        "display": "JSS",
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/patientidentifiertype/284c931e-9d21-11e2-8137-0800271c1b75",
+        "rel": "self"
+        }
+        ]
+        },
+        "location": null,
+        "preferred": true,
+        "voided": false,
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/patient/d6729333-bc31-4886-a864-0a6e7ae570a9/identifier/a9505d5d-5cbf-467b-a820-340c1ec93d4f",
+        "rel": "self"
+        },
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/patient/d6729333-bc31-4886-a864-0a6e7ae570a9/identifier/a9505d5d-5cbf-467b-a820-340c1ec93d4f?v=full",
+        "rel": "full"
+        }
+        ],
+        "resourceVersion": "1.8"
+        }
+        ],
+        "person": {
+        "uuid": "d6729333-bc31-4886-a864-0a6e7ae570a9",
+        "display": "mareez naam",
+        "gender": "M",
+        "age": 35,
+        "birthdate": "1978-09-05T00:00:00.000+0530",
+        "birthdateEstimated": true,
+        "dead": false,
+        "deathDate": null,
+        "causeOfDeath": null,
+        "preferredName": {
+        "display": "mareez naam",
+        "uuid": "2d807b4d-ba79-4793-b8db-d7b5eb2cfab3",
+        "givenName": "mareez",
+        "middleName": null,
+        "familyName": "naam",
+        "familyName2": null,
+        "voided": false,
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9/name/2d807b4d-ba79-4793-b8db-d7b5eb2cfab3",
+        "rel": "self"
+        },
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9/name/2d807b4d-ba79-4793-b8db-d7b5eb2cfab3?v=full",
+        "rel": "full"
+        }
+        ],
+        "resourceVersion": "1.8"
+        },
+        "preferredAddress": {
+        "display": null,
+        "uuid": "fc60babc-ce29-47c8-9c72-a0cb9020fe44",
+        "preferred": true,
+        "address1": null,
+        "address2": null,
+        "cityVillage": "Ganiyari",
+        "stateProvince": null,
+        "country": null,
+        "postalCode": null,
+        "countyDistrict": null,
+        "address3": null,
+        "address4": null,
+        "address5": null,
+        "address6": null,
+        "startDate": null,
+        "endDate": null,
+        "latitude": null,
+        "longitude": null,
+        "voided": false,
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9/address/fc60babc-ce29-47c8-9c72-a0cb9020fe44",
+        "rel": "self"
+        },
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9/address/fc60babc-ce29-47c8-9c72-a0cb9020fe44?v=full",
+        "rel": "full"
+        }
+        ],
+        "resourceVersion": "1.8"
+        },
+        "names": [
+        {
+        "display": "mareez naam",
+        "uuid": "2d807b4d-ba79-4793-b8db-d7b5eb2cfab3",
+        "givenName": "mareez",
+        "middleName": null,
+        "familyName": "naam",
+        "familyName2": null,
+        "voided": false,
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9/name/2d807b4d-ba79-4793-b8db-d7b5eb2cfab3",
+        "rel": "self"
+        },
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9/name/2d807b4d-ba79-4793-b8db-d7b5eb2cfab3?v=full",
+        "rel": "full"
+        }
+        ],
+        "resourceVersion": "1.8"
+        }
+        ],
+        "addresses": [
+        {
+        "display": null,
+        "uuid": "fc60babc-ce29-47c8-9c72-a0cb9020fe44",
+        "preferred": true,
+        "address1": null,
+        "address2": null,
+        "cityVillage": "Ganiyari",
+        "stateProvince": null,
+        "country": null,
+        "postalCode": null,
+        "countyDistrict": null,
+        "address3": null,
+        "address4": null,
+        "address5": null,
+        "address6": null,
+        "startDate": null,
+        "endDate": null,
+        "latitude": null,
+        "longitude": null,
+        "voided": false,
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9/address/fc60babc-ce29-47c8-9c72-a0cb9020fe44",
+        "rel": "self"
+        },
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9/address/fc60babc-ce29-47c8-9c72-a0cb9020fe44?v=full",
+        "rel": "full"
+        }
+        ],
+        "resourceVersion": "1.8"
+        }
+        ],
+        "attributes": [
+        {
+        "display": "healthCenter = 2",
+        "uuid": "9dc3152d-b352-4e36-8cfc-6daeb6d6d1f8",
+        "value": "2",
+        "attributeType": {
+        "uuid": "2844de08-9d21-11e2-8137-0800271c1b75",
+        "display": "healthCenter",
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/personattributetype/2844de08-9d21-11e2-8137-0800271c1b75",
+        "rel": "self"
+        }
+        ]
+        },
+        "voided": false,
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9/attribute/9dc3152d-b352-4e36-8cfc-6daeb6d6d1f8",
+        "rel": "self"
+        },
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9/attribute/9dc3152d-b352-4e36-8cfc-6daeb6d6d1f8?v=full",
+        "rel": "full"
+        }
+        ],
+        "resourceVersion": "1.8"
+        }
+        ],
+        "voided": false,
+        "personDateCreated": "2013-09-05T10:45:56.000+0530",
+        "auditInfo": {
+        "creator": null,
+        "dateCreated": null,
+        "changedBy": null,
+        "dateChanged": null
+        },
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/person/d6729333-bc31-4886-a864-0a6e7ae570a9",
+        "rel": "self"
+        }
+        ],
+        "resourceVersion": "1.8"
+        },
+        "voided": false,
+        "auditInfo": {
+        "creator": {
+        "uuid": "a54dad82-9d1a-11e2-8137-0800271c1b75",
+        "display": "admin",
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/user/a54dad82-9d1a-11e2-8137-0800271c1b75",
+        "rel": "self"
+        }
+        ]
+        },
+        "dateCreated": "2013-09-05T10:45:56.000+0530",
+        "changedBy": null,
+        "dateChanged": null
+        },
+        "links": [
+        {
+        "uri": "http://192.168.33.10/openmrs/ws/rest/v1/patient/d6729333-bc31-4886-a864-0a6e7ae570a9",
+        "rel": "self"
+        }
+        ],
+        "resourceVersion": "1.8"
+        }

@@ -4,8 +4,11 @@ import com.sun.syndication.feed.atom.Content;
 import com.sun.syndication.feed.atom.Entry;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
+import com.sun.syndication.io.FeedException;
 import org.bahmni.feed.openerp.event.EventWorkerFactory;
 import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
+import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
 import org.ict4h.atomfeed.Configuration;
 import org.ict4h.atomfeed.client.domain.Marker;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
@@ -57,6 +60,7 @@ public class OpenERPCustomerFeedClientServiceIT {
     Feed last;
     OpenERPAllMarkersJdbcImpl allMarkersJdbc;
     private JdbcConnectionProvider jdbcConnectionProvider;
+    private OpenMRSAuthenticator openMRSAuthenticator;
 
 
     @Before
@@ -84,6 +88,8 @@ public class OpenERPCustomerFeedClientServiceIT {
         second.setOtherLinks(Arrays.asList(getLink("prev-archive", firstFeedUri), getLink("next-archive", recentFeedUri),getLink("self", secondFeedUri),getLink("via", secondFeedUri)));
 
         first.setOtherLinks(Arrays.asList(new Link[]{getLink("next-archive", secondFeedUri),getLink("via", firstFeedUri)}));
+
+        openMRSAuthenticator = mock(OpenMRSAuthenticator.class);
     }
 
     @After
@@ -117,15 +123,28 @@ public class OpenERPCustomerFeedClientServiceIT {
     }
 
     @Test
-    public void shouldCreateCustomerInOpenERP() throws URISyntaxException {
+    public void shouldCreateCustomerInOpenERP() throws URISyntaxException, FeedException {
         when(atomFeedProperties.getFeedUri("customer.feed.generator.uri")).thenReturn("http://host/patients/notifications");
         when(allFeedsMock.getFor(notificationsUri)).thenReturn(last);
         when(allFeedsMock.getFor(recentFeedUri)).thenReturn(last);
         when(allFeedsMock.getFor(secondFeedUri)).thenReturn(second);
         when(allFeedsMock.getFor(firstFeedUri)).thenReturn(first);
 
+        when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
+
+        when(atomFeedProperties.getOpenMRSUser()).thenReturn("mrsuser");
+        when(atomFeedProperties.getOpenMRSPassword()).thenReturn("mrspwd");
+        when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
+
+        OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
+        authenticationResponse.setAuthenticated(true);
+        authenticationResponse.setSessionId("sessionIdValue");
+        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
+
         OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(atomFeedProperties,jdbcConnectionProvider,
-                new EventWorkerFactory(),openERPClient, "customer.feed.generator.uri", allFeedsMock, allMarkersJdbc, new AllFailedEventsJdbcImpl(jdbcConnectionProvider), mock(TaskMonitor.class));
+                new EventWorkerFactory(),openERPClient, "customer.feed.generator.uri", allFeedsMock, allMarkersJdbc,
+                new AllFailedEventsJdbcImpl(jdbcConnectionProvider), mock(TaskMonitor.class),
+                openMRSAuthenticator);
         feedClientService.processFeed();
 
         Marker marker = allMarkersJdbc.get(notificationsUri);

@@ -5,28 +5,43 @@ import com.sun.syndication.feed.atom.Entry;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
+import org.bahmni.webclients.WebClient;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class OpenERPCustomerServiceEventWorkerTest {
-
-    OpenERPClient openERPClient;
+    private OpenERPClient openERPClient;
+    private WebClient mockWebClient;
+    private String MRSURLPrefix;
 
     @Before
     public void setUp() throws Exception {
         openERPClient = mock(OpenERPClient.class);
+        mockWebClient = mock(WebClient.class);
     }
 
     @Test
-    public void shouldCallOpenERPClientWithRightParameters(){
-        OpenERPCustomerServiceEventWorker customerServiceEventWorker = new OpenERPCustomerServiceEventWorker("www.openmrs.com",openERPClient);
+    public void shouldCallOpenERPClientWithRightParameters() throws FileNotFoundException {
+        MRSURLPrefix = "urlPrefixTest";
+        OpenERPCustomerServiceEventWorker customerServiceEventWorker =
+                new OpenERPCustomerServiceEventWorker("www.openmrs.com", openERPClient, mockWebClient, MRSURLPrefix);
+
+        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("patientResource.xml");
+        String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
+
+        when(mockWebClient.get(any(URI.class), any(Map.class))).thenReturn(patientResource);
+
         Event event = new Event(createEntry(),"www.openmrs.com");
         customerServiceEventWorker.process(event);
 
@@ -36,8 +51,8 @@ public class OpenERPCustomerServiceEventWorkerTest {
 
     private OpenERPRequest createOpenERPRequest(Event event) {
         List<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(createParameter("name","Ram Singh","string"));
-        parameters.add(createParameter("ref","GAN111111","string"));
+        parameters.add(createParameter("name","mareez naam","string"));
+        parameters.add(createParameter("ref","GAN200066","string"));
         parameters.add(createParameter("village", "Ganiyari", "string"));
         parameters.add(createParameter("category", "create.customer", "string"));
 
@@ -49,16 +64,19 @@ public class OpenERPCustomerServiceEventWorkerTest {
         return new OpenERPRequest("atom.event.worker","process_event",parameters);
     }
 
-    private Entry createEntry() {
+    private Entry createEntry() throws FileNotFoundException {
         Entry entry = new Entry();
         ArrayList<Content> contents = new ArrayList<Content>();
         Content content = new Content();
-        String value ="{\"name\": \"Ram Singh\",\"ref\": \"GAN111111\", \"village\":  \"Ganiyari\"}";
-        content.setValue(String.format("%s%s%s", "<![CDATA[", value, "]]>"));
+        content.setValue(String.format("%s%s%s", "<![CDATA[", getMRSURI(), "]]>"));
         contents.add(content);
         entry.setContents(contents);
 
         return entry;
+    }
+
+    private String getMRSURI() {
+        return "/openmrs/ws/rest/v1/patient/d6729333-bc31-4886-a864-0a6e7ae570a9?v=full";
     }
 
     private Parameter createParameter(String name, String value, String type) {

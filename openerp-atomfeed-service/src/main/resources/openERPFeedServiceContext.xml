@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/context
@@ -10,7 +10,8 @@
        http://www.springframework.org/schema/task
        http://www.springframework.org/schema/task/spring-task-3.0.xsd
        http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
     <context:property-placeholder location="classpath:atomfeed.properties"/>
     <import resource="classpath:applicationContext-openerp-client.xml"/>
@@ -21,10 +22,10 @@
     <context:component-scan base-package="org.bahmni.feed.openerp"/>
     <context:component-scan base-package="org.ict4h.atomfeed.spring.resource"/>
 
-    <!--TO BE USED AFTER WIRING Up WITH OPENMRS-->
-    <!--task:scheduled-tasks>
+    <task:scheduled-tasks>
         <task:scheduled ref="openerpFeedClientService" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>
-    </task:scheduled-tasks-->
+        <task:scheduled ref="openerpFeedClientService" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>
+    </task:scheduled-tasks>
 
 
     <bean id="openerpFeedClientService" class="org.bahmni.feed.openerp.OpenERPCustomerFeedClientService" >
@@ -39,7 +40,7 @@
         <constructor-arg value="customer.feed.generator.uri"/>
     </bean>
 
-    <bean id="jdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.SpringJdbcConnectionProvider">
+    <bean id="jdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider">
         <constructor-arg ref="dataSource"/>
     </bean>
 

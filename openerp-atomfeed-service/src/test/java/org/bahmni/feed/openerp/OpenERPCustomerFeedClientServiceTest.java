@@ -3,9 +3,12 @@ package org.bahmni.feed.openerp;
 import com.sun.syndication.feed.atom.Entry;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
+import com.sun.syndication.io.FeedException;
 import org.bahmni.feed.openerp.event.EventWorkerFactory;
 import org.bahmni.feed.openerp.event.OpenERPCustomerServiceEventWorker;
 import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
+import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
@@ -48,19 +51,33 @@ public class OpenERPCustomerFeedClientServiceTest {
     }
 
     @Test
-    public void shouldCallOpenERPEventWorkerOnProcessingFeed() throws URISyntaxException {
+    public void shouldCallOpenERPEventWorkerOnProcessingFeed() throws URISyntaxException, FeedException {
         Feed feed = setupFeed();
-        OpenERPCustomerServiceEventWorker openERPEventWorker = new OpenERPCustomerServiceEventWorker("www.openmrs.com",openERPClient);
+        OpenERPCustomerServiceEventWorker openERPEventWorker = new OpenERPCustomerServiceEventWorker("www.openmrs.com",openERPClient, null, null);
+
+        when(atomFeedProperties.getOpenMRSUser()).thenReturn("mrsuser");
+        when(atomFeedProperties.getOpenMRSPassword()).thenReturn("mrspwd");
         when(atomFeedProperties.getFeedUri("customer.feed.generator.uri")).thenReturn("http://www.openerp.com");
-        when(workerFactory.getWorker("openerp.customer.service", "http://www.openerp.com", openERPClient)).thenReturn(openERPEventWorker);
+        when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
+
+        when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
+
+        when(workerFactory.getWorker("openerp.customer.service", "http://www.openerp.com", openERPClient,
+                atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds(), null, null, null)).thenReturn(openERPEventWorker);
         when(allFeedsMock.getFor(feedUri)).thenReturn(feed);
         when(allFailedEvents.getNumberOfFailedEvents(feedUri.toString())).thenReturn(0);
+
+        OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
+        authenticationResponse.setAuthenticated(true);
+        authenticationResponse.setSessionId("sessionIdValue");
+        OpenMRSAuthenticator mrsAuthenticator = mock(OpenMRSAuthenticator.class);
+        when(mrsAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
         JdbcConnectionProvider jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
 
         OpenERPCustomerFeedClientService feedClientService =
-                new OpenERPCustomerFeedClientService(
-                atomFeedProperties,jdbcConnectionProvider,workerFactory,openERPClient,"customer.feed.generator.uri",allFeedsMock, null,allFailedEvents, mock(TaskMonitor.class));
+                new OpenERPCustomerFeedClientService(atomFeedProperties,jdbcConnectionProvider,workerFactory,openERPClient,"customer.feed.generator.uri",
+                        allFeedsMock, null,allFailedEvents, mock(TaskMonitor.class), mrsAuthenticator);
         feedClientService.processFeed();
 
 //        verify(atomFeedClient, atLeastOnce()).processEvents(new URI("http://www.openerp.com"), openERPEventWorker);
