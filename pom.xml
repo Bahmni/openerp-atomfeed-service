@@ -5,7 +5,7 @@
 
     <groupId>org.bahmni.openerp</groupId>
     <artifactId>openerp-service</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>2.5-SNAPSHOT</version>
     <modules>
         <module>openerp-atomfeed-service</module>
         <module>openerp-client</module>
