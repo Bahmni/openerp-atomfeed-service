@@ -48,7 +48,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:applicationContext-openerpTest.xml"})
-public class OpenERPCustomerFeedClientServiceIT {
+public class OpenERPCustomerFeedIT {
     private   AllFeeds allFeedsMock;
     private OpenERPAtomFeedProperties atomFeedProperties;
 
