@@ -32,7 +32,7 @@
         <constructor-arg ref="openERPAtomFeedProperties"/>
         <constructor-arg ref="openERPClient"/>
         <constructor-arg ref="feedName" />
-        <constructor-arg ref="jdbcConnectionProvider" />
+        <constructor-arg ref="threadLocalJdbcConnectionProvider" />
         <constructor-arg ref="customerFeedClientMonitor" />
     </bean>
 
@@ -40,7 +40,7 @@
         <constructor-arg value="customer.feed.generator.uri"/>
     </bean>
 
-    <bean id="jdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider">
+    <bean id="threadLocalJdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider">
         <constructor-arg ref="dataSource"/>
     </bean>
 

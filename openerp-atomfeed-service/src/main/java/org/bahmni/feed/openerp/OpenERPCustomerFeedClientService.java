@@ -48,11 +48,11 @@ public class OpenERPCustomerFeedClientService {
 
     @Autowired
     public OpenERPCustomerFeedClientService(OpenERPAtomFeedProperties atomFeedProperties, OpenERPClient openERPClient,
-                                            String feedName, JdbcConnectionProvider jdbcConnectionProvider,
+                                            String feedName, JdbcConnectionProvider threadLocalJdbcConnectionProvider,
                                             org.bahmni.feed.openerp.TaskMonitor customerFeedClientMonitor) throws FeedException {
-        this(atomFeedProperties,jdbcConnectionProvider, new EventWorkerFactory(), openERPClient, feedName,
-                getAllFeeds(atomFeedProperties), new AllMarkersJdbcImpl(jdbcConnectionProvider),
-                new AllFailedEventsJdbcImpl(jdbcConnectionProvider), customerFeedClientMonitor,
+        this(atomFeedProperties,threadLocalJdbcConnectionProvider, new EventWorkerFactory(), openERPClient, feedName,
+                getAllFeeds(atomFeedProperties), new AllMarkersJdbcImpl(threadLocalJdbcConnectionProvider),
+                new AllFailedEventsJdbcImpl(threadLocalJdbcConnectionProvider), customerFeedClientMonitor,
                 new OpenMRSAuthenticator(atomFeedProperties.getAuthenticationURI(), atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds()));
     }
 
