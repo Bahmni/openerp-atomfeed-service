@@ -1,12 +1,16 @@
-package org.bahmni.feed.openerp;
+package org.bahmni.feed.openerp.client;
 
 import com.sun.syndication.feed.atom.Content;
 import com.sun.syndication.feed.atom.Entry;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
+import org.bahmni.feed.openerp.ObjectMapperRepository;
+import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
+import org.bahmni.feed.openerp.TaskMonitor;
 import org.bahmni.feed.openerp.event.EventWorkerFactory;
 import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.webclients.WebClient;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
 import org.ict4h.atomfeed.Configuration;
@@ -26,25 +30,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:applicationContext-openerpTest.xml"})
-public class OpenERPCustomerFeedClientServiceIT {
+public class OpenERPSaleOrderFeedIT {
     private   AllFeeds allFeedsMock;
     private OpenERPAtomFeedProperties atomFeedProperties;
 
@@ -61,12 +65,14 @@ public class OpenERPCustomerFeedClientServiceIT {
     OpenERPAllMarkersJdbcImpl allMarkersJdbc;
     private JdbcConnectionProvider jdbcConnectionProvider;
     private OpenMRSAuthenticator openMRSAuthenticator;
+    private WebClient webClient;
 
 
     @Before
     public void setUp() throws URISyntaxException {
         atomFeedProperties = mock(OpenERPAtomFeedProperties.class);
         allFeedsMock = mock(AllFeeds.class);
+        webClient = mock(WebClient.class);
         jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
         allMarkersJdbc = new OpenERPAllMarkersJdbcImpl(jdbcConnectionProvider);
 
@@ -87,7 +93,7 @@ public class OpenERPCustomerFeedClientServiceIT {
 
         second.setOtherLinks(Arrays.asList(getLink("prev-archive", firstFeedUri), getLink("next-archive", recentFeedUri),getLink("self", secondFeedUri),getLink("via", secondFeedUri)));
 
-        first.setOtherLinks(Arrays.asList(new Link[]{getLink("next-archive", secondFeedUri),getLink("via", firstFeedUri)}));
+        first.setOtherLinks(Arrays.asList(new Link[]{getLink("next-archive", secondFeedUri),getLink("self", firstFeedUri),getLink("via", firstFeedUri)}));
 
         openMRSAuthenticator = mock(OpenMRSAuthenticator.class);
     }
@@ -123,12 +129,17 @@ public class OpenERPCustomerFeedClientServiceIT {
     }
 
     @Test
-    public void shouldCreateCustomerInOpenERP() throws URISyntaxException, FeedException {
-        when(atomFeedProperties.getFeedUri("customer.feed.generator.uri")).thenReturn("http://host/patients/notifications");
+    public void shouldCreateSaleOrderInOpenERP() throws URISyntaxException, FeedException {
+        when(atomFeedProperties.getFeedUri("saleorder.feed.generator.uri")).thenReturn("http://host/patients/notifications");
         when(allFeedsMock.getFor(notificationsUri)).thenReturn(last);
         when(allFeedsMock.getFor(recentFeedUri)).thenReturn(last);
         when(allFeedsMock.getFor(secondFeedUri)).thenReturn(second);
         when(allFeedsMock.getFor(firstFeedUri)).thenReturn(first);
+
+        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("encounterResource.xml");
+        String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
+
+        when(webClient.get((URI) any(),(HashMap)any())).thenReturn(patientResource);
 
         when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
 
@@ -141,11 +152,11 @@ public class OpenERPCustomerFeedClientServiceIT {
         authenticationResponse.setSessionId("sessionIdValue");
         when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
-        OpenERPCustomerFeedClientService feedClientService = new OpenERPCustomerFeedClientService(atomFeedProperties,jdbcConnectionProvider,
-                new EventWorkerFactory(),openERPClient, "customer.feed.generator.uri", allFeedsMock, allMarkersJdbc,
+        OpenERPSaleOrderFeedJob feedJob = new OpenERPSaleOrderFeedJob(atomFeedProperties,jdbcConnectionProvider,
+                new EventWorkerFactory(webClient),openERPClient, "saleorder.feed.generator.uri", allFeedsMock, allMarkersJdbc,
                 new AllFailedEventsJdbcImpl(jdbcConnectionProvider), mock(TaskMonitor.class),
                 openMRSAuthenticator);
-        feedClientService.processFeed();
+        feedJob.processFeed();
 
         Marker marker = allMarkersJdbc.get(notificationsUri);
         assertNotNull(marker);
@@ -156,7 +167,7 @@ public class OpenERPCustomerFeedClientServiceIT {
         Entry entry = new Entry();
         ArrayList<Content> contents = new ArrayList<Content>();
         Content content = new Content();
-        String value ="{\"name\": \"Ram Singh\",\"ref\": \"GAN111133\", \"village\":  \"Ganiyari\"}";
+        String value ="/Test";
         content.setValue(String.format("%s%s%s", "<![CDATA[", value, "]]>"));
         contents.add(content);
         entry.setContents(contents);

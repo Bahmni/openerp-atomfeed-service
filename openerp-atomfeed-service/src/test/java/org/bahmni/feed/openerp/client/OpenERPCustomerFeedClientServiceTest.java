@@ -1,9 +1,12 @@
-package org.bahmni.feed.openerp;
+package org.bahmni.feed.openerp.client;
 
 import com.sun.syndication.feed.atom.Entry;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
+import org.bahmni.feed.openerp.ObjectMapperRepository;
+import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
+import org.bahmni.feed.openerp.TaskMonitor;
 import org.bahmni.feed.openerp.event.EventWorkerFactory;
 import org.bahmni.feed.openerp.event.OpenERPCustomerServiceEventWorker;
 import org.bahmni.openerp.web.client.OpenERPClient;
@@ -22,8 +25,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class OpenERPCustomerFeedClientServiceTest {
 
@@ -37,6 +39,7 @@ public class OpenERPCustomerFeedClientServiceTest {
     private OpenERPAtomFeedProperties atomFeedProperties;
     private EventWorkerFactory workerFactory;
     private OpenERPClient openERPClient;
+    OpenERPCustomerServiceEventWorker openERPEventWorker;
 
 
     @Before
@@ -48,12 +51,13 @@ public class OpenERPCustomerFeedClientServiceTest {
         workerFactory = mock(EventWorkerFactory.class);
         atomFeedClient = mock(AtomFeedClient.class);
         openERPClient = mock(OpenERPClient.class);
+        openERPEventWorker = mock(OpenERPCustomerServiceEventWorker.class);
     }
 
     @Test
     public void shouldCallOpenERPEventWorkerOnProcessingFeed() throws URISyntaxException, FeedException {
         Feed feed = setupFeed();
-        OpenERPCustomerServiceEventWorker openERPEventWorker = new OpenERPCustomerServiceEventWorker("www.openmrs.com",openERPClient, null, null);
+       // OpenERPCustomerServiceEventWorker openERPEventWorker = new OpenERPCustomerServiceEventWorker("www.openmrs.com",openERPClient, null, null);
 
         when(atomFeedProperties.getOpenMRSUser()).thenReturn("mrsuser");
         when(atomFeedProperties.getOpenMRSPassword()).thenReturn("mrspwd");
@@ -62,9 +66,9 @@ public class OpenERPCustomerFeedClientServiceTest {
 
         when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
 
-        when(workerFactory.getWorker("openerp.customer.service", "http://www.openerp.com", openERPClient,
-                atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds(), null, null, null)).thenReturn(openERPEventWorker);
-        when(allFeedsMock.getFor(feedUri)).thenReturn(feed);
+//        when(workerFactory.getWorker("openerp.customer.service", "http://www.openerp.com", openERPClient,
+//                atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds(), null, null, null)).thenReturn(openERPEventWorker);
+//        when(allFeedsMock.getFor(feedUri)).thenReturn(feed);
         when(allFailedEvents.getNumberOfFailedEvents(feedUri.toString())).thenReturn(0);
 
         OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
@@ -75,12 +79,14 @@ public class OpenERPCustomerFeedClientServiceTest {
 
         JdbcConnectionProvider jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
 
-        OpenERPCustomerFeedClientService feedClientService =
-                new OpenERPCustomerFeedClientService(atomFeedProperties,jdbcConnectionProvider,workerFactory,openERPClient,"customer.feed.generator.uri",
+        OpenERPCustomerFeedJob feedJob =
+                new OpenERPCustomerFeedJob(atomFeedProperties,jdbcConnectionProvider,workerFactory,openERPClient,"customer.feed.generator.uri",
                         allFeedsMock, null,allFailedEvents, mock(TaskMonitor.class), mrsAuthenticator);
-        feedClientService.processFeed();
+        feedJob.setAtomFeedClient(atomFeedClient);
+        feedJob.processFeed();
 
-//        verify(atomFeedClient, atLeastOnce()).processEvents(new URI("http://www.openerp.com"), openERPEventWorker);
+        verify(atomFeedClient, atLeastOnce()).processEvents();
+//        verify(openERPEventWorker, atLeastOnce()).process((Event) any());
     }
 
 

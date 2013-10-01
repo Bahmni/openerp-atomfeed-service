@@ -5,11 +5,22 @@ import org.bahmni.webclients.WebClient;
 import org.ict4h.atomfeed.client.service.EventWorker;
 
 public class EventWorkerFactory {
+
+    private WebClient webClient;
+
+    public EventWorkerFactory(WebClient webClient){
+        this.webClient = webClient;
+    }
+
     public EventWorker getWorker(String workerName, String feedUrl, OpenERPClient openERPClient,
-                                 int connectionTimeoutInMilliseconds, int replyTimeoutInMilliseconds, String sessionIdKey, String sessionIdValue, String urlPrefix) {
+                                  String urlPrefix) {
         if (workerName.equals("openerp.customer.service"))
             return new OpenERPCustomerServiceEventWorker(feedUrl, openERPClient,
-                    new WebClient(connectionTimeoutInMilliseconds, replyTimeoutInMilliseconds, sessionIdKey, sessionIdValue),
+                    webClient,
+                    urlPrefix);
+        if (workerName.equals("openerp.saleorder.service"))
+            return new OpenERPSaleOrderEventWorker(feedUrl, openERPClient,
+                    webClient,
                     urlPrefix);
         throw new RuntimeException(String.format("No worker for %s", workerName));
     }

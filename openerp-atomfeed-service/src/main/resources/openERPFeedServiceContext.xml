@@ -23,24 +23,38 @@
     <context:component-scan base-package="org.ict4h.atomfeed.spring.resource"/>
 
     <task:scheduled-tasks>
-        <task:scheduled ref="openerpFeedClientService" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>
-        <task:scheduled ref="openerpFeedClientService" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>
+        <task:scheduled ref="openerpCustomerFeedClientService" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>
+        <task:scheduled ref="openerpCustomerFeedClientService" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>
+        <task:scheduled ref="openerpSaleOrderFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>
+        <task:scheduled ref="openerpSaleOrderFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>
     </task:scheduled-tasks>
 
 
-    <bean id="openerpFeedClientService" class="org.bahmni.feed.openerp.OpenERPCustomerFeedClientService" >
+    <bean id="openerpCustomerFeedClientService" class="org.bahmni.feed.openerp.client.OpenERPCustomerFeedJob" >
         <constructor-arg ref="openERPAtomFeedProperties"/>
         <constructor-arg ref="openERPClient"/>
-        <constructor-arg ref="feedName" />
-        <constructor-arg ref="threadLocalJdbcConnectionProvider" />
+        <constructor-arg ref="customerFeedName" />
+        <constructor-arg ref="jdbcConnectionProvider" />
         <constructor-arg ref="customerFeedClientMonitor" />
     </bean>
 
-    <bean id="feedName" class="java.lang.String">
+    <bean id="customerFeedName" class="java.lang.String">
         <constructor-arg value="customer.feed.generator.uri"/>
     </bean>
 
-    <bean id="threadLocalJdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider">
+    <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.client.OpenERPSaleOrderFeedJob" >
+        <constructor-arg ref="openERPAtomFeedProperties"/>
+        <constructor-arg ref="openERPClient"/>
+        <constructor-arg type="java.lang.String" value="saleorder.feed.generator.uri" />
+        <constructor-arg ref="jdbcConnectionProvider" />
+        <constructor-arg ref="customerFeedClientMonitor" />
+    </bean>
+
+    <!--<bean id="saleorderFeedName" class="java.lang.String">-->
+        <!--<constructor-arg value="saleorder.feed.generator.uri"/>-->
+    <!--</bean>-->
+
+    <bean id="jdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider">
         <constructor-arg ref="dataSource"/>
     </bean>
 
