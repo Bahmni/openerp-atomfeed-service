@@ -136,7 +136,7 @@ public class OpenERPSaleOrderFeedIT {
         when(allFeedsMock.getFor(secondFeedUri)).thenReturn(second);
         when(allFeedsMock.getFor(firstFeedUri)).thenReturn(first);
 
-        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("encounterResource.xml");
+        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("encounterResource.json");
         String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
 
         when(webClient.get((URI) any(),(HashMap)any())).thenReturn(patientResource);

@@ -78,14 +78,25 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
     private List<Parameter> mapParameters(OpenMRSEncounter openMRSEncounter, String eventId, String feedUri) {
         List<Parameter> parameters = new ArrayList<Parameter>();
-        if(openMRSEncounter.getOrders().size() > 0){
-            OpenMRSOrder order = openMRSEncounter.getOrders().get(0);
-            parameters.add(createParameter("product_id", order.getConcept().getUuid(), "string"));
+        String product_ids="";
+        String patientDisplay = openMRSEncounter.getPatient().getDisplay();
+        String patientId = patientDisplay.split(" ")[0];
 
-            parameters.add(createParameter("category", "create.saleorder", "string"));
-            parameters.add(createParameter("feed_uri", feedUrl, "string"));
-            parameters.add(createParameter("last_read_entry_id", eventId, "string"));
-            parameters.add(createParameter("feed_uri_for_last_read_entry", feedUri, "string"));
+        parameters.add(createParameter("category", "create.sale.order", "string"));
+        parameters.add(createParameter("customer_id", patientId, "string"));
+        parameters.add(createParameter("feed_uri", feedUrl, "string"));
+        parameters.add(createParameter("last_read_entry_id", eventId, "string"));
+        parameters.add(createParameter("feed_uri_for_last_read_entry", feedUri, "string"));
+
+        if(openMRSEncounter.getOrders().size() > 0){
+            int i =0;
+            for(OpenMRSOrder order : openMRSEncounter.getOrders())    {
+                if(i > 0)
+                    product_ids +=",";
+                product_ids += order.getConcept().getUuid();
+                i++;
+            }
+            parameters.add(createParameter("product_ids", product_ids, "string"));
         }
         return parameters;
     }

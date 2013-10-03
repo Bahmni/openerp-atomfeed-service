@@ -16,6 +16,7 @@
 
 package org.bahmni.feed.openerp.domain.encounter;
 
+import org.bahmni.feed.openerp.domain.OpenMRSPatient;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSEncounter {
+    private OpenMRSPatient patient;
     private String uuid;
     private List<OpenMRSOrder> orders = new ArrayList<>();
 
@@ -32,5 +34,9 @@ public class OpenMRSEncounter {
 
     public List<OpenMRSOrder> getOrders() {
         return orders;
+    }
+
+    public OpenMRSPatient getPatient() {
+        return patient;
     }
 }

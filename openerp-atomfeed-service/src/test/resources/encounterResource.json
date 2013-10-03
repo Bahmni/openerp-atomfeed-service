@@ -1,0 +1,482 @@
+{
+    "uuid": "f18b7270-0085-4196-a6e9-367ebcbfc890",
+    "patient": {
+        "uuid": "136cdac1-8bdf-4892-8a18-929a3ac113e3",
+        "display": "SIV4660 - Gabbar Singh Uranw",
+        "identifiers": [
+            {
+                "uuid": "aa0a0375-03d0-49ad-a02b-3aa12b0bb79c",
+                "display": "JSS = SIV4660",
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/136cdac1-8bdf-4892-8a18-929a3ac113e3/identifier/aa0a0375-03d0-49ad-a02b-3aa12b0bb79c",
+                        "rel": "self"
+                    }
+                ]
+            }
+        ],
+        "person": {
+            "uuid": "136cdac1-8bdf-4892-8a18-929a3ac113e3",
+            "display": "Gabbar Singh Uranw",
+            "gender": "M",
+            "age": 40,
+            "birthdate": "1973-01-06T00:00:00.000+0530",
+            "birthdateEstimated": false,
+            "dead": false,
+            "deathDate": null,
+            "causeOfDeath": null,
+            "preferredName": {
+                "uuid": "1a994c4b-a20b-4b24-a5e9-1a823bc6fa36",
+                "display": "Gabbar Singh Uranw",
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/136cdac1-8bdf-4892-8a18-929a3ac113e3/name/1a994c4b-a20b-4b24-a5e9-1a823bc6fa36",
+                        "rel": "self"
+                    }
+                ]
+            },
+            "preferredAddress": {
+                "uuid": "21ad87d4-7c22-4d2b-88fc-bfb72a8e79cd",
+                "display": null,
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/136cdac1-8bdf-4892-8a18-929a3ac113e3/address/21ad87d4-7c22-4d2b-88fc-bfb72a8e79cd",
+                        "rel": "self"
+                    }
+                ]
+            },
+            "attributes": [
+                {
+                    "uuid": "5e5979c9-7638-4f8e-98a1-7349559af82b",
+                    "display": "healthCenter = 4",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/136cdac1-8bdf-4892-8a18-929a3ac113e3/attribute/5e5979c9-7638-4f8e-98a1-7349559af82b",
+                            "rel": "self"
+                        }
+                    ]
+                },
+                {
+                    "uuid": "45335c4c-8e3b-4163-b075-24a2f41e706e",
+                    "display": "primaryRelative = Mansay",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/136cdac1-8bdf-4892-8a18-929a3ac113e3/attribute/45335c4c-8e3b-4163-b075-24a2f41e706e",
+                            "rel": "self"
+                        }
+                    ]
+                }
+            ],
+            "voided": false,
+            "links": [
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/136cdac1-8bdf-4892-8a18-929a3ac113e3",
+                    "rel": "self"
+                },
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/136cdac1-8bdf-4892-8a18-929a3ac113e3?v=full",
+                    "rel": "full"
+                }
+            ],
+            "resourceVersion": "1.8"
+        },
+        "voided": false,
+        "links": [
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/136cdac1-8bdf-4892-8a18-929a3ac113e3",
+                "rel": "self"
+            },
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/136cdac1-8bdf-4892-8a18-929a3ac113e3?v=full",
+                "rel": "full"
+            }
+        ],
+        "resourceVersion": "1.8"
+    },
+    "orders": [
+        {
+            "uuid": "26141644-468c-4e71-8d1c-8c17fd3b6df0",
+            "orderType": {
+                "uuid": "46eaeed0-2a7f-11e3-8f4c-005056823ee5",
+                "display": "Lab Order",
+                "name": "Lab Order",
+                "description": "An order for laboratory tests",
+                "retired": false,
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/ordertype/46eaeed0-2a7f-11e3-8f4c-005056823ee5",
+                        "rel": "self"
+                    },
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/ordertype/46eaeed0-2a7f-11e3-8f4c-005056823ee5?v=full",
+                        "rel": "full"
+                    }
+                ],
+                "resourceVersion": "1.8"
+            },
+            "concept": {
+                "uuid": "4a3ad265-34f7-4fbb-9cd5-d52289afea7a",
+                "display": "PS for mf by concentration",
+                "name": {
+                    "display": "PS for mf by concentration",
+                    "uuid": "d622e02f-9303-4dc8-86e5-a907e7b9b996",
+                    "name": "PS for mf by concentration",
+                    "locale": "en",
+                    "localePreferred": true,
+                    "conceptNameType": "FULLY_SPECIFIED",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/298f77ce-f8fc-46d3-ac6e-d7eebc407ba2/name/d622e02f-9303-4dc8-86e5-a907e7b9b996",
+                            "rel": "self"
+                        },
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/298f77ce-f8fc-46d3-ac6e-d7eebc407ba2/name/d622e02f-9303-4dc8-86e5-a907e7b9b996?v=full",
+                            "rel": "full"
+                        }
+                    ],
+                    "resourceVersion": "1.9"
+                },
+                "datatype": {
+                    "uuid": "8d4a4488-c2cc-11de-8d13-0010c6dffd0f",
+                    "display": "Numeric",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/conceptdatatype/8d4a4488-c2cc-11de-8d13-0010c6dffd0f",
+                            "rel": "self"
+                        }
+                    ]
+                },
+                "conceptClass": {
+                    "uuid": "8d4907b2-c2cc-11de-8d13-0010c6dffd0f",
+                    "display": "Test",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/conceptclass/8d4907b2-c2cc-11de-8d13-0010c6dffd0f",
+                            "rel": "self"
+                        }
+                    ]
+                },
+                "set": false,
+                "version": null,
+                "retired": false,
+                "names": [
+                    {
+                        "uuid": "d622e02f-9303-4dc8-86e5-a907e7b9b996",
+                        "display": "PS for mf by concentration",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/298f77ce-f8fc-46d3-ac6e-d7eebc407ba2/name/d622e02f-9303-4dc8-86e5-a907e7b9b996",
+                                "rel": "self"
+                            }
+                        ]
+                    }
+                ],
+                "descriptions": [],
+                "mappings": [],
+                "answers": [],
+                "setMembers": [],
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/298f77ce-f8fc-46d3-ac6e-d7eebc407ba2",
+                        "rel": "self"
+                    },
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/298f77ce-f8fc-46d3-ac6e-d7eebc407ba2?v=full",
+                        "rel": "full"
+                    }
+                ],
+                "resourceVersion": "1.9"
+            }
+        },
+        {
+            "uuid": "3f9960ef-f141-4131-a4b5-23835d69671d",
+            "orderType": {
+                "uuid": "46eaeed0-2a7f-11e3-8f4c-005056823ee5",
+                "display": "Lab Order",
+                "name": "Lab Order",
+                "description": "An order for laboratory tests",
+                "retired": false,
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/ordertype/46eaeed0-2a7f-11e3-8f4c-005056823ee5",
+                        "rel": "self"
+                    },
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/ordertype/46eaeed0-2a7f-11e3-8f4c-005056823ee5?v=full",
+                        "rel": "full"
+                    }
+                ],
+                "resourceVersion": "1.8"
+            },
+            "concept": {
+                "uuid": "2461e8c0-ef23-475f-934d-b8d8366d5e90",
+                "display": "Anaemia Panel",
+                "name": {
+                    "display": "Anaemia Panel",
+                    "uuid": "98c416ee-d6e2-4cb7-8e40-dba8d1d75d7d",
+                    "name": "Anaemia Panel",
+                    "locale": "en",
+                    "localePreferred": true,
+                    "conceptNameType": "FULLY_SPECIFIED",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/b825211f-0dac-4c58-b249-a3a72d6a0da9/name/98c416ee-d6e2-4cb7-8e40-dba8d1d75d7d",
+                            "rel": "self"
+                        },
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/b825211f-0dac-4c58-b249-a3a72d6a0da9/name/98c416ee-d6e2-4cb7-8e40-dba8d1d75d7d?v=full",
+                            "rel": "full"
+                        }
+                    ],
+                    "resourceVersion": "1.9"
+                },
+                "datatype": {
+                    "uuid": "8d4a4488-c2cc-11de-8d13-0010c6dffd0f",
+                    "display": "Numeric",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/conceptdatatype/8d4a4488-c2cc-11de-8d13-0010c6dffd0f",
+                            "rel": "self"
+                        }
+                    ]
+                },
+                "conceptClass": {
+                    "uuid": "8d492026-c2cc-11de-8d13-0010c6dffd0f",
+                    "display": "LabSet",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/conceptclass/8d492026-c2cc-11de-8d13-0010c6dffd0f",
+                            "rel": "self"
+                        }
+                    ]
+                },
+                "set": true,
+                "version": null,
+                "retired": false,
+                "names": [
+                    {
+                        "uuid": "98c416ee-d6e2-4cb7-8e40-dba8d1d75d7d",
+                        "display": "Anaemia Panel",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/b825211f-0dac-4c58-b249-a3a72d6a0da9/name/98c416ee-d6e2-4cb7-8e40-dba8d1d75d7d",
+                                "rel": "self"
+                            }
+                        ]
+                    }
+                ],
+                "descriptions": [],
+                "mappings": [],
+                "answers": [],
+                "setMembers": [
+                    {
+                        "uuid": "efdb5f58-f70b-41f2-8c93-582a5615d9d9",
+                        "display": "Packed Cell Volume (PCV)",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/efdb5f58-f70b-41f2-8c93-582a5615d9d9",
+                                "rel": "self"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "9986c40b-b755-4584-a68b-b7fcfbcdf69d",
+                        "display": "PS for RBC Morphology",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/9986c40b-b755-4584-a68b-b7fcfbcdf69d",
+                                "rel": "self"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "b74f996e-2114-403d-906d-adb14e39a874",
+                        "display": "Sickling Test",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/b74f996e-2114-403d-906d-adb14e39a874",
+                                "rel": "self"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "a1a47426-77dd-4adb-9cdf-9892cb1b2d85",
+                        "display": "Reticulocyte Count",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/a1a47426-77dd-4adb-9cdf-9892cb1b2d85",
+                                "rel": "self"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "2bbc9b43-90ac-4e00-ae03-bb409f46bfbd",
+                        "display": "Hb Electrophoresis",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/2bbc9b43-90ac-4e00-ae03-bb409f46bfbd",
+                                "rel": "self"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "6800c44a-2899-48c8-949f-bd2d3f025e57",
+                        "display": "Platelet Count",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/6800c44a-2899-48c8-949f-bd2d3f025e57",
+                                "rel": "self"
+                            }
+                        ]
+                    }
+                ],
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/b825211f-0dac-4c58-b249-a3a72d6a0da9",
+                        "rel": "self"
+                    },
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/b825211f-0dac-4c58-b249-a3a72d6a0da9?v=full",
+                        "rel": "full"
+                    }
+                ],
+                "resourceVersion": "1.9"
+            }
+        },
+        {
+            "uuid": "f81749c4-4827-4374-be64-28e5f52513f5",
+            "orderType": {
+                "uuid": "46eaeed0-2a7f-11e3-8f4c-005056823ee5",
+                "display": "Lab Order",
+                "name": "Lab Order",
+                "description": "An order for laboratory tests",
+                "retired": false,
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/ordertype/46eaeed0-2a7f-11e3-8f4c-005056823ee5",
+                        "rel": "self"
+                    },
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/ordertype/46eaeed0-2a7f-11e3-8f4c-005056823ee5?v=full",
+                        "rel": "full"
+                    }
+                ],
+                "resourceVersion": "1.8"
+            },
+            "concept": {
+                "uuid": "2461e8c0-ef23-475f-934d-b8d8366d5e90",
+                "display": "Routine Urine",
+                "name": {
+                    "display": "Routine Urine",
+                    "uuid": "f726af16-fc6b-47fa-9956-58cb2ed8105e",
+                    "name": "Routine Urine",
+                    "locale": "en",
+                    "localePreferred": true,
+                    "conceptNameType": "FULLY_SPECIFIED",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/0f609895-7d45-4b22-a91b-755d75e470ec/name/f726af16-fc6b-47fa-9956-58cb2ed8105e",
+                            "rel": "self"
+                        },
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/0f609895-7d45-4b22-a91b-755d75e470ec/name/f726af16-fc6b-47fa-9956-58cb2ed8105e?v=full",
+                            "rel": "full"
+                        }
+                    ],
+                    "resourceVersion": "1.9"
+                },
+                "datatype": {
+                    "uuid": "8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                    "display": "N/A",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/conceptdatatype/8d4a4c94-c2cc-11de-8d13-0010c6dffd0f",
+                            "rel": "self"
+                        }
+                    ]
+                },
+                "conceptClass": {
+                    "uuid": "8d492026-c2cc-11de-8d13-0010c6dffd0f",
+                    "display": "LabSet",
+                    "links": [
+                        {
+                            "uri": "NEED-TO-CONFIGURE/ws/rest/v1/conceptclass/8d492026-c2cc-11de-8d13-0010c6dffd0f",
+                            "rel": "self"
+                        }
+                    ]
+                },
+                "set": true,
+                "version": null,
+                "retired": false,
+                "names": [
+                    {
+                        "uuid": "f726af16-fc6b-47fa-9956-58cb2ed8105e",
+                        "display": "Routine Urine",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/0f609895-7d45-4b22-a91b-755d75e470ec/name/f726af16-fc6b-47fa-9956-58cb2ed8105e",
+                                "rel": "self"
+                            }
+                        ]
+                    }
+                ],
+                "descriptions": [],
+                "mappings": [],
+                "answers": [],
+                "setMembers": [
+                    {
+                        "uuid": "009a1bde-0503-45c3-af37-b3881e82fa93",
+                        "display": "Albumin",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/009a1bde-0503-45c3-af37-b3881e82fa93",
+                                "rel": "self"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "6e0cf697-b43a-40fa-a9ec-f857930eaf6c",
+                        "display": "Sugar",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/6e0cf697-b43a-40fa-a9ec-f857930eaf6c",
+                                "rel": "self"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "5c6a0bac-144d-4ac8-97de-02580a14c772",
+                        "display": "pH",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/5c6a0bac-144d-4ac8-97de-02580a14c772",
+                                "rel": "self"
+                            }
+                        ]
+                    },
+                    {
+                        "uuid": "0bcd08cc-50da-49fe-8edf-e345ac5ac44c",
+                        "display": "Specific Gravity",
+                        "links": [
+                            {
+                                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/0bcd08cc-50da-49fe-8edf-e345ac5ac44c",
+                                "rel": "self"
+                            }
+                        ]
+                    }
+                ],
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/0f609895-7d45-4b22-a91b-755d75e470ec",
+                        "rel": "self"
+                    },
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/concept/0f609895-7d45-4b22-a91b-755d75e470ec?v=full",
+                        "rel": "full"
+                    }
+                ],
+                "resourceVersion": "1.9"
+            }
+        }
+    ]
+}

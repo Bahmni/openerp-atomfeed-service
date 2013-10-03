@@ -19,4 +19,5 @@ public class OpenMRSOrder {
     public OpenMRSConcept getConcept() {
         return concept;
     }
+
 }
