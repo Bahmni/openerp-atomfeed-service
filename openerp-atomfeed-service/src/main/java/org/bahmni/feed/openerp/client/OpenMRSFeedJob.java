@@ -38,7 +38,7 @@ public abstract class OpenMRSFeedJob {
     AllFeeds allFeeds;
     AllMarkers allMarkers;
     AllFailedEvents allFailedEvents;
-    static OpenMRSAuthenticator openMRSAuthenticator;
+    OpenMRSAuthenticator openMRSAuthenticator;
 
     public OpenMRSFeedJob() {}
 

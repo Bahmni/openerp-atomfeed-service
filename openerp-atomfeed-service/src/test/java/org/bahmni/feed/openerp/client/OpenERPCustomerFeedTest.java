@@ -81,7 +81,7 @@ public class OpenERPCustomerFeedTest {
 
         OpenERPCustomerFeedJob feedJob =
                 new OpenERPCustomerFeedJob(atomFeedProperties,jdbcConnectionProvider,workerFactory,openERPClient,"customer.feed.generator.uri",
-                        allFeedsMock, null,allFailedEvents, mock(TaskMonitor.class), mrsAuthenticator);
+                        allFeedsMock, null,allFailedEvents, mock(TaskMonitor.class));
         feedJob.setAtomFeedClient(atomFeedClient);
         feedJob.processFeed();
 

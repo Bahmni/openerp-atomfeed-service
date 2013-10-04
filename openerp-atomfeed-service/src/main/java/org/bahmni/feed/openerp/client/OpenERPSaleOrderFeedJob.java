@@ -34,14 +34,14 @@ public class OpenERPSaleOrderFeedJob extends OpenMRSFeedJob{
                                    TaskMonitor customerFeedClientMonitor) throws FeedException {
         this(atomFeedProperties,jdbcConnectionProvider, new EventWorkerFactory(getWebClient(atomFeedProperties,new OpenMRSAuthenticator(atomFeedProperties.getAuthenticationURI(), atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds()))), openERPClient, feedName,
                 getAllFeeds(atomFeedProperties), new AllMarkersJdbcImpl(jdbcConnectionProvider),
-                new AllFailedEventsJdbcImpl(jdbcConnectionProvider), customerFeedClientMonitor,
-                new OpenMRSAuthenticator(atomFeedProperties.getAuthenticationURI(), atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds()));
+                new AllFailedEventsJdbcImpl(jdbcConnectionProvider), customerFeedClientMonitor
+                );
     }
 
     OpenERPSaleOrderFeedJob(OpenERPAtomFeedProperties atomFeedProperties, JdbcConnectionProvider jdbcConnectionProvider,
                             EventWorkerFactory workerFactory, OpenERPClient openERPClient, String feedName,
                             AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents,
-                            TaskMonitor taskMonitor, OpenMRSAuthenticator openMRSAuthenticator) throws FeedException {
+                            TaskMonitor taskMonitor) throws FeedException {
         this.atomFeedProperties = atomFeedProperties;
         this.jdbcConnectionProvider = jdbcConnectionProvider;
         this.workerFactory = workerFactory;

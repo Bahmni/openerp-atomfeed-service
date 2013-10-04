@@ -154,8 +154,8 @@ public class OpenERPSaleOrderFeedIT {
 
         OpenERPSaleOrderFeedJob feedJob = new OpenERPSaleOrderFeedJob(atomFeedProperties,jdbcConnectionProvider,
                 new EventWorkerFactory(webClient),openERPClient, "saleorder.feed.generator.uri", allFeedsMock, allMarkersJdbc,
-                new AllFailedEventsJdbcImpl(jdbcConnectionProvider), mock(TaskMonitor.class),
-                openMRSAuthenticator);
+                new AllFailedEventsJdbcImpl(jdbcConnectionProvider), mock(TaskMonitor.class)
+                );
         feedJob.processFeed();
 
         Marker marker = allMarkersJdbc.get(notificationsUri);
