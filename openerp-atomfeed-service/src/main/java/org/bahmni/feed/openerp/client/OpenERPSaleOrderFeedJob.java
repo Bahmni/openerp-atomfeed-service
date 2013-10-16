@@ -7,7 +7,6 @@ import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.TaskMonitor;
 import org.bahmni.feed.openerp.event.EventWorkerFactory;
 import org.bahmni.openerp.web.client.OpenERPClient;
-import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.repository.AllMarkers;
@@ -32,7 +31,7 @@ public class OpenERPSaleOrderFeedJob extends OpenMRSFeedJob{
     public OpenERPSaleOrderFeedJob(OpenERPAtomFeedProperties atomFeedProperties, OpenERPClient openERPClient,
                                    String feedName, JdbcConnectionProvider jdbcConnectionProvider,
                                    TaskMonitor customerFeedClientMonitor) throws FeedException {
-        this(atomFeedProperties,jdbcConnectionProvider, new EventWorkerFactory(getWebClient(atomFeedProperties,new OpenMRSAuthenticator(atomFeedProperties.getAuthenticationURI(), atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds()))), openERPClient, feedName,
+        this(atomFeedProperties,jdbcConnectionProvider, null, openERPClient, feedName,
                 getAllFeeds(atomFeedProperties), new AllMarkersJdbcImpl(jdbcConnectionProvider),
                 new AllFailedEventsJdbcImpl(jdbcConnectionProvider), customerFeedClientMonitor
                 );

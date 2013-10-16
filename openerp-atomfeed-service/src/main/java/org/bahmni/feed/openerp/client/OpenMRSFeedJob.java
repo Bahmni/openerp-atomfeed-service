@@ -71,6 +71,8 @@ public abstract class OpenMRSFeedJob {
 
     private FeedClient getAtomFeedClient() throws FeedException {
         if (atomFeedClient == null) {
+            if(workerFactory == null)
+                workerFactory = new EventWorkerFactory(getWebClient(atomFeedProperties,new OpenMRSAuthenticator(atomFeedProperties.getAuthenticationURI(), atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds())));
             atomFeedClient = getFeedClient(atomFeedProperties,jdbcConnectionProvider, feedName, openERPClient, workerFactory, allFeeds, allMarkers, allFailedEvents);
         }
         return atomFeedClient;
