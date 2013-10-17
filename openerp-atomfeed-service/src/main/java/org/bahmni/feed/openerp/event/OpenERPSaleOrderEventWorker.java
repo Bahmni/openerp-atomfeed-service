@@ -3,12 +3,15 @@ package org.bahmni.feed.openerp.event;
 import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenMRSEncounterMapper;
+import org.bahmni.feed.openerp.domain.encounter.OpenERPOrder;
+import org.bahmni.feed.openerp.domain.encounter.OpenERPOrders;
 import org.bahmni.feed.openerp.domain.encounter.OpenMRSEncounter;
 import org.bahmni.feed.openerp.domain.encounter.OpenMRSOrder;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.bahmni.webclients.WebClient;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.service.EventWorker;
 
@@ -23,6 +26,8 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
     private String feedUrl;
     private WebClient webClient;
     private String urlPrefix;
+    public static ObjectMapper objectMapper = new ObjectMapper();
+
 
     private static Logger logger = Logger.getLogger(OpenERPSaleOrderEventWorker.class);
 
@@ -76,9 +81,8 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
         return mapParameters(openMRSEncounter, event.getId(), event.getFeedUri());
     }
 
-    private List<Parameter> mapParameters(OpenMRSEncounter openMRSEncounter, String eventId, String feedUri) {
+    private List<Parameter> mapParameters(OpenMRSEncounter openMRSEncounter, String eventId, String feedUri) throws IOException {
         List<Parameter> parameters = new ArrayList<Parameter>();
-        String product_ids="";
         String patientDisplay = openMRSEncounter.getPatient().getDisplay();
         String patientId = patientDisplay.split(" ")[0];
 
@@ -88,15 +92,20 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
         parameters.add(createParameter("last_read_entry_id", eventId, "string"));
         parameters.add(createParameter("feed_uri_for_last_read_entry", feedUri, "string"));
 
+        OpenERPOrders orders = new OpenERPOrders();
+
         if(openMRSEncounter.getOrders().size() > 0){
-            int i =0;
             for(OpenMRSOrder order : openMRSEncounter.getOrders())    {
-                if(i > 0)
-                    product_ids +=",";
-                product_ids += order.getConcept().getUuid();
-                i++;
+                OpenERPOrder openERPOrder = new OpenERPOrder();
+                openERPOrder.setId(order.getUuid());
+                List<String> productIds = new ArrayList<String>();
+                productIds.add(order.getConcept().getUuid());
+                openERPOrder.setProductIds(productIds);
+                orders.getOpenERPOrders().add(openERPOrder);
             }
-            parameters.add(createParameter("product_ids", product_ids, "string"));
+            String ordersJson = objectMapper.writeValueAsString(orders);
+
+            parameters.add(createParameter("orders", ordersJson, "string"));
         }
         return parameters;
     }

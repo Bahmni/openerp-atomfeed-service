@@ -137,9 +137,9 @@ public class OpenERPSaleOrderFeedIT {
         when(allFeedsMock.getFor(firstFeedUri)).thenReturn(first);
 
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("encounterResource.json");
-        String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
+        String encounterResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
 
-        when(webClient.get((URI) any(),(HashMap)any())).thenReturn(patientResource);
+        when(webClient.get((URI) any(),(HashMap)any())).thenReturn(encounterResource);
 
         when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
 
