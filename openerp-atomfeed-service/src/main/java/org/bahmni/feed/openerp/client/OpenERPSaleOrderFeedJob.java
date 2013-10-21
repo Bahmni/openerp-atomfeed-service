@@ -60,11 +60,8 @@ public class OpenERPSaleOrderFeedJob extends OpenMRSFeedJob{
         String feedUri = atomFeedProperties.getFeedUri(feedName);
         try {
             String urlPrefix = getURLPrefix(atomFeedProperties);
-
-
             EventWorker eventWorker = eventWorkerFactory.getWorker("openerp.saleorder.service", atomFeedProperties.getFeedUri(feedName),openERPClient,
                      urlPrefix);
-
             return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(), jdbcConnectionProvider, new URI(feedUri), eventWorker) ;
         } catch (URISyntaxException e) {
             logger.error(e);

@@ -7,7 +7,6 @@ import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.TaskMonitor;
 import org.bahmni.feed.openerp.event.EventWorkerFactory;
 import org.bahmni.openerp.web.client.OpenERPClient;
-import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.repository.AllMarkers;
@@ -32,7 +31,7 @@ public class OpenERPCustomerFeedJob extends OpenMRSFeedJob {
     public OpenERPCustomerFeedJob(OpenERPAtomFeedProperties atomFeedProperties, OpenERPClient openERPClient,
                                   String feedName, JdbcConnectionProvider jdbcConnectionProvider,
                                   org.bahmni.feed.openerp.TaskMonitor customerFeedClientMonitor) throws FeedException {
-        this(atomFeedProperties,jdbcConnectionProvider, new EventWorkerFactory(getWebClient(atomFeedProperties,new OpenMRSAuthenticator(atomFeedProperties.getAuthenticationURI(), atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds()))), openERPClient, feedName,
+        this(atomFeedProperties,jdbcConnectionProvider, null, openERPClient, feedName,
                 getAllFeeds(atomFeedProperties), new AllMarkersJdbcImpl(jdbcConnectionProvider),
                 new AllFailedEventsJdbcImpl(jdbcConnectionProvider), customerFeedClientMonitor
                 );
@@ -50,7 +49,6 @@ public class OpenERPCustomerFeedJob extends OpenMRSFeedJob {
         this.allFeeds = allFeeds;
         this.allMarkers = allMarkers;
         this.allFailedEvents = allFailedEvents;
-        this.openMRSAuthenticator = openMRSAuthenticator;
         this.taskMonitor = taskMonitor;
     }
 
@@ -60,11 +58,8 @@ public class OpenERPCustomerFeedJob extends OpenMRSFeedJob {
         String feedUri = atomFeedProperties.getFeedUri(feedName);
         try {
             String urlPrefix = getURLPrefix(atomFeedProperties);
-
-
             EventWorker eventWorker = eventWorkerFactory.getWorker("openerp.customer.service", atomFeedProperties.getFeedUri(feedName),openERPClient,
                      urlPrefix);
-
             return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(), jdbcConnectionProvider, new URI(feedUri), eventWorker) ;
         } catch (URISyntaxException e) {
             logger.error(e);
