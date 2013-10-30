@@ -207,12 +207,17 @@
             <url>http://maven.springframework.org/release</url>
         </repository>
         <repository>
+            <id>spring-lib-milestone</id>
+            <name>Spring Maven libs milestone repository</name>
+            <url>http://repo.springsource.org/libs-milestone</url>
+        </repository>
+        <repository>
             <id>bahmni-artifactory</id>
             <name>bahmni-artifactory-snapshots</name>
             <url>http://bahmnirepo.thoughtworks.com/artifactory/libs-snapshot-local</url>
         </repository>
-
     </repositories>
+
     <distributionManagement>
         <snapshotRepository>
             <id>bahmni-artifactory</id>
