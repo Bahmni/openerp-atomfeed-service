@@ -66,7 +66,7 @@ public class OpenERPClient {
         login();
         String request = requestBuilder.buildNewRequest(openERPRequest, id, database, password);
         String response = httpClient().post("http://" + host + ":" + port + XML_RPC_OBJECT_ENDPOINT, request);
-        OpenERPResponseErrorValidator.checkForError(response);
+        new OpenERPResponseErrorValidator().checkForError(response);
         return response;
     }
 

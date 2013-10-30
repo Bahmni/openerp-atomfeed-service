@@ -19,24 +19,13 @@ import java.io.IOException;
 public class OpenERPResponseErrorValidator {
     private static final Logger logger = Logger.getLogger(OpenERPResponseErrorValidator.class);
     private static final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-    private static final ThreadLocal<DocumentBuilder> documentBuilderThreadLocal = new ThreadLocal<DocumentBuilder>() {
-        @Override
-        protected DocumentBuilder initialValue() {
-            try {
-                return builderFactory.newDocumentBuilder();
-            } catch (ParserConfigurationException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    };
 
-
-    public static void checkForError(String response) {
+    public void checkForError(String response) {
         StringBuilder errorMessage = new StringBuilder();
         try {
             Document document = getDocumentBuilder().parse(new ByteArrayInputStream(response.getBytes()));
             XPath xPath =  XPathFactory.newInstance().newXPath();
-            NodeList nodeList = (NodeList) xPath.compile("//fault//member/value/string").evaluate(document, XPathConstants.NODESET);
+            NodeList nodeList = (NodeList) xPath.compile("methodResponse/fault/descendant::member/value/string").evaluate(document, XPathConstants.NODESET);
 
             if(nodeList.getLength() == 0) {
                 return;
@@ -54,9 +43,11 @@ public class OpenERPResponseErrorValidator {
         }
     }
 
-    private static DocumentBuilder getDocumentBuilder() {
-        DocumentBuilder documentBuilder = documentBuilderThreadLocal.get();
-        documentBuilder.reset();
-        return documentBuilder;
+    private DocumentBuilder getDocumentBuilder() {
+        try {
+            return builderFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

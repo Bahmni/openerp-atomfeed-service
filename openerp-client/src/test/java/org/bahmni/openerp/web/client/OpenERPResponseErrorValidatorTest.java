@@ -6,12 +6,12 @@ public class OpenERPResponseErrorValidatorTest {
 
     @Test(expected = RuntimeException.class)
     public void shouldThrowErrorIfResponseHasFaultCode() throws Exception {
-        OpenERPResponseErrorValidator.checkForError(errorResponse());
+        new OpenERPResponseErrorValidator().checkForError(errorResponse());
     }
 
     @Test
     public void shouldNotThrowErrorIfResponseIsSuccess() throws Exception {
-        OpenERPResponseErrorValidator.checkForError(successResponse());
+        new OpenERPResponseErrorValidator().checkForError(successResponse());
     }
 
     private String errorResponse() {

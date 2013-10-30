@@ -3,6 +3,7 @@ package org.bahmni.openerp.web.http.client;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.CommonsClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,7 +35,7 @@ public class HttpClient {
     public void setTimeout(int replyTimeoutInMilliseconds) {
         if (!isTimeoutSet) {
             try {
-                CommonsClientHttpRequestFactory requestFactoryWithTimeout = new CommonsClientHttpRequestFactory();
+                HttpComponentsClientHttpRequestFactory requestFactoryWithTimeout = new HttpComponentsClientHttpRequestFactory();
                 requestFactoryWithTimeout.setReadTimeout(replyTimeoutInMilliseconds);
                 restTemplate.setRequestFactory(requestFactoryWithTimeout);
 
