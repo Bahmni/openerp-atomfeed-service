@@ -56,7 +56,7 @@ public class OpenERPSaleOrderFeedJob extends OpenMRSFeedJob{
 
     AtomFeedClient getFeedClient(OpenERPAtomFeedProperties atomFeedProperties,JdbcConnectionProvider jdbcConnectionProvider,
                                                 String feedName, OpenERPClient openERPClient, EventWorkerFactory eventWorkerFactory,
-                                                AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents) throws FeedException {
+                                                AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents)  {
         String feedUri = atomFeedProperties.getFeedUri(feedName);
         try {
             String urlPrefix = getURLPrefix(atomFeedProperties);

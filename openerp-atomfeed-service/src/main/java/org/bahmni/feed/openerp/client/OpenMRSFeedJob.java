@@ -1,8 +1,9 @@
 package org.bahmni.feed.openerp.client;
 
 
-import com.sun.syndication.io.FeedException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
+import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.TaskMonitor;
@@ -51,6 +52,7 @@ public abstract class OpenMRSFeedJob {
             getAtomFeedClient().processEvents();
         } catch (Exception e) {
             logger.error("failed customer feed execution " + e);
+            handleException(e);
         } finally {
             taskMonitor.endTask();
         }
@@ -64,9 +66,21 @@ public abstract class OpenMRSFeedJob {
             getAtomFeedClient().processFailedEvents();
         } catch (Exception e) {
             logger.error("failed customer feed execution " + e);
+            handleException(e);
         } finally {
             taskMonitor.endTask();
         }
+    }
+
+    protected void handleException(Throwable e) throws FeedException {
+        if (e != null && ExceptionUtils.getStackTrace(e).contains("HTTP response code: 401")) {
+            reInitializeAtomFeedClient();
+        }
+    }
+
+    private void reInitializeAtomFeedClient() throws FeedException {
+        workerFactory = new EventWorkerFactory(getWebClient(atomFeedProperties,new OpenMRSAuthenticator(atomFeedProperties.getAuthenticationURI(), atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds())));
+        atomFeedClient = getFeedClient(atomFeedProperties,jdbcConnectionProvider, feedName, openERPClient, workerFactory, allFeeds, allMarkers, allFailedEvents);
     }
 
     private FeedClient getAtomFeedClient() throws FeedException {
@@ -90,7 +104,7 @@ public abstract class OpenMRSFeedJob {
                                                 String feedName, OpenERPClient openERPClient, EventWorkerFactory eventWorkerFactory,
                                                 AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents) throws FeedException ;
 
-    static WebClient getWebClient(OpenERPAtomFeedProperties atomFeedProperties,OpenMRSAuthenticator openMRSAuthenticator) throws FeedException {
+    static WebClient getWebClient(OpenERPAtomFeedProperties atomFeedProperties,OpenMRSAuthenticator openMRSAuthenticator) {
         OpenMRSAuthenticationResponse authenticationResponse = openMRSAuthenticator.authenticate(atomFeedProperties.getOpenMRSUser(),
                 atomFeedProperties.getOpenMRSPassword(), ObjectMapperRepository.objectMapper);
         if (!authenticationResponse.isAuthenticated()) throw new FeedException("Failed to authenticate with OpenMRS");
