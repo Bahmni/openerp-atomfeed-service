@@ -88,7 +88,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
         parameters.add(createParameter("category", "create.sale.order", "string"));
         parameters.add(createParameter("customer_id", patientId, "string"));
-        if(feedUrl.contains("$param.value"))
+        if(feedUrl.contains("$param.value") || feedUri.contains("$param.value"))
             throw new RuntimeException("Junk values in the feedUrl:$param.value");
         parameters.add(createParameter("feed_uri", feedUrl, "string"));
         parameters.add(createParameter("last_read_entry_id", eventId, "string"));
