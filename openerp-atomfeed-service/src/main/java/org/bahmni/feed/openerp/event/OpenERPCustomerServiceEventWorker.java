@@ -82,7 +82,7 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         parameters.add(createParameter("village", openMRSPatient.getPerson().getPreferredAddress().getCityVillage(), "string"));
 
         parameters.add(createParameter("category", "create.customer", "string"));
-        if(feedUrl.contains("$param.value") || feedUri.contains("$param.value"))
+        if((feedUrl != null && feedUrl.contains("$param.value")) || (feedUri != null && feedUri.contains("$param.value")))
             throw new RuntimeException("Junk values in the feedUrl:$param.value");
         parameters.add(createParameter("feed_uri", feedUrl, "string"));
         parameters.add(createParameter("last_read_entry_id", eventId, "string"));
