@@ -52,7 +52,7 @@ public abstract class OpenMRSFeedJob {
             getAtomFeedClient().processEvents();
         } catch (Exception e) {
             logger.error("failed customer feed execution " + e);
-            handleException(e);
+            handleAuthorizationException(e);
         } finally {
             taskMonitor.endTask();
         }
@@ -66,13 +66,13 @@ public abstract class OpenMRSFeedJob {
             getAtomFeedClient().processFailedEvents();
         } catch (Exception e) {
             logger.error("failed customer feed execution " + e);
-            handleException(e);
+            handleAuthorizationException(e);
         } finally {
             taskMonitor.endTask();
         }
     }
 
-    protected void handleException(Throwable e) throws FeedException {
+    protected void handleAuthorizationException(Throwable e) throws FeedException {
         if (e != null && ExceptionUtils.getStackTrace(e).contains("HTTP response code: 401")) {
             reInitializeAtomFeedClient();
         }
