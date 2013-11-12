@@ -8,17 +8,17 @@ import com.sun.syndication.io.FeedException;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.TaskMonitor;
-import org.bahmni.feed.openerp.event.EventWorkerFactory;
+import org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob;
+import org.bahmni.feed.openerp.job.OpenMRSFeedJob;
 import org.bahmni.openerp.web.client.OpenERPClient;
-import org.bahmni.webclients.WebClient;
+import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
 import org.ict4h.atomfeed.Configuration;
 import org.ict4h.atomfeed.client.domain.Marker;
+import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
-import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
-import org.ict4h.atomfeed.client.service.FeedEnumerator;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.jdbc.JdbcUtils;
 import org.ict4h.atomfeed.jdbc.PropertiesJdbcConnectionProvider;
@@ -26,7 +26,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -35,9 +35,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
@@ -49,12 +52,27 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:applicationContext-openerpTest.xml"})
 public class OpenERPSaleOrderFeedIT {
+
+    @Mock
     private   AllFeeds allFeedsMock;
+
+    @Mock
     private OpenERPAtomFeedProperties atomFeedProperties;
 
-    @Autowired
+    @Mock
     private OpenERPClient openERPClient;
 
+
+    @Mock
+    private OpenMRSAuthenticator openMRSAuthenticator;
+
+    @Mock
+    private OpenMRSWebClient webClient;
+
+    @Mock
+    private AllFailedEvents allFailedEvents;
+
+    private JdbcConnectionProvider jdbcConnectionProvider;
     private URI notificationsUri;
     private URI firstFeedUri;
     private URI secondFeedUri;
@@ -62,17 +80,11 @@ public class OpenERPSaleOrderFeedIT {
     Feed first;
     Feed second;
     Feed last;
-    OpenERPAllMarkersJdbcImpl allMarkersJdbc;
-    private JdbcConnectionProvider jdbcConnectionProvider;
-    private OpenMRSAuthenticator openMRSAuthenticator;
-    private WebClient webClient;
 
+    private OpenERPAllMarkersJdbcImpl allMarkersJdbc;
 
     @Before
     public void setUp() throws URISyntaxException {
-        atomFeedProperties = mock(OpenERPAtomFeedProperties.class);
-        allFeedsMock = mock(AllFeeds.class);
-        webClient = mock(WebClient.class);
         jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
         allMarkersJdbc = new OpenERPAllMarkersJdbcImpl(jdbcConnectionProvider);
 
@@ -120,14 +132,6 @@ public class OpenERPSaleOrderFeedIT {
         return entries;
     }
 
-    private List<String> getEntries(FeedEnumerator feedEnumerator) {
-        List<String> entryIds = new ArrayList<String>();
-        for(Entry entry : feedEnumerator) {
-            entryIds.add(entry.getId());
-        }
-        return entryIds;
-    }
-
     @Test
     public void shouldCreateSaleOrderInOpenERP() throws URISyntaxException, FeedException {
         when(atomFeedProperties.getFeedUri("saleorder.feed.generator.uri")).thenReturn("http://host/patients/notifications");
@@ -146,16 +150,20 @@ public class OpenERPSaleOrderFeedIT {
         when(atomFeedProperties.getOpenMRSUser()).thenReturn("mrsuser");
         when(atomFeedProperties.getOpenMRSPassword()).thenReturn("mrspwd");
         when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
+        when(openERPClient.execute((OpenERPRequest) any())).thenReturn("Success");
 
         OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
         authenticationResponse.setAuthenticated(true);
         authenticationResponse.setSessionId("sessionIdValue");
         when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
-        OpenERPSaleOrderFeedJob feedJob = new OpenERPSaleOrderFeedJob(atomFeedProperties,jdbcConnectionProvider,
-                new EventWorkerFactory(webClient),openERPClient, "saleorder.feed.generator.uri", allFeedsMock, allMarkersJdbc,
-                new AllFailedEventsJdbcImpl(jdbcConnectionProvider), mock(TaskMonitor.class)
-                );
+        AtomFeedClientHelper clientHelper = new AtomFeedClientHelper(atomFeedProperties,jdbcConnectionProvider,openERPClient,
+                new FeedClientFactory(webClient),allMarkersJdbc,allFeedsMock,
+                allFailedEvents);
+        OpenMRSFeedJob openMRSFeedJob = new OpenMRSFeedJob(clientHelper,mock(TaskMonitor.class));
+
+        OpenERPSaleOrderFeedJob feedJob = new OpenERPSaleOrderFeedJob(openMRSFeedJob,"saleorder.feed.generator.uri");
+
         feedJob.processFeed();
 
         Marker marker = allMarkersJdbc.get(notificationsUri);
@@ -182,8 +190,7 @@ public class OpenERPSaleOrderFeedIT {
 
         public void delete(URI feedUri) throws SQLException {
             Connection connection = null;
-            PreparedStatement stmt = null;
-            ResultSet resultSet = null;
+            PreparedStatement stmt;
             try {
                 connection = jdbcConnectionProvider.getConnection();
                 String sql = String.format("delete from %s where feed_uri = ?",
@@ -197,9 +204,7 @@ public class OpenERPSaleOrderFeedIT {
                 connection.close();
             }
         }
-
     }
-
 }
 
 

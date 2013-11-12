@@ -8,15 +8,15 @@ import com.sun.syndication.io.FeedException;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.TaskMonitor;
-import org.bahmni.feed.openerp.event.EventWorkerFactory;
+import org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob;
+import org.bahmni.feed.openerp.job.OpenMRSFeedJob;
 import org.bahmni.openerp.web.client.OpenERPClient;
-import org.bahmni.webclients.WebClient;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
 import org.ict4h.atomfeed.Configuration;
 import org.ict4h.atomfeed.client.domain.Marker;
+import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
-import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
 import org.ict4h.atomfeed.client.service.FeedEnumerator;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
@@ -26,7 +26,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -35,9 +35,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
@@ -45,14 +48,28 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:applicationContext-openerpTest.xml"})
 public class OpenERPCustomerFeedIT {
+
+    @Mock
     private   AllFeeds allFeedsMock;
+
+    @Mock
     private OpenERPAtomFeedProperties atomFeedProperties;
 
-    @Autowired
+    @Mock
+    private OpenMRSAuthenticator openMRSAuthenticator;
+
+    @Mock
+    private OpenMRSWebClient webClient;
+
+    @Mock
+    private AllFailedEvents allFailedEvents;
+
+    @Mock
     private OpenERPClient openERPClient;
 
     private URI notificationsUri;
@@ -64,15 +81,13 @@ public class OpenERPCustomerFeedIT {
     Feed last;
     OpenERPAllMarkersJdbcImpl allMarkersJdbc;
     private JdbcConnectionProvider jdbcConnectionProvider;
-    private OpenMRSAuthenticator openMRSAuthenticator;
-    private WebClient webClient;
+
 
 
     @Before
     public void setUp() throws URISyntaxException {
-        atomFeedProperties = mock(OpenERPAtomFeedProperties.class);
-        allFeedsMock = mock(AllFeeds.class);
-        webClient = mock(WebClient.class);
+        initMocks(this);
+
         jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
         allMarkersJdbc = new OpenERPAllMarkersJdbcImpl(jdbcConnectionProvider);
 
@@ -94,8 +109,6 @@ public class OpenERPCustomerFeedIT {
         second.setOtherLinks(Arrays.asList(getLink("prev-archive", firstFeedUri), getLink("next-archive", recentFeedUri),getLink("self", secondFeedUri),getLink("via", secondFeedUri)));
 
         first.setOtherLinks(Arrays.asList(new Link[]{getLink("next-archive", secondFeedUri),getLink("self", firstFeedUri),getLink("via", firstFeedUri)}));
-
-        openMRSAuthenticator = mock(OpenMRSAuthenticator.class);
     }
 
     @After
@@ -139,9 +152,6 @@ public class OpenERPCustomerFeedIT {
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("patientResource.xml");
         String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
 
-
-//        String value ="{\"name\": \"Ram Singh\",\"ref\": \"GAN111133\", \"village\":  \"Ganiyari\"}";
-
         when(webClient.get((URI) any(),(HashMap)any())).thenReturn(patientResource);
 
         when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
@@ -155,10 +165,12 @@ public class OpenERPCustomerFeedIT {
         authenticationResponse.setSessionId("sessionIdValue");
         when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
-        OpenERPCustomerFeedJob feedJob = new OpenERPCustomerFeedJob(atomFeedProperties,jdbcConnectionProvider,
-                new EventWorkerFactory(webClient),openERPClient, "customer.feed.generator.uri", allFeedsMock, allMarkersJdbc,
-                new AllFailedEventsJdbcImpl(jdbcConnectionProvider), mock(TaskMonitor.class)
-                );
+        AtomFeedClientHelper clientHelper = new AtomFeedClientHelper(atomFeedProperties,jdbcConnectionProvider,openERPClient,
+                new FeedClientFactory(webClient),allMarkersJdbc,allFeedsMock,
+                allFailedEvents);
+        OpenMRSFeedJob openMRSFeedJob = new OpenMRSFeedJob(clientHelper,mock(TaskMonitor.class));
+        OpenERPCustomerFeedJob feedJob = new OpenERPCustomerFeedJob(openMRSFeedJob,"customer.feed.generator.uri");
+
         feedJob.processFeed();
 
         Marker marker = allMarkersJdbc.get(notificationsUri);
@@ -185,8 +197,7 @@ public class OpenERPCustomerFeedIT {
 
         public void delete(URI feedUri) throws SQLException {
             Connection connection = null;
-            PreparedStatement stmt = null;
-            ResultSet resultSet = null;
+            PreparedStatement stmt;
             try {
                 connection = jdbcConnectionProvider.getConnection();
                 String sql = String.format("delete from %s where feed_uri = ?",
@@ -200,9 +211,7 @@ public class OpenERPCustomerFeedIT {
                 connection.close();
             }
         }
-
     }
-
 }
 
 

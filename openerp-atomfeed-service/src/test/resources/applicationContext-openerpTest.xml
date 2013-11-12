@@ -8,7 +8,7 @@
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
     <import resource="classpath:openERPFeedServiceContext.xml"/>
-    <bean id="openERPProperties" class="org.bahmni.feed.openerp.OpenERPPropertiesStub"/>
+    <bean id="openERPProperties" class="org.bahmni.feed.openerp.testhelper.OpenERPPropertiesStub"/>
     <context:property-placeholder location="classpath:atomfeed.properties"/>
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">

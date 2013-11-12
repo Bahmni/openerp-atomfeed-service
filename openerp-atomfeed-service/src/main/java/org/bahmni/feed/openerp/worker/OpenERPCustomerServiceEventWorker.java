@@ -1,17 +1,13 @@
-package org.bahmni.feed.openerp.event;
+package org.bahmni.feed.openerp.worker;
 
 import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
-import org.bahmni.feed.openerp.OpenMRSEncounterMapper;
-import org.bahmni.feed.openerp.domain.encounter.OpenERPOrder;
-import org.bahmni.feed.openerp.domain.encounter.OpenERPOrders;
-import org.bahmni.feed.openerp.domain.encounter.OpenMRSEncounter;
-import org.bahmni.feed.openerp.domain.encounter.OpenMRSOrder;
+import org.bahmni.feed.openerp.OpenMRSPatientMapper;
+import org.bahmni.feed.openerp.client.OpenMRSWebClient;
+import org.bahmni.feed.openerp.domain.OpenMRSPatient;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
-import org.bahmni.webclients.WebClient;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.service.EventWorker;
 
@@ -21,17 +17,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class OpenERPSaleOrderEventWorker implements EventWorker {
+public class OpenERPCustomerServiceEventWorker implements EventWorker {
     OpenERPClient openERPClient;
     private String feedUrl;
-    private WebClient webClient;
+    private OpenMRSWebClient webClient;
     private String urlPrefix;
-    public static ObjectMapper objectMapper = new ObjectMapper();
 
+    private static Logger logger = Logger.getLogger(OpenERPCustomerServiceEventWorker.class);
 
-    private static Logger logger = Logger.getLogger(OpenERPSaleOrderEventWorker.class);
-
-    public OpenERPSaleOrderEventWorker(String feedUrl, OpenERPClient openERPClient, WebClient webClient, String urlPrefix) {
+    public OpenERPCustomerServiceEventWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient webClient, String urlPrefix) {
         this.feedUrl = feedUrl;
         this.openERPClient = openERPClient;
         this.webClient = webClient;
@@ -75,41 +69,24 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
         String content = event.getContent();
         String patientJSON = webClient.get(URI.create(urlPrefix + content), new HashMap<String, String>(0));
 
-        OpenMRSEncounterMapper openMRSEncounterMapper = new OpenMRSEncounterMapper(ObjectMapperRepository.objectMapper);
-        OpenMRSEncounter openMRSEncounter = openMRSEncounterMapper.map(patientJSON);
+        OpenMRSPatientMapper openMRSPatientMapper = new OpenMRSPatientMapper(ObjectMapperRepository.objectMapper);
+        OpenMRSPatient openMRSPatient = openMRSPatientMapper.map(patientJSON);
 
-        return mapParameters(openMRSEncounter, event.getId(), event.getFeedUri());
+        return mapParameters(openMRSPatient, event.getId(), event.getFeedUri());
     }
 
-    private List<Parameter> mapParameters(OpenMRSEncounter openMRSEncounter, String eventId, String feedUri) throws IOException {
+    private List<Parameter> mapParameters(OpenMRSPatient openMRSPatient, String eventId, String feedUri) {
         List<Parameter> parameters = new ArrayList<Parameter>();
-        String patientDisplay = openMRSEncounter.getPatient().getDisplay();
-        String patientId = patientDisplay.split(" ")[0];
+        parameters.add(createParameter("name", openMRSPatient.getName(), "string"));
+        parameters.add(createParameter("ref", openMRSPatient.getIdentifiers().get(0).getIdentifier(), "string"));
+        parameters.add(createParameter("village", openMRSPatient.getPerson().getPreferredAddress().getCityVillage(), "string"));
 
-        parameters.add(createParameter("category", "create.sale.order", "string"));
-        parameters.add(createParameter("customer_id", patientId, "string"));
+        parameters.add(createParameter("category", "create.customer", "string"));
         if((feedUrl != null && feedUrl.contains("$param.value")) || (feedUri != null && feedUri.contains("$param.value")))
             throw new RuntimeException("Junk values in the feedUrl:$param.value");
         parameters.add(createParameter("feed_uri", feedUrl, "string"));
         parameters.add(createParameter("last_read_entry_id", eventId, "string"));
         parameters.add(createParameter("feed_uri_for_last_read_entry", feedUri, "string"));
-
-        OpenERPOrders orders = new OpenERPOrders();
-        orders.setId(openMRSEncounter.getUuid());
-
-        if(openMRSEncounter.getOrders().size() > 0){
-            for(OpenMRSOrder order : openMRSEncounter.getOrders())    {
-                OpenERPOrder openERPOrder = new OpenERPOrder();
-                openERPOrder.setId(order.getUuid());
-                List<String> productIds = new ArrayList<String>();
-                productIds.add(order.getConcept().getUuid());
-                openERPOrder.setProductIds(productIds);
-                orders.getOpenERPOrders().add(openERPOrder);
-            }
-            String ordersJson = objectMapper.writeValueAsString(orders);
-
-            parameters.add(createParameter("orders", ordersJson, "string"));
-        }
         return parameters;
     }
 

@@ -30,24 +30,30 @@
     </task:scheduled-tasks>
 
 
-    <bean id="openerpCustomerFeedClientService" class="org.bahmni.feed.openerp.client.OpenERPCustomerFeedJob" >
-        <constructor-arg ref="openERPAtomFeedProperties"/>
-        <constructor-arg ref="openERPClient"/>
+    <bean id="openerpCustomerFeedClientService" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob" >
+        <constructor-arg ref="openMRSFeedJob"/>
         <constructor-arg ref="customerFeedName" />
-        <constructor-arg ref="threadlocaljdbcConnectionProvider" />
-        <constructor-arg ref="customerFeedClientMonitor" />
     </bean>
+
+    <bean id="openMRSFeedJob" class="org.bahmni.feed.openerp.job.OpenMRSFeedJob" >
+        <constructor-arg ref="atomFeedClientHelper"/>
+        <constructor-arg ref="customerFeedClientMonitor"/>
+    </bean>
+
+    <bean id="atomFeedClientHelper" class="org.bahmni.feed.openerp.client.AtomFeedClientHelper" >
+        <constructor-arg ref="openERPAtomFeedProperties"/>
+        <constructor-arg ref="threadlocaljdbcConnectionProvider" />
+        <constructor-arg ref="openERPClient"/>
+    </bean>
+
 
     <bean id="customerFeedName" class="java.lang.String">
         <constructor-arg value="customer.feed.generator.uri"/>
     </bean>
 
-    <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.client.OpenERPSaleOrderFeedJob" >
-        <constructor-arg ref="openERPAtomFeedProperties"/>
-        <constructor-arg ref="openERPClient"/>
+    <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob" >
+        <constructor-arg ref="openMRSFeedJob"/>
         <constructor-arg type="java.lang.String" value="saleorder.feed.generator.uri" />
-        <constructor-arg ref="threadlocaljdbcConnectionProvider" />
-        <constructor-arg ref="customerFeedClientMonitor" />
     </bean>
 
     <!--<bean id="saleorderFeedName" class="java.lang.String">-->

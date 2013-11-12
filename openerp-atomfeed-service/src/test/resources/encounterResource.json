@@ -93,6 +93,59 @@
         ],
         "resourceVersion": "1.8"
     },
+    "visit": {
+        "uuid": "294f02b4-78d4-4b3a-831b-40b667efe3b8",
+        "display": "REG ? - 29/05/2013 05:59",
+        "patient": {
+            "uuid": "b92ded1e-71d8-4039-bbd9-9b15879a51ad",
+            "display": "GAN200000 - Dummy Jr.",
+            "links": [
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/b92ded1e-71d8-4039-bbd9-9b15879a51ad",
+                    "rel": "self"
+                }
+            ]
+        },
+        "visitType": {
+            "uuid": "b4686a0a-c79a-11e2-b284-107d46e7b2c5",
+            "display": "REG",
+            "links": [
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/visittype/b4686a0a-c79a-11e2-b284-107d46e7b2c5",
+                    "rel": "self"
+                }
+            ]
+        },
+        "indication": null,
+        "location": null,
+        "startDatetime": "2013-05-29T05:59:23.000+0530",
+        "stopDatetime": "2013-09-23T23:59:59.000+0530",
+        "encounters": [
+            {
+                "uuid": "c9956571-9a78-47aa-b212-a3faa2f691b6",
+                "display": "REG 29/05/2013",
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/encounter/c9956571-9a78-47aa-b212-a3faa2f691b6",
+                        "rel": "self"
+                    }
+                ]
+            }
+        ],
+        "attributes": [],
+        "voided": false,
+        "links": [
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/visit/294f02b4-78d4-4b3a-831b-40b667efe3b8",
+                "rel": "self"
+            },
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/visit/294f02b4-78d4-4b3a-831b-40b667efe3b8?v=full",
+                "rel": "full"
+            }
+        ],
+        "resourceVersion": "1.9"
+    },
     "orders": [
         {
             "uuid": "26141644-468c-4e71-8d1c-8c17fd3b6df0",

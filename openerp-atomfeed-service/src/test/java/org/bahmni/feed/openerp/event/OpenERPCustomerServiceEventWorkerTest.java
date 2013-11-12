@@ -2,10 +2,11 @@ package org.bahmni.feed.openerp.event;
 
 import com.sun.syndication.feed.atom.Content;
 import com.sun.syndication.feed.atom.Entry;
+import org.bahmni.feed.openerp.client.OpenMRSWebClient;
+import org.bahmni.feed.openerp.worker.OpenERPCustomerServiceEventWorker;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
-import org.bahmni.webclients.WebClient;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,13 +23,13 @@ import static org.mockito.Mockito.*;
 
 public class OpenERPCustomerServiceEventWorkerTest {
     private OpenERPClient openERPClient;
-    private WebClient mockWebClient;
+    private OpenMRSWebClient mockWebClient;
     private String MRSURLPrefix;
 
     @Before
     public void setUp() throws Exception {
         openERPClient = mock(OpenERPClient.class);
-        mockWebClient = mock(WebClient.class);
+        mockWebClient = mock(OpenMRSWebClient.class);
     }
 
     @Test

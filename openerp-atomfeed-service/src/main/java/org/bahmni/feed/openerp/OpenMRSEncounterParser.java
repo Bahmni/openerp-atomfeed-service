@@ -21,14 +21,14 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 
-public class OpenMRSEncounterMapper {
+public class OpenMRSEncounterParser {
     private ObjectMapper objectMapper;
 
-    public OpenMRSEncounterMapper(ObjectMapper objectMapper) {
+    public OpenMRSEncounterParser(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
-    public OpenMRSEncounter map(String encounterJSON) throws IOException {
+    public OpenMRSEncounter parse(String encounterJSON) throws IOException {
         return objectMapper.readValue(encounterJSON, OpenMRSEncounter.class);
     }
 }

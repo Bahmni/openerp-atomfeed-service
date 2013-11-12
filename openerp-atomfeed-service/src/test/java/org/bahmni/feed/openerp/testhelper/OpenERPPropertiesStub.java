@@ -1,4 +1,4 @@
-package org.bahmni.feed.openerp;
+package org.bahmni.feed.openerp.testhelper;
 
 import org.bahmni.openerp.web.OpenERPProperties;
 
