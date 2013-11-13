@@ -10,6 +10,7 @@ public class OpenERPOrder {
     private String visitId;
     private String type;
     private DateTime startDate;
+    private String description;
 
     public String getId() {
         return id;
@@ -35,6 +36,10 @@ public class OpenERPOrder {
         this.type = display;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getVisitId() {
         return visitId;
     }
@@ -49,5 +54,9 @@ public class OpenERPOrder {
 
     public DateTime getStartDate() {
         return startDate;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

@@ -9,16 +9,16 @@ import java.text.SimpleDateFormat;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSVisit {
     private String uuid;
-    private String visitType;
     private String startDatetime;
+    private String visitType;
     private static final String SPACE = " ";
 
     public OpenMRSVisit() {
     }
 
-    public OpenMRSVisit(String uuid, String visitType, String startDatetime) {
+    public OpenMRSVisit(String uuid, String type, String startDatetime) {
         this.uuid = uuid;
-        this.visitType = visitType;
+        this.visitType = type;
         this.startDatetime = startDatetime;
     }
 
@@ -26,8 +26,7 @@ public class OpenMRSVisit {
         return uuid;
     }
 
-    @JsonDeserialize(using = VisitTypeDeserializer.class)
-    public String getVisitType() {
+    public String getDescription() {
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String date = "";
@@ -44,4 +43,8 @@ public class OpenMRSVisit {
         return startDatetime;
     }
 
+    @JsonDeserialize(using = VisitTypeDeserializer.class)
+    public String getVisitType() {
+        return visitType;
+    }
 }

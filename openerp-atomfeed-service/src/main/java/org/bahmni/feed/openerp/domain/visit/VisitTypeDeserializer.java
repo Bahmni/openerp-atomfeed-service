@@ -13,6 +13,5 @@ public class VisitTypeDeserializer extends JsonDeserializer<String> {
     public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode jsonNodes = jsonParser.getCodec().readTree(jsonParser);
         return jsonNodes.get("display").getTextValue();
-
     }
 }

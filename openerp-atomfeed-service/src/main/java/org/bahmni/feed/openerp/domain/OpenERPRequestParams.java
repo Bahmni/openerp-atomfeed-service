@@ -60,7 +60,7 @@ public class OpenERPRequestParams {
                 OpenERPOrder openERPOrder = new OpenERPOrder();
                 openERPOrder.setId(order.getUuid());
                 setVisitDetails(openERPOrder,visit);
-                List<String> productIds = new ArrayList<String>();
+                List<String> productIds = new ArrayList<>();
                 productIds.add(order.getConcept().getUuid());
                 openERPOrder.setProductIds(productIds);
                 orders.getOpenERPOrders().add(openERPOrder);
@@ -74,6 +74,7 @@ public class OpenERPRequestParams {
     private void setVisitDetails(OpenERPOrder openERPOrder, OpenMRSVisit visit) {
         openERPOrder.setVisitId(visit.getUuid());
         openERPOrder.setVisitType(visit.getVisitType());
+        openERPOrder.setDescription(visit.getDescription());
     }
 
     private Parameter createParameter(String name, String value, String type) {
