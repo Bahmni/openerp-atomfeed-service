@@ -32,15 +32,15 @@
 
     <bean id="openerpCustomerFeedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob" >
         <constructor-arg ref="openMRSFeedJob"/>
-        <constructor-arg  ref="customerFeedName" />
+        <constructor-arg  name="feedName" ref="customerFeedName" />
     </bean>
 
-    <bean id="openMRSFeedJob" class="org.bahmni.feed.openerp.job.OpenMRSFeedJob" >
+    <bean id="openMRSFeedJob" class="org.bahmni.feed.openerp.job.OpenMRSFeedJob" scope="prototype">
         <constructor-arg ref="atomFeedClientHelper"/>
         <constructor-arg ref="customerFeedClientMonitor"/>
     </bean>
 
-    <bean id="atomFeedClientHelper" class="org.bahmni.feed.openerp.client.AtomFeedClientHelper" >
+    <bean id="atomFeedClientHelper" class="org.bahmni.feed.openerp.client.AtomFeedClientHelper" scope="prototype">
         <constructor-arg ref="openERPAtomFeedProperties"/>
         <constructor-arg ref="threadlocaljdbcConnectionProvider" />
         <constructor-arg ref="openERPClient"/>
@@ -51,14 +51,15 @@
         <constructor-arg value="customer.feed.generator.uri"/>
     </bean>
 
-    <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob" >
-        <constructor-arg ref="openMRSFeedJob"/>
-        <constructor-arg type="java.lang.String" name="saleOrderFeedName" value="saleorder.feed.generator.uri" />
+   <bean id="saleorderFeedName" class="java.lang.String">
+        <constructor-arg value="saleorder.feed.generator.uri"/>
     </bean>
 
-    <!--<bean id="saleorderFeedName" class="java.lang.String">-->
-        <!--<constructor-arg value="saleorder.feed.generator.uri"/>-->
-    <!--</bean>-->
+    <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob" >
+        <constructor-arg ref="openMRSFeedJob"/>
+        <constructor-arg  name="feedName" ref="saleorderFeedName" />
+    </bean>
+
 
     <bean id="threadlocaljdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider">
         <constructor-arg ref="dataSource"/>

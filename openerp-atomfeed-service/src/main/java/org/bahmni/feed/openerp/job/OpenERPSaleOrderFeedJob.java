@@ -13,9 +13,9 @@ public class OpenERPSaleOrderFeedJob {
     public OpenERPSaleOrderFeedJob() {
     }
 
-    public OpenERPSaleOrderFeedJob(OpenMRSFeedJob openMRSFeedJob, String saleOrderFeedName) throws FeedException {
+    public OpenERPSaleOrderFeedJob(OpenMRSFeedJob openMRSFeedJob, String feedName) throws FeedException {
         this.openMRSFeedJob = openMRSFeedJob;
-        this.feedName = saleOrderFeedName;
+        this.feedName = feedName;
     }
 
 

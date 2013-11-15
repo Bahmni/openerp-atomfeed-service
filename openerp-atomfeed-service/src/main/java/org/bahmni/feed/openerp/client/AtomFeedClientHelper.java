@@ -12,7 +12,6 @@ import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
 import org.ict4h.atomfeed.client.service.FeedClient;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 
@@ -27,7 +26,6 @@ public class AtomFeedClientHelper {
     private FeedClientFactory feedClientFactory;
     private OpenERPClient openERPClient;
 
-    @Autowired
     public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, JdbcConnectionProvider jdbcConnectionProvider,OpenERPClient openERPClient) {
         this(atomFeedProperties,jdbcConnectionProvider,openERPClient,new FeedClientFactory(new OpenMRSWebClient(atomFeedProperties)),new AllMarkersJdbcImpl(jdbcConnectionProvider),
                 getAllFeeds(atomFeedProperties),new AllFailedEventsJdbcImpl(jdbcConnectionProvider));
