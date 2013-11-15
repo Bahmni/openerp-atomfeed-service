@@ -23,16 +23,16 @@
     <context:component-scan base-package="org.ict4h.atomfeed.spring.resource"/>
 
     <task:scheduled-tasks>
-        <task:scheduled ref="openerpCustomerFeedClientService" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>
-        <task:scheduled ref="openerpCustomerFeedClientService" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>
+        <task:scheduled ref="openerpCustomerFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>
+        <task:scheduled ref="openerpCustomerFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>
         <task:scheduled ref="openerpSaleOrderFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>
         <task:scheduled ref="openerpSaleOrderFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>
     </task:scheduled-tasks>
 
 
-    <bean id="openerpCustomerFeedClientService" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob" >
+    <bean id="openerpCustomerFeedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob" >
         <constructor-arg ref="openMRSFeedJob"/>
-        <constructor-arg ref="customerFeedName" />
+        <constructor-arg  ref="customerFeedName" />
     </bean>
 
     <bean id="openMRSFeedJob" class="org.bahmni.feed.openerp.job.OpenMRSFeedJob" >
@@ -53,7 +53,7 @@
 
     <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob" >
         <constructor-arg ref="openMRSFeedJob"/>
-        <constructor-arg type="java.lang.String" value="saleorder.feed.generator.uri" />
+        <constructor-arg type="java.lang.String" name="saleOrderFeedName" value="saleorder.feed.generator.uri" />
     </bean>
 
     <!--<bean id="saleorderFeedName" class="java.lang.String">-->
