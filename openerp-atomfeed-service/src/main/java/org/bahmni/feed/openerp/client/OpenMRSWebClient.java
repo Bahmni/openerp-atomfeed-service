@@ -22,7 +22,7 @@ public class OpenMRSWebClient{
     private ConnectionDetails connectionDetails(OpenERPAtomFeedProperties properties) {
         return new ConnectionDetails(properties.getAuthenticationURI(),
                 properties.getOpenMRSUser(),
-                properties.getPassword(),
+                properties.getOpenMRSPassword(),
                 properties.getConnectionTimeoutInMilliseconds(),
                 properties.getReplyTimeoutInMilliseconds());
     }
