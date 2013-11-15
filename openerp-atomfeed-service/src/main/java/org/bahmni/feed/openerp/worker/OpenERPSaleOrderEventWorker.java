@@ -11,7 +11,6 @@ import org.ict4h.atomfeed.client.service.EventWorker;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 
 public class OpenERPSaleOrderEventWorker implements EventWorker {
@@ -62,7 +61,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
     private String getContent(Event event) {
         String content = event.getContent();
-        return webClient.get(URI.create(urlPrefix + content), new HashMap<String, String>(0));
+        return webClient.get(URI.create(urlPrefix + content));
     }
 
     private OpenERPRequest mapRequest(Event event) throws IOException {

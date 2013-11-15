@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.TaskMonitor;
 import org.bahmni.feed.openerp.client.AtomFeedClientHelper;
-import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,7 +14,6 @@ public class OpenMRSFeedJob {
 
     private AtomFeedClientHelper atomFeedClientHelper;
     TaskMonitor taskMonitor;
-    AllFailedEvents allFailedEvents;
 
     @Autowired
     public OpenMRSFeedJob(

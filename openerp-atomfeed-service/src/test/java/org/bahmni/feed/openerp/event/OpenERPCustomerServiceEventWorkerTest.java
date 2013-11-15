@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 import static org.mockito.Mockito.*;
@@ -41,7 +40,7 @@ public class OpenERPCustomerServiceEventWorkerTest {
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("patientResource.xml");
         String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
 
-        when(mockWebClient.get(any(URI.class), any(Map.class))).thenReturn(patientResource);
+        when(mockWebClient.get(any(URI.class))).thenReturn(patientResource);
 
         Event event = new Event(createEntry(),"www.openmrs.com");
         customerServiceEventWorker.process(event);

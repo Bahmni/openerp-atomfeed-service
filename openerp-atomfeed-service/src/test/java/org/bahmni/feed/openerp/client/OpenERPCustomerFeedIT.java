@@ -38,7 +38,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -152,7 +151,7 @@ public class OpenERPCustomerFeedIT {
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("patientResource.xml");
         String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
 
-        when(webClient.get((URI) any(),(HashMap)any())).thenReturn(patientResource);
+        when(webClient.get((URI) any())).thenReturn(patientResource);
 
         when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
 

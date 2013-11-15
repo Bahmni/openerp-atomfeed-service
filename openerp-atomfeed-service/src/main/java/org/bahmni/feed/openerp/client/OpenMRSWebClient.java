@@ -1,38 +1,28 @@
 package org.bahmni.feed.openerp.client;
 
-import org.bahmni.feed.openerp.FeedException;
-import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
-import org.bahmni.webclients.WebClient;
-import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
-import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
+import org.bahmni.webclients.ConnectionDetails;
+import org.bahmni.webclients.HttpClient;
 
 import java.net.URI;
-import java.util.Map;
 
 public class OpenMRSWebClient{
 
-    public static final String JSESSION_ID_KEY = "JSESSIONID";
-    private OpenERPAtomFeedProperties atomFeedProperties;
+    private static HttpClient httpClient;
 
     public OpenMRSWebClient(OpenERPAtomFeedProperties properties) {
-        this.atomFeedProperties = properties;
+        httpClient = new HttpClient(connectionDetails(properties));
     }
 
-    public OpenMRSAuthenticator authenticator() {
-        return new OpenMRSAuthenticator(atomFeedProperties.getAuthenticationURI(), atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds());
+    public String get(URI uri) {
+        return httpClient.get(uri);
     }
 
-    public WebClient getWebClient() {
-        OpenMRSAuthenticationResponse authenticationResponse = authenticator().authenticate(atomFeedProperties.getOpenMRSUser(),
-                atomFeedProperties.getOpenMRSPassword(), ObjectMapperRepository.objectMapper);
-        if (!authenticationResponse.isAuthenticated()) throw new FeedException("Failed to authenticate with OpenMRS");
-        String sessionIdValue = authenticationResponse.getSessionId();
-
-        return new WebClient(atomFeedProperties.getConnectionTimeoutInMilliseconds(), atomFeedProperties.getReplyTimeoutInMilliseconds(), JSESSION_ID_KEY, sessionIdValue);
-    }
-
-    public String get(URI uri, Map<String, String> stringStringHashMap) {
-        return getWebClient().get(uri,stringStringHashMap);
+    private ConnectionDetails connectionDetails(OpenERPAtomFeedProperties properties) {
+        return new ConnectionDetails(properties.getAuthenticationURI(),
+                properties.getOpenMRSUser(),
+                properties.getPassword(),
+                properties.getConnectionTimeoutInMilliseconds(),
+                properties.getReplyTimeoutInMilliseconds());
     }
 }

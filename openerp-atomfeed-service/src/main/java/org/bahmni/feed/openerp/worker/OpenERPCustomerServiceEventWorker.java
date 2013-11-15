@@ -14,7 +14,6 @@ import org.ict4h.atomfeed.client.service.EventWorker;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class OpenERPCustomerServiceEventWorker implements EventWorker {
@@ -67,7 +66,7 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
 
     private List<Parameter> getParameters(Event event) throws IOException {
         String content = event.getContent();
-        String patientJSON = webClient.get(URI.create(urlPrefix + content), new HashMap<String, String>(0));
+        String patientJSON = webClient.get(URI.create(urlPrefix + content));
 
         OpenMRSPatientMapper openMRSPatientMapper = new OpenMRSPatientMapper(ObjectMapperRepository.objectMapper);
         OpenMRSPatient openMRSPatient = openMRSPatientMapper.map(patientJSON);

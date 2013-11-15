@@ -17,11 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.HashMap;
 
 public class AtomFeedClientHelper {
-    AtomFeedClient atomFeedClient;
-    OpenMRSWebClient openMRSWebClient;
-    AllFeeds allFeeds;
+    private AtomFeedClient atomFeedClient;
+    private OpenMRSWebClient openMRSWebClient;
+    private AllFeeds allFeeds;
     private AllFailedEvents allFailedEvents;
-    AllMarkers allMarkers;
+    private AllMarkers allMarkers;
     private OpenERPAtomFeedProperties atomFeedProperties;
     private JdbcConnectionProvider jdbcConnectionProvider;
     private FeedClientFactory feedClientFactory;

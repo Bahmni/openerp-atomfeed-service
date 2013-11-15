@@ -38,7 +38,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -145,7 +144,7 @@ public class OpenERPSaleOrderFeedIT {
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("encounterResource.json");
         String encounterResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
 
-        when(webClient.get((URI) any(),(HashMap)any())).thenReturn(encounterResource);
+        when(webClient.get((URI) any())).thenReturn(encounterResource);
 
         when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
 
