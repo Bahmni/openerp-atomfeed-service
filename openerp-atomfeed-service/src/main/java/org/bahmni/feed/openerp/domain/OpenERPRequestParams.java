@@ -37,11 +37,9 @@ public class OpenERPRequestParams {
         List<Parameter> parameters = new ArrayList<>();
         String patientDisplay = openMRSEncounter.getPatient().getDisplay();
         String patientId = patientDisplay.split(" ")[0];
-
+        validateUrls(feedUri);
         parameters.add(createParameter("category", "create.sale.order", "string"));
         parameters.add(createParameter("customer_id", patientId, "string"));
-        if((feedUrl != null && feedUrl.contains("$param.value")) || (feedUri != null && feedUri.contains("$param.value")))
-            throw new RuntimeException("Junk values in the feedUrl:$param.value");
         parameters.add(createParameter("feed_uri", feedUrl, "string"));
         parameters.add(createParameter("last_read_entry_id", eventId, "string"));
         parameters.add(createParameter("feed_uri_for_last_read_entry", feedUri, "string"));
@@ -51,6 +49,11 @@ public class OpenERPRequestParams {
 
         mapOrders(openMRSEncounter, parameters, orders);
         return parameters;
+    }
+
+    private void validateUrls(String feedUri) {
+        if((feedUrl != null && feedUrl.contains("$param")) || (feedUri != null && feedUri.contains("$param")))
+            throw new RuntimeException("Junk values in the feedUrl:$param**");
     }
 
     private void mapOrders(OpenMRSEncounter openMRSEncounter, List<Parameter> parameters, OpenERPOrders orders) throws IOException {

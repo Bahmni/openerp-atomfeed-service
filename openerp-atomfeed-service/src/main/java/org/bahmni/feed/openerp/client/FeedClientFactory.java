@@ -24,14 +24,14 @@ public class FeedClientFactory {
         this.webClient = webClient;
     }
 
-    public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties atomFeedProperties,JdbcConnectionProvider jdbcConnectionProvider,
+    public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties,JdbcConnectionProvider jdbcConnectionProvider,
                                         String feedName, OpenERPClient openERPClient, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, String jobName)  {
-        String feedUri = atomFeedProperties.getFeedUri(feedName);
+        String feedUri = openERPAtomFeedProperties.getFeedUri(feedName);
         try {
-            String urlPrefix = getURLPrefix(atomFeedProperties);
-            EventWorker eventWorker = new WorkerFactory(webClient).getWorker(jobName, atomFeedProperties.getFeedUri(feedName),openERPClient,
+            String urlPrefix = getURLPrefix(openERPAtomFeedProperties);
+            EventWorker eventWorker = new WorkerFactory(webClient).getWorker(jobName, openERPAtomFeedProperties.getFeedUri(feedName), openERPClient,
                     urlPrefix);
-            return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(), jdbcConnectionProvider, new URI(feedUri), eventWorker) ;
+            return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(openERPAtomFeedProperties), jdbcConnectionProvider, new URI(feedUri), eventWorker) ;
         } catch (URISyntaxException e) {
             throw new RuntimeException("error for uri:" + feedUri);
         }
@@ -48,9 +48,13 @@ public class FeedClientFactory {
     }
 
 
-    static AtomFeedProperties atomFeedProperties() {
+    static AtomFeedProperties atomFeedProperties(OpenERPAtomFeedProperties openERPAtomFeedProperties) {
         AtomFeedProperties atomFeedProperties = new AtomFeedProperties();
         atomFeedProperties.setControlsEventProcessing(true);
+        atomFeedProperties.setConnectTimeout(openERPAtomFeedProperties.getConnectionTimeoutInMilliseconds());
+        atomFeedProperties.setReadTimeout(openERPAtomFeedProperties.getReplyTimeoutInMilliseconds());
+        atomFeedProperties.setMaxFailedEvents(openERPAtomFeedProperties.getMaxFailedEvents());
+
         return atomFeedProperties;
     }
 
