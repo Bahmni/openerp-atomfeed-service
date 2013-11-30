@@ -1,10 +1,8 @@
 package org.bahmni.feed.openerp.job;
 
-
 import com.sun.syndication.io.FeedException;
 import org.springframework.stereotype.Controller;
 
-@Controller
 public class OpenERPSaleOrderFeedJob {
     private OpenMRSFeedJob openMRSFeedJob;
     private static final String jobName = "openerp.saleorder.service";
@@ -18,7 +16,6 @@ public class OpenERPSaleOrderFeedJob {
         this.feedName = feedName;
     }
 
-
     public void processFeed()  {
         openMRSFeedJob.processFeed(feedName, jobName);
     }
@@ -26,6 +23,4 @@ public class OpenERPSaleOrderFeedJob {
     public void processFailedEvents()  {
         openMRSFeedJob.processFailedEvents(feedName, jobName);
     }
-
-
 }

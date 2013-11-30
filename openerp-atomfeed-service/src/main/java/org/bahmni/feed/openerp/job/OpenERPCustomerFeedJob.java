@@ -4,7 +4,6 @@ package org.bahmni.feed.openerp.job;
 import com.sun.syndication.io.FeedException;
 import org.springframework.stereotype.Controller;
 
-@Controller
 public class OpenERPCustomerFeedJob {
     private OpenMRSFeedJob openMRSFeedJob;
     private static final String jobName = "openerp.customer.service";
