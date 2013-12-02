@@ -26,11 +26,11 @@ public class OpenMRSFeedJob {
     public void processFeed(String feedName, String jobName) {
         try {
             taskMonitor.startTask();
-            logger.info("Processing Customer Feed " + DateTime.now());
+            logger.info("Processing Customer Feed");
 
             atomFeedClientHelper.getAtomFeedClient(feedName, jobName).processEvents();
         } catch (Exception e) {
-            logger.error("failed customer feed execution " + e);
+            logger.error("failed customer feed execution ", e);
             handleAuthorizationException(e, feedName, jobName);
         } finally {
             taskMonitor.endTask();
@@ -40,11 +40,11 @@ public class OpenMRSFeedJob {
     public void processFailedEvents(String feedName, String jobName) {
         try {
             taskMonitor.startTask();
-            logger.info("Processing failed events for Customer Feed " + DateTime.now());
+            logger.info("Processing failed events for Customer Feed");
 
             atomFeedClientHelper.getAtomFeedClient(feedName, jobName).processFailedEvents();
         } catch (Exception e) {
-            logger.error("failed customer feed execution " + e);
+            logger.error("failed customer feed execution ", e);
             handleAuthorizationException(e, feedName, jobName);
         } finally {
             taskMonitor.endTask();
