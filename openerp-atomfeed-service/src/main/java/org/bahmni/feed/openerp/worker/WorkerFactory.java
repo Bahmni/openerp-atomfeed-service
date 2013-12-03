@@ -11,16 +11,14 @@ public class WorkerFactory {
         this.webClient = webClient;
     }
 
-    public EventWorker getWorker(String workerName, String feedUrl, OpenERPClient openERPClient,
+    public EventWorker getWorker(String jobName, String feedUrl, OpenERPClient openERPClient,
                                  String urlPrefix) {
-        if (workerName.equals("openerp.customer.service"))
-            return new OpenERPCustomerServiceEventWorker(feedUrl, openERPClient,
-                    webClient,
-                    urlPrefix);
-        if (workerName.equals("openerp.saleorder.service"))
-            return new OpenERPSaleOrderEventWorker(feedUrl, openERPClient,
-                    webClient,
-                    urlPrefix);
-        throw new RuntimeException(String.format("No worker for %s", workerName));
+        if (jobName.equals("openerp.customer.service"))
+            return new OpenERPCustomerServiceEventWorker(feedUrl, openERPClient, webClient, urlPrefix);
+
+        if (jobName.equals("openerp.saleorder.service"))
+            return new OpenERPSaleOrderEventWorker(feedUrl, openERPClient, webClient, urlPrefix);
+
+        throw new RuntimeException(String.format("No worker for %s", jobName));
     }
 }

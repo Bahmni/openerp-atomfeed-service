@@ -45,21 +45,6 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
     public void cleanUp(Event event) {
     }
 
-    public void processFailedEvents(Event event) {
-        try {
-            openERPClient.execute(mapFailedEventRequest(event));
-        } catch (Exception e) {
-            logger.error(e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    private OpenERPRequest mapFailedEventRequest(Event event) throws IOException {
-        List<Parameter> parameterList = getParameters(event);
-        parameterList.add(createParameter("is_failed_event", "True", "boolean"));
-        return new OpenERPRequest("atom.event.worker", "process_event", parameterList);
-    }
-
     private OpenERPRequest mapRequest(Event event) throws IOException {
         return new OpenERPRequest("atom.event.worker", "process_event", getParameters(event));
     }
@@ -71,10 +56,10 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         OpenMRSPatientMapper openMRSPatientMapper = new OpenMRSPatientMapper(ObjectMapperRepository.objectMapper);
         OpenMRSPatient openMRSPatient = openMRSPatientMapper.map(patientJSON);
 
-        return mapParameters(openMRSPatient, event.getId(), event.getFeedUri());
+        return mapParameters(openMRSPatient, event.getId(), event.getFeedUri(), event.getFeedUri() == null);
     }
 
-    private List<Parameter> mapParameters(OpenMRSPatient openMRSPatient, String eventId, String feedUri) {
+    private List<Parameter> mapParameters(OpenMRSPatient openMRSPatient, String eventId, String feedUri, boolean isFailedEvent) {
         List<Parameter> parameters = new ArrayList<Parameter>();
         parameters.add(createParameter("name", openMRSPatient.getName(), "string"));
         parameters.add(createParameter("ref", openMRSPatient.getIdentifiers().get(0).getIdentifier(), "string"));
@@ -86,6 +71,8 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         parameters.add(createParameter("feed_uri", feedUrl, "string"));
         parameters.add(createParameter("last_read_entry_id", eventId, "string"));
         parameters.add(createParameter("feed_uri_for_last_read_entry", feedUri, "string"));
+        if (isFailedEvent)
+            parameters.add(createParameter("is_failed_event", "True", "boolean"));
         return parameters;
     }
 

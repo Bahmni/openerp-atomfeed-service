@@ -16,8 +16,6 @@ public class OpenERPServiceIntegrationTest extends TestCase {
 
     @Test
     public void shouldCreateFindAndDeleteCustomer() throws Exception {
-        setUp();
-
         String name= "Mario Areias";
         String patientId ="122678984333";
         String village ="Ganiyari";

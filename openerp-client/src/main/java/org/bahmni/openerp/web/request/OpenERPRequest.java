@@ -9,6 +9,13 @@ public class OpenERPRequest {
     private final String operation;
     private final List<Parameter> parameters;
 
+    public static final OpenERPRequest DO_NOT_CONSUME = new OpenERPRequest(null, null, null) {
+        @Override
+        public boolean shouldERPConsumeEvent() {
+            return false;
+        }
+    };
+
     public OpenERPRequest(String resource, String operation, List<Parameter> parameters) {
         this.resource = resource;
         this.operation = operation;
@@ -56,5 +63,13 @@ public class OpenERPRequest {
 
     public List<Parameter> getParameters() {
         return parameters;
+    }
+
+    public boolean shouldERPConsumeEvent() {
+        return true;
+    }
+
+    public void addParameter(Parameter parameter) {
+        parameters.add(parameter);
     }
 }

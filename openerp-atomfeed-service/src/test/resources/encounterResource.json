@@ -1,5 +1,23 @@
 {
     "uuid": "f18b7270-0085-4196-a6e9-367ebcbfc890",
+    "encounterType": {
+            "uuid": "df95a01c-0a6a-11e3-87b2-05a83b2f3a98",
+            "display": "OPD",
+            "name": "OPD",
+            "description": "OPD consultation encounter",
+            "retired": false,
+            "links": [
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/encountertype/df95a01c-0a6a-11e3-87b2-05a83b2f3a98",
+                    "rel": "self"
+                },
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/encountertype/df95a01c-0a6a-11e3-87b2-05a83b2f3a98?v=full",
+                    "rel": "full"
+                }
+            ],
+            "resourceVersion": "1.8"
+        },
     "patient": {
         "uuid": "136cdac1-8bdf-4892-8a18-929a3ac113e3",
         "display": "SIV4660 - Gabbar Singh Uranw",

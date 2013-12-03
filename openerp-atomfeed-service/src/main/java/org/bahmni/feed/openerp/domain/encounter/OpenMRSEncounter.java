@@ -21,14 +21,19 @@ import org.bahmni.feed.openerp.domain.visit.OpenMRSVisit;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSEncounter {
     private OpenMRSPatient patient;
+    private OpenMRSEncounterType encounterType;
     private String uuid;
     private List<OpenMRSOrder> orders = new ArrayList<>();
     private OpenMRSVisit visit;
+
+    // These need to match the OpenMRS ADT Concept set members.
+    private static final String[] ADT_EVENTS_ARRAY = new String[] {"ADMISSION", "DISCHARGE", "TRANSFER"};
 
     public String getUuid() {
         return uuid;
@@ -44,5 +49,28 @@ public class OpenMRSEncounter {
 
     public OpenMRSVisit getVisit() {
         return visit;
+    }
+
+    public boolean shouldERPConsumeEvent() {
+        return isADTEvent() || hasOrders();
+    }
+
+    private boolean hasOrders() {
+        return getOrders().size() > 0;
+    }
+
+    public OpenMRSEncounterType getEncounterType() {
+        return encounterType;
+    }
+
+    private boolean isADTEvent() {
+        if (encounterType == null) return false;
+
+        List<String> adtEncounterTypes = Arrays.asList(ADT_EVENTS_ARRAY);
+        for (String adtEncounterType : adtEncounterTypes) {
+            if (adtEncounterType.equalsIgnoreCase(encounterType.getName()))
+                return true;
+        }
+        return false;
     }
 }

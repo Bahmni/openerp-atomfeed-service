@@ -11,7 +11,6 @@ import org.ict4h.atomfeed.client.service.EventWorker;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
 
 public class OpenERPSaleOrderEventWorker implements EventWorker {
     OpenERPClient openERPClient;
@@ -32,7 +31,11 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
     @Override
     public void process(Event event) {
         try {
-            openERPClient.execute(mapRequest(event));
+            OpenERPRequest openERPRequest = mapRequest(event);
+            if (!openERPRequest.shouldERPConsumeEvent())
+                return;
+
+            openERPClient.execute(openERPRequest);
         } catch (Exception e) {
             logger.error(e);
             throw new RuntimeException(e);
@@ -43,29 +46,20 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
     public void cleanUp(Event event) {
     }
 
-    public void processFailedEvents(Event event) {
-        try {
-            openERPClient.execute(mapFailedEventRequest(event));
-        } catch (Exception e) {
-            logger.error(e);
-            throw new RuntimeException(e);
-        }
-    }
+    private OpenERPRequest mapRequest(Event event) throws IOException {
+        String encounterEventContent = getContent(event);
+        OpenERPRequestParams openERPRequestParams = new OpenERPRequestParams(event, feedUrl);
+        OpenERPRequest openERPRequest = openERPRequestParams.getRequest(encounterEventContent);
 
-    private OpenERPRequest mapFailedEventRequest(Event event) throws IOException {
+        if (event.getFeedUri() == null)
+            openERPRequest.addParameter(createParameter("is_failed_event", "True", "boolean"));
 
-        List<Parameter> parameterList = new OpenERPRequestParams(event, feedUrl).getParameters(getContent(event));
-        parameterList.add(createParameter("is_failed_event", "True", "boolean"));
-        return new OpenERPRequest("atom.event.worker", "process_event", parameterList);
+        return openERPRequest;
     }
 
     private String getContent(Event event) {
         String content = event.getContent();
         return webClient.get(URI.create(urlPrefix + content));
-    }
-
-    private OpenERPRequest mapRequest(Event event) throws IOException {
-        return new OpenERPRequest("atom.event.worker", "process_event", new OpenERPRequestParams(event, feedUrl).getParameters(getContent(event)));
     }
 
     private Parameter createParameter(String name, String value, String type) {

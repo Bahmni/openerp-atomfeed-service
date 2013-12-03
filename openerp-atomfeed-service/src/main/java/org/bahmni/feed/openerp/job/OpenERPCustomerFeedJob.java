@@ -17,7 +17,6 @@ public class OpenERPCustomerFeedJob {
         this.feedName = feedName;
     }
 
-
     public void processFeed()  {
         openMRSFeedJob.processFeed(feedName, jobName);
     }

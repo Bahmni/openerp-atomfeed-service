@@ -7,6 +7,7 @@ import org.bahmni.feed.openerp.domain.encounter.OpenERPOrders;
 import org.bahmni.feed.openerp.domain.encounter.OpenMRSEncounter;
 import org.bahmni.feed.openerp.domain.encounter.OpenMRSOrder;
 import org.bahmni.feed.openerp.domain.visit.OpenMRSVisit;
+import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -26,14 +27,8 @@ public class OpenERPRequestParams {
         this.feedUrl = feedUrl;
     }
 
-    public List<Parameter> getParameters(String orderJSON) throws IOException {
-        OpenMRSEncounterParser openMRSEncounterParser = new OpenMRSEncounterParser(ObjectMapperRepository.objectMapper);
-        OpenMRSEncounter openMRSEncounter = openMRSEncounterParser.parse(orderJSON);
-
-        return mapParameters(openMRSEncounter, event.getId(), event.getFeedUri());
-    }
-
-    private List<Parameter> mapParameters(OpenMRSEncounter openMRSEncounter, String eventId, String feedUri) throws IOException {
+    private List<Parameter> getParameters(OpenMRSEncounter openMRSEncounter) throws IOException {
+        String feedUri = event.getFeedUri();
         List<Parameter> parameters = new ArrayList<>();
         String patientDisplay = openMRSEncounter.getPatient().getDisplay();
         String patientId = patientDisplay.split(" ")[0];
@@ -41,7 +36,7 @@ public class OpenERPRequestParams {
         parameters.add(createParameter("category", "create.sale.order", "string"));
         parameters.add(createParameter("customer_id", patientId, "string"));
         parameters.add(createParameter("feed_uri", feedUrl, "string"));
-        parameters.add(createParameter("last_read_entry_id", eventId, "string"));
+        parameters.add(createParameter("last_read_entry_id", event.getId(), "string"));
         parameters.add(createParameter("feed_uri_for_last_read_entry", feedUri, "string"));
 
         OpenERPOrders orders = new OpenERPOrders();
@@ -51,6 +46,11 @@ public class OpenERPRequestParams {
         return parameters;
     }
 
+    private OpenMRSEncounter getOpenMRSEncounter(String orderJSON) throws IOException {
+        OpenMRSEncounterParser openMRSEncounterParser = new OpenMRSEncounterParser(ObjectMapperRepository.objectMapper);
+        return openMRSEncounterParser.parse(orderJSON);
+    }
+
     private void validateUrls(String feedUri) {
         if((feedUrl != null && feedUrl.contains("$param")) || (feedUri != null && feedUri.contains("$param")))
             throw new RuntimeException("Junk values in the feedUrl:$param**");
@@ -58,7 +58,7 @@ public class OpenERPRequestParams {
 
     private void mapOrders(OpenMRSEncounter openMRSEncounter, List<Parameter> parameters, OpenERPOrders orders) throws IOException {
         OpenMRSVisit visit = openMRSEncounter.getVisit();
-        if(openMRSEncounter.getOrders().size() > 0){
+        if (openMRSEncounter.getOrders().size() > 0){
             for(OpenMRSOrder order : openMRSEncounter.getOrders())    {
                 OpenERPOrder openERPOrder = new OpenERPOrder();
                 openERPOrder.setId(order.getUuid());
@@ -82,5 +82,15 @@ public class OpenERPRequestParams {
 
     private Parameter createParameter(String name, String value, String type) {
         return new Parameter(name, value, type);
+    }
+
+    public OpenERPRequest getRequest(String encounterEventContent) throws IOException {
+        OpenMRSEncounter openMRSEncounter = getOpenMRSEncounter(encounterEventContent);
+
+        if (!openMRSEncounter.shouldERPConsumeEvent()) {
+            return OpenERPRequest.DO_NOT_CONSUME;
+        }
+
+        return new OpenERPRequest("atom.event.worker", "process_event", getParameters(openMRSEncounter));
     }
 }

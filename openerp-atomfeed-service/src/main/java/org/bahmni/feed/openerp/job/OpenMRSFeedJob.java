@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.TaskMonitor;
 import org.bahmni.feed.openerp.client.AtomFeedClientHelper;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class OpenMRSFeedJob {
@@ -26,7 +25,7 @@ public class OpenMRSFeedJob {
     public void processFeed(String feedName, String jobName) {
         try {
             taskMonitor.startTask();
-            logger.info("Processing Customer Feed");
+            logger.info("Processing " + feedName + ". ");
 
             atomFeedClientHelper.getAtomFeedClient(feedName, jobName).processEvents();
         } catch (Exception e) {
