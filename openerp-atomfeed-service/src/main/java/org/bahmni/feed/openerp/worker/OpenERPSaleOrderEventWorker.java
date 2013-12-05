@@ -6,6 +6,7 @@ import org.bahmni.feed.openerp.domain.OpenERPRequestParams;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
+import org.bahmni.openerp.web.service.ProductService;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.service.EventWorker;
 
@@ -37,7 +38,6 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
             openERPClient.execute(openERPRequest);
         } catch (Exception e) {
-            logger.error(e);
             throw new RuntimeException(e);
         }
     }
@@ -48,11 +48,11 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
     private OpenERPRequest mapRequest(Event event) throws IOException {
         String encounterEventContent = getContent(event);
-        OpenERPRequestParams openERPRequestParams = new OpenERPRequestParams(event, feedUrl);
+        OpenERPRequestParams openERPRequestParams = new OpenERPRequestParams(event, feedUrl,new ProductService(openERPClient));
         OpenERPRequest openERPRequest = openERPRequestParams.getRequest(encounterEventContent);
 
         if (event.getFeedUri() == null)
-            openERPRequest.addParameter(createParameter("is_failed_event", "True", "boolean"));
+            openERPRequest.addParameter(createParameter("is_failed_event", "1", "boolean"));
 
         return openERPRequest;
     }

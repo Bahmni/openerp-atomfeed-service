@@ -12,13 +12,13 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-public class OpenERPParameterMapperTest {
+public class OpenERPCustomerParameterMapperTest {
 
-    private OpenERPParameterMapper mapper;
+    private OpenERPCustomerParameterMapper mapper;
 
     @Before
     public void setUp(){
-        mapper = new OpenERPParameterMapper();
+        mapper = new OpenERPCustomerParameterMapper();
     }
 
 

@@ -36,7 +36,6 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         try {
             openERPClient.execute(mapRequest(event));
         } catch (Exception e) {
-            logger.error(e);
             throw new RuntimeException(e);
         }
     }
@@ -72,7 +71,7 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         parameters.add(createParameter("last_read_entry_id", eventId, "string"));
         parameters.add(createParameter("feed_uri_for_last_read_entry", feedUri, "string"));
         if (isFailedEvent)
-            parameters.add(createParameter("is_failed_event", "True", "boolean"));
+            parameters.add(createParameter("is_failed_event", "1", "boolean"));
         return parameters;
     }
 

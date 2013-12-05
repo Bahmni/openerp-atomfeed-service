@@ -4,7 +4,7 @@ import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.OpenERPRequestTestHelper;
 import org.bahmni.openerp.web.request.builder.Parameter;
-import org.bahmni.openerp.web.request.mapper.OpenERPParameterMapper;
+import org.bahmni.openerp.web.request.mapper.OpenERPCustomerParameterMapper;
 import org.bahmni.openerp.web.service.domain.Customer;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class CustomerServiceTest {
     private OpenERPClient openERPClient;
 
     @Mock
-    private OpenERPParameterMapper parameterMapper;
+    private OpenERPCustomerParameterMapper parameterMapper;
     private OpenERPRequestTestHelper openERPRequestTestHelper;
 
     @Before

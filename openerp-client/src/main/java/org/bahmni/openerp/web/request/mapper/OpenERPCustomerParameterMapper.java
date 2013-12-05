@@ -8,7 +8,7 @@ import org.bahmni.openerp.web.service.domain.Customer;
 import java.util.Arrays;
 import java.util.List;
 
-public class OpenERPParameterMapper {
+public class OpenERPCustomerParameterMapper {
 
     public static final String OPENERP_CUSTOMER_NAME = "name";
     public static final String OPENERP_CUSTOMER_REF = "ref";

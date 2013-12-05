@@ -4,6 +4,7 @@ package org.bahmni.feed.openerp.domain;
 import org.bahmni.feed.openerp.testhelper.SampleEncounter;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
+import org.bahmni.openerp.web.service.ProductService;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +19,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class OpenERPRequestParamsTest {
     @Mock
     private Event event;
+    @Mock
+    private ProductService productService;
 
     @Before
     public void setup() {
@@ -26,7 +29,7 @@ public class OpenERPRequestParamsTest {
 
     @Test
     public void shouldMapEncounterToOpenERPRequestparams() throws IOException {
-        OpenERPRequestParams requestParams = new OpenERPRequestParams(event,"http://test");
+        OpenERPRequestParams requestParams = new OpenERPRequestParams(event,"http://test", productService);
 
         OpenERPRequest openERPRequest = requestParams.getRequest(SampleEncounter.json());
         List<Parameter> parameters = openERPRequest.getParameters();

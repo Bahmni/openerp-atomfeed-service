@@ -22,11 +22,13 @@ public class OpenERPServiceTest {
     CustomerAccountService customerAccountService;
     @Mock
     private CustomerService customerService;
+    @Mock
+    private ProductService productService;
 
     @Before
     public void setUp()  {
         initMocks(this);
-        openERPService = new OpenERPService(customerService, customerAccountService);
+        openERPService = new OpenERPService(customerService, customerAccountService, productService);
     }
 
     @Test

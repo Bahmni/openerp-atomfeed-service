@@ -62,6 +62,10 @@ public class OpenERPClient {
         return execute(resource, "search", params);
     }
 
+    public Object read(String resource,Vector ids, Vector params) {
+        return executeRead(resource, "read", ids, params);
+    }
+
     public String execute(OpenERPRequest openERPRequest) {
         login();
         String request = requestBuilder.buildNewRequest(openERPRequest, id, database, password);
@@ -93,6 +97,17 @@ public class OpenERPClient {
     public Object execute(String resource, String operation, Vector params) {
         login();
         Object args[] = {database, (Integer) id, password, resource, operation, params};
+
+        try {
+            return xmlRpcClient(XML_RPC_OBJECT_ENDPOINT).execute("execute", args);
+        } catch (XmlRpcException e) {
+            throw new OpenERPException(e);
+        }
+    }
+
+    public Object executeRead(String resource, String operation,Vector ids, Vector params) {
+        login();
+        Object args[] = {database, (Integer) id, password, resource, operation,ids, params};
 
         try {
             return xmlRpcClient(XML_RPC_OBJECT_ENDPOINT).execute("execute", args);

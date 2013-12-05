@@ -9,6 +9,7 @@ import org.bahmni.feed.openerp.domain.encounter.OpenMRSOrder;
 import org.bahmni.feed.openerp.domain.visit.OpenMRSVisit;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
+import org.bahmni.openerp.web.service.ProductService;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ict4h.atomfeed.client.domain.Event;
 
@@ -18,13 +19,16 @@ import java.util.List;
 
 public class OpenERPRequestParams {
 
+    public static final String ADMISSION_CHARGES = "Admission Charges";
     private Event event;
     private String feedUrl;
     public static ObjectMapper objectMapper = new ObjectMapper();
+    private ProductService productService;
 
-    public OpenERPRequestParams(Event event, String feedUrl) {
+    public OpenERPRequestParams(Event event, String feedUrl, ProductService productService) {
         this.event = event;
         this.feedUrl = feedUrl;
+        this.productService = productService;
     }
 
     private List<Parameter> getParameters(OpenMRSEncounter openMRSEncounter) throws IOException {
@@ -58,20 +62,44 @@ public class OpenERPRequestParams {
 
     private void mapOrders(OpenMRSEncounter openMRSEncounter, List<Parameter> parameters, OpenERPOrders orders) throws IOException {
         OpenMRSVisit visit = openMRSEncounter.getVisit();
-        if (openMRSEncounter.getOrders().size() > 0){
-            for(OpenMRSOrder order : openMRSEncounter.getOrders())    {
-                OpenERPOrder openERPOrder = new OpenERPOrder();
-                openERPOrder.setId(order.getUuid());
-                setVisitDetails(openERPOrder,visit);
-                List<String> productIds = new ArrayList<>();
-                productIds.add(order.getConcept().getUuid());
-                openERPOrder.setProductIds(productIds);
-                orders.getOpenERPOrders().add(openERPOrder);
+        if (hasOrders(openMRSEncounter)){
+            for(OpenMRSOrder order : openMRSEncounter.getOrders()) {
+                addNewOrders(orders, visit, order);
             }
-            String ordersJson = objectMapper.writeValueAsString(orders);
-
-            parameters.add(createParameter("orders", ordersJson, "string"));
+        }else if(isAdmissionEncounter(openMRSEncounter)){
+            addAdmissionChargeOrder(orders, visit);
         }
+        String ordersJson = objectMapper.writeValueAsString(orders);
+        parameters.add(createParameter("orders", ordersJson, "string"));
+    }
+
+    private void addAdmissionChargeOrder(OpenERPOrders orders, OpenMRSVisit visit) {
+        OpenERPOrder openERPOrder = new OpenERPOrder();
+        setVisitDetails(openERPOrder,visit);
+        List<String> productIds = new ArrayList<>();
+        String productId = productService.findProductByName(ADMISSION_CHARGES);
+        if(productId != null)
+            productIds.add(productId);
+        openERPOrder.setProductIds(productIds);
+        orders.getOpenERPOrders().add(openERPOrder);
+    }
+
+    private void addNewOrders(OpenERPOrders orders, OpenMRSVisit visit, OpenMRSOrder order) {
+        OpenERPOrder openERPOrder = new OpenERPOrder();
+        openERPOrder.setId(order.getUuid());
+        setVisitDetails(openERPOrder,visit);
+        List<String> productIds = new ArrayList<>();
+        productIds.add(order.getConcept().getUuid());
+        openERPOrder.setProductIds(productIds);
+        orders.getOpenERPOrders().add(openERPOrder);
+    }
+
+    private boolean isAdmissionEncounter(OpenMRSEncounter openMRSEncounter) {
+        return openMRSEncounter.getEncounterType().getName().equals(OpenMRSEncounter.TYPE_ADMISSION);
+    }
+
+    private boolean hasOrders(OpenMRSEncounter openMRSEncounter) {
+        return openMRSEncounter.getOrders().size() > 0;
     }
 
     private void setVisitDetails(OpenERPOrder openERPOrder, OpenMRSVisit visit) {

@@ -32,8 +32,11 @@ public class OpenMRSEncounter {
     private List<OpenMRSOrder> orders = new ArrayList<>();
     private OpenMRSVisit visit;
 
+    public static final String TYPE_ADMISSION = "ADMISSION";
+    public static final String TYPE_DISCHARGE = "DISCHARGE";
+    public static final String TYPE_TRANSFER = "TRANSFER";
     // These need to match the OpenMRS ADT Concept set members.
-    private static final String[] ADT_EVENTS_ARRAY = new String[] {"ADMISSION", "DISCHARGE", "TRANSFER"};
+    private static final String[] ADT_EVENTS_ARRAY = new String[] {TYPE_ADMISSION, TYPE_DISCHARGE, TYPE_TRANSFER};
 
     public String getUuid() {
         return uuid;

@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 public class OpenERPService {
     private CustomerAccountService customerAccountService;
     private CustomerService customerService;
+    private ProductService productService;
 
     @Autowired
-    public OpenERPService(CustomerService customerService, CustomerAccountService customerAccountService){
+    public OpenERPService(CustomerService customerService, CustomerAccountService customerAccountService, ProductService productService){
         this.customerService = customerService;
         this.customerAccountService = customerAccountService;
+        this.productService = productService;
     }
 
     public void createCustomer(String name, String patientId, String village) {
@@ -32,6 +34,11 @@ public class OpenERPService {
     public void deleteCustomer(String patientId) throws Exception {
         customerService.deleteCustomerWithPatientReference(patientId);
     }
+
+    public String findProduct(String name) {
+        return productService.findProductByName(name);
+    }
+
 
 }
 
