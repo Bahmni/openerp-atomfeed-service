@@ -5,7 +5,7 @@ import org.joda.time.DateTime;
 import java.util.List;
 
 public class OpenERPOrder {
-    private String id;
+    private String id; // encounterId
     private List<String> productIds;
     private String visitId;
     private String type;

@@ -1,0 +1,158 @@
+{
+    "uuid": "688ae62f-1d16-452c-9ae4-4c1d64bd9c41",
+    "encounterType": {
+        "uuid": "1a8fd615-5b0c-11e3-9fb3-0800271c1b75",
+        "display": "ADMISSION",
+        "name": "ADMISSION",
+        "description": "ADMISSION encounter",
+        "retired": false,
+        "links": [
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/encountertype/1a8fd615-5b0c-11e3-9fb3-0800271c1b75",
+                "rel": "self"
+            },
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/encountertype/1a8fd615-5b0c-11e3-9fb3-0800271c1b75?v=full",
+                "rel": "full"
+            }
+        ],
+        "resourceVersion": "1.8"
+    },
+    "patient": {
+        "uuid": "7927f199-bf43-4268-b0b1-7597647e14cf",
+        "display": "BAM200003 - Ranjan Sakalle",
+        "identifiers": [
+            {
+                "uuid": "8adebb2d-68ad-40da-8387-e8d800a7663c",
+                "display": "JSS = BAM200003",
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/7927f199-bf43-4268-b0b1-7597647e14cf/identifier/8adebb2d-68ad-40da-8387-e8d800a7663c",
+                        "rel": "self"
+                    }
+                ]
+            }
+        ],
+        "person": {
+            "uuid": "7927f199-bf43-4268-b0b1-7597647e14cf",
+            "display": "Ranjan Sakalle",
+            "gender": "M",
+            "age": 45,
+            "birthdate": "1968-12-04T00:00:00.000+0530",
+            "birthdateEstimated": true,
+            "dead": false,
+            "deathDate": null,
+            "causeOfDeath": null,
+            "preferredName": {
+                "uuid": "13d3cc39-af9d-4c84-85ea-67a0061cf0f3",
+                "display": "Ranjan Sakalle",
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/7927f199-bf43-4268-b0b1-7597647e14cf/name/13d3cc39-af9d-4c84-85ea-67a0061cf0f3",
+                        "rel": "self"
+                    }
+                ]
+            },
+            "preferredAddress": null,
+            "attributes": [],
+            "voided": false,
+            "links": [
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/7927f199-bf43-4268-b0b1-7597647e14cf",
+                    "rel": "self"
+                },
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/7927f199-bf43-4268-b0b1-7597647e14cf?v=full",
+                    "rel": "full"
+                }
+            ],
+            "resourceVersion": "1.8"
+        },
+        "voided": false,
+        "links": [
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/7927f199-bf43-4268-b0b1-7597647e14cf",
+                "rel": "self"
+            },
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/7927f199-bf43-4268-b0b1-7597647e14cf?v=full",
+                "rel": "full"
+            }
+        ],
+        "resourceVersion": "1.8"
+    },
+    "visit": {
+        "uuid": "5582a60a-5a13-4a41-81d0-678ff5bd0a7d",
+        "display": "REG ? - 12/04/2013 12:41 PM",
+        "patient": {
+            "uuid": "7927f199-bf43-4268-b0b1-7597647e14cf",
+            "display": "BAM200003 - Ranjan Sakalle",
+            "links": [
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/7927f199-bf43-4268-b0b1-7597647e14cf",
+                    "rel": "self"
+                }
+            ]
+        },
+        "visitType": {
+            "uuid": "284886ca-9d21-11e2-8137-0800271c1b75",
+            "display": "REG",
+            "links": [
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/visittype/284886ca-9d21-11e2-8137-0800271c1b75",
+                    "rel": "self"
+                }
+            ]
+        },
+        "indication": null,
+        "location": null,
+        "startDatetime": "2013-12-04T12:41:00.000+0530",
+        "stopDatetime": "2013-12-05T07:37:29.000+0530",
+        "encounters": [
+            {
+                "uuid": "688ae62f-1d16-452c-9ae4-4c1d64bd9c41",
+                "display": "ADMISSION 12/04/2013",
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/encounter/688ae62f-1d16-452c-9ae4-4c1d64bd9c41",
+                        "rel": "self"
+                    }
+                ]
+            },
+            {
+                "uuid": "e3d725af-3083-42ad-8a87-3193736a54b8",
+                "display": "OPD 12/04/2013",
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/encounter/e3d725af-3083-42ad-8a87-3193736a54b8",
+                        "rel": "self"
+                    }
+                ]
+            },
+            {
+                "uuid": "cd7b7bb9-c71f-473e-af76-1725f4b0e46f",
+                "display": "REG 12/04/2013",
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/encounter/cd7b7bb9-c71f-473e-af76-1725f4b0e46f",
+                        "rel": "self"
+                    }
+                ]
+            }
+        ],
+        "attributes": [],
+        "voided": false,
+        "links": [
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/visit/5582a60a-5a13-4a41-81d0-678ff5bd0a7d",
+                "rel": "self"
+            },
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/visit/5582a60a-5a13-4a41-81d0-678ff5bd0a7d?v=full",
+                "rel": "full"
+            }
+        ],
+        "resourceVersion": "1.9"
+    },
+    "orders": []
+}

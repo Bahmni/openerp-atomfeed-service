@@ -16,7 +16,7 @@
 
 package org.bahmni.feed.openerp;
 
-import org.bahmni.feed.openerp.domain.encounter.OpenMRSEncounter;
+import org.bahmni.feed.openerp.domain.encounter.bedassignment.OpenMRSBedAssignment;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.bahmni.openerp.web.service.ProductService;
@@ -25,22 +25,23 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 
-public class OpenMRSEncounterParser implements EncounterEventParser {
+public class OpenMRSBedAssignmentParser implements EncounterEventParser {
     private ObjectMapper objectMapper;
 
-    public OpenMRSEncounterParser(ObjectMapper objectMapper) {
+    public OpenMRSBedAssignmentParser(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
     @Override
     public OpenERPRequest parse(String encounterEventContent, ProductService productService, String eventId,
                                 String feedURIForLastReadEntry, String feedURI) throws IOException {
-        OpenMRSEncounter openMRSEncounter = objectMapper.readValue(encounterEventContent, OpenMRSEncounter.class);
-        if (!openMRSEncounter.shouldERPConsumeEvent()) {
+        OpenMRSBedAssignment openMRSBedAssignment = objectMapper.readValue(encounterEventContent, OpenMRSBedAssignment.class);
+        if (!openMRSBedAssignment.shouldERPConsumeEvent()) {
             return OpenERPRequest.DO_NOT_CONSUME;
         }
 
-        List<Parameter> parameters = openMRSEncounter.getParameters(eventId, productService, feedURIForLastReadEntry, feedURI);
+        List<Parameter> parameters = openMRSBedAssignment.getParameters(eventId, productService, feedURIForLastReadEntry, feedURI);
         return new OpenERPRequest("atom.event.worker", "process_event", parameters);
+
     }
 }

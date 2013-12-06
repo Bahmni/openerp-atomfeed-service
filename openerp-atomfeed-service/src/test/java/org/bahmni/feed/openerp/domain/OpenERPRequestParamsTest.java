@@ -1,6 +1,9 @@
 package org.bahmni.feed.openerp.domain;
 
 
+import org.bahmni.feed.openerp.EncounterEventParser;
+import org.bahmni.feed.openerp.ObjectMapperRepository;
+import org.bahmni.feed.openerp.OpenMRSEncounterParser;
 import org.bahmni.feed.openerp.testhelper.SampleEncounter;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
@@ -11,6 +14,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -29,9 +33,13 @@ public class OpenERPRequestParamsTest {
 
     @Test
     public void shouldMapEncounterToOpenERPRequestparams() throws IOException {
-        OpenERPRequestParams requestParams = new OpenERPRequestParams(event,"http://test", productService);
+        OpenMRSEncounterParser openMRSEncounterParser = new OpenMRSEncounterParser(ObjectMapperRepository.objectMapper);
+        List<EncounterEventParser> encounterParsers = new ArrayList<>();
+        encounterParsers.add(openMRSEncounterParser);
 
-        OpenERPRequest openERPRequest = requestParams.getRequest(SampleEncounter.json());
+        OpenERPRequestParams requestParams = new OpenERPRequestParams(productService, encounterParsers);
+
+        OpenERPRequest openERPRequest = requestParams.getRequest(SampleEncounter.json("encounterResourceForLabOrder.json"), "http://feedUriLastReadEntry", "http://feedUri", "eventId");
         List<Parameter> parameters = openERPRequest.getParameters();
         assertTrue(parameters.size() == 6);
     }

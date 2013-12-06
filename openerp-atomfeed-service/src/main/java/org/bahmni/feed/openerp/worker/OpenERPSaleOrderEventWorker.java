@@ -1,6 +1,10 @@
 package org.bahmni.feed.openerp.worker;
 
 import org.apache.log4j.Logger;
+import org.bahmni.feed.openerp.EncounterEventParser;
+import org.bahmni.feed.openerp.ObjectMapperRepository;
+import org.bahmni.feed.openerp.OpenMRSBedAssignmentParser;
+import org.bahmni.feed.openerp.OpenMRSEncounterParser;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.OpenERPRequestParams;
 import org.bahmni.openerp.web.client.OpenERPClient;
@@ -12,6 +16,8 @@ import org.ict4h.atomfeed.client.service.EventWorker;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OpenERPSaleOrderEventWorker implements EventWorker {
     OpenERPClient openERPClient;
@@ -47,19 +53,20 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
     }
 
     private OpenERPRequest mapRequest(Event event) throws IOException {
-        String encounterEventContent = getContent(event);
-        OpenERPRequestParams openERPRequestParams = new OpenERPRequestParams(event, feedUrl,new ProductService(openERPClient));
-        OpenERPRequest openERPRequest = openERPRequestParams.getRequest(encounterEventContent);
+        String encounterOrBedAssignmentEventContent = webClient.get(URI.create(urlPrefix + event.getContent()));
+
+        List<EncounterEventParser> encounterEventParsers = new ArrayList<>();
+        encounterEventParsers.add(new OpenMRSEncounterParser(ObjectMapperRepository.objectMapper));
+        encounterEventParsers.add(new OpenMRSBedAssignmentParser(ObjectMapperRepository.objectMapper));
+
+        OpenERPRequestParams openERPRequestParams = new OpenERPRequestParams(new ProductService(openERPClient), encounterEventParsers);
+        OpenERPRequest openERPRequest = openERPRequestParams.getRequest(encounterOrBedAssignmentEventContent,
+                event.getFeedUri(), feedUrl, event.getId());
 
         if (event.getFeedUri() == null)
             openERPRequest.addParameter(createParameter("is_failed_event", "1", "boolean"));
 
         return openERPRequest;
-    }
-
-    private String getContent(Event event) {
-        String content = event.getContent();
-        return webClient.get(URI.create(urlPrefix + content));
     }
 
     private Parameter createParameter(String name, String value, String type) {

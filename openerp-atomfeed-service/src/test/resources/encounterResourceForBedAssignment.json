@@ -1,0 +1,102 @@
+{
+    "bed": {
+        "id": 41,
+        "bedNumber": "Bed 14",
+        "bedType": {
+            "name": "General",
+            "id": 101,
+            "displayName": "General Be",
+            "description": "This is the general bed types"
+        },
+        "status": "OCCUPIED",
+        "resourceVersion": "1.8"
+    },
+    "patient": {
+        "uuid": "7927f199-bf43-4268-b0b1-7597647e14cf",
+        "display": "BAM200003 - Ranjan Sakalle",
+        "identifiers": [
+            {
+                "uuid": "8adebb2d-68ad-40da-8387-e8d800a7663c",
+                "display": "JSS = BAM200003",
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/7927f199-bf43-4268-b0b1-7597647e14cf/identifier/8adebb2d-68ad-40da-8387-e8d800a7663c",
+                        "rel": "self"
+                    }
+                ]
+            }
+        ],
+        "person": {
+            "uuid": "7927f199-bf43-4268-b0b1-7597647e14cf",
+            "display": "Ranjan Sakalle",
+            "gender": "M",
+            "age": 45,
+            "birthdate": "1968-12-04T00:00:00.000+0530",
+            "birthdateEstimated": true,
+            "dead": false,
+            "deathDate": null,
+            "causeOfDeath": null,
+            "preferredName": {
+                "uuid": "13d3cc39-af9d-4c84-85ea-67a0061cf0f3",
+                "display": "Ranjan Sakalle",
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/7927f199-bf43-4268-b0b1-7597647e14cf/name/13d3cc39-af9d-4c84-85ea-67a0061cf0f3",
+                        "rel": "self"
+                    }
+                ]
+            },
+            "preferredAddress": null,
+            "attributes": [],
+            "voided": false,
+            "links": [
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/7927f199-bf43-4268-b0b1-7597647e14cf",
+                    "rel": "self"
+                },
+                {
+                    "uri": "NEED-TO-CONFIGURE/ws/rest/v1/person/7927f199-bf43-4268-b0b1-7597647e14cf?v=full",
+                    "rel": "full"
+                }
+            ],
+            "resourceVersion": "1.8"
+        },
+        "voided": false,
+        "links": [
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/7927f199-bf43-4268-b0b1-7597647e14cf",
+                "rel": "self"
+            },
+            {
+                "uri": "NEED-TO-CONFIGURE/ws/rest/v1/patient/7927f199-bf43-4268-b0b1-7597647e14cf?v=full",
+                "rel": "full"
+            }
+        ],
+        "resourceVersion": "1.8"
+    },
+    "encounter": {
+        "uuid": "688ae62f-1d16-452c-9ae4-4c1d64bd9c41",
+        "visit": {
+            "uuid": "5582a60a-5a13-4a41-81d0-678ff5bd0a7d",
+            "startDatetime": "2013-12-04T12:41:00.000+0530",
+            "visitType": {
+                "uuid": "284886ca-9d21-11e2-8137-0800271c1b75",
+                "display": "REG",
+                "name": "REG",
+                "description": "Regular patient visit",
+                "retired": false,
+                "links": [
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/visittype/284886ca-9d21-11e2-8137-0800271c1b75",
+                        "rel": "self"
+                    },
+                    {
+                        "uri": "NEED-TO-CONFIGURE/ws/rest/v1/visittype/284886ca-9d21-11e2-8137-0800271c1b75?v=full",
+                        "rel": "full"
+                    }
+                ],
+                "resourceVersion": "1.9"
+            }
+        }
+    }
+}
