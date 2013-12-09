@@ -1,12 +1,11 @@
 package org.bahmni.feed.openerp.job;
 
 import com.sun.syndication.io.FeedException;
-import org.springframework.stereotype.Controller;
 
 public class OpenERPSaleOrderFeedJob {
     private OpenMRSFeedJob openMRSFeedJob;
     private static final String jobName = "openerp.saleorder.service";
-    private static String feedName;
+    private String feedName;
 
     public OpenERPSaleOrderFeedJob() {
     }
