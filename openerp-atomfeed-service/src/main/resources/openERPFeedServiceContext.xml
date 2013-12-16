@@ -23,10 +23,10 @@
     <context:component-scan base-package="org.ict4h.atomfeed.spring.resource"/>
 
     <task:scheduled-tasks>
-        <task:scheduled ref="openerpCustomerFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}" initial-delay="${scheduler.initial.delay}"/>
-        <task:scheduled ref="openerpCustomerFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}" initial-delay="${scheduler.initial.delay}"/>
-        <task:scheduled ref="openerpSaleOrderFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}" initial-delay="${scheduler.initial.delay}"/>
-        <task:scheduled ref="openerpSaleOrderFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}" initial-delay="${scheduler.initial.delay}"/>
+        <task:scheduled ref="openerpCustomerFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}" initial-delay="60000"/>
+        <task:scheduled ref="openerpCustomerFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}" initial-delay="60000"/>
+        <task:scheduled ref="openerpSaleOrderFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}" initial-delay="60000"/>
+        <task:scheduled ref="openerpSaleOrderFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}" initial-delay="60000"/>
     </task:scheduled-tasks>
 
 
