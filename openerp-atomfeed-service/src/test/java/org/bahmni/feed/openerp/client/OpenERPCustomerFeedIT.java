@@ -168,7 +168,7 @@ public class OpenERPCustomerFeedIT {
                 new FeedClientFactory(webClient),allMarkersJdbc,allFeedsMock,
                 allFailedEvents);
         OpenMRSFeedJob openMRSFeedJob = new OpenMRSFeedJob(clientHelper,mock(TaskMonitor.class));
-        OpenERPCustomerFeedJob feedJob = new OpenERPCustomerFeedJob(openMRSFeedJob,"customer.feed.generator.uri");
+        OpenERPCustomerFeedJob feedJob = new OpenERPCustomerFeedJob(openMRSFeedJob);
 
         feedJob.processFeed();
 

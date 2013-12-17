@@ -4,14 +4,14 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
        http://www.springframework.org/schema/task
-       http://www.springframework.org/schema/task/spring-task-3.2.xsd
+       http://www.springframework.org/schema/task/spring-task-3.0.xsd
        http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
-       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
     <context:property-placeholder location="classpath:atomfeed.properties"/>
     <import resource="classpath:applicationContext-openerp-client.xml"/>
@@ -22,17 +22,83 @@
     <context:component-scan base-package="org.bahmni.feed.openerp"/>
     <context:component-scan base-package="org.ict4h.atomfeed.spring.resource"/>
 
-    <task:scheduled-tasks>
-        <task:scheduled ref="openerpCustomerFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}" initial-delay="60000"/>
-        <task:scheduled ref="openerpCustomerFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}" initial-delay="60000"/>
-        <task:scheduled ref="openerpSaleOrderFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}" initial-delay="60000"/>
-        <task:scheduled ref="openerpSaleOrderFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}" initial-delay="60000"/>
-    </task:scheduled-tasks>
+    <!--<task:scheduled-tasks>-->
+        <!--<task:scheduled ref="openerpCustomerFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>-->
+        <!--<task:scheduled ref="openerpCustomerFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>-->
+        <!--<task:scheduled ref="openerpSaleOrderFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>-->
+        <!--<task:scheduled ref="openerpSaleOrderFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>-->
+    <!--</task:scheduled-tasks>-->
 
+    <bean id="openerpCustomerFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="openerpCustomerFeedJob"/>
+        <property name="targetMethod" value="processFeed"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="openerpCustomerFeedQuartzFailedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="openerpCustomerFeedFailedJob"/>
+        <property name="targetMethod" value="processFailedEvents"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="openerpSaleOrderFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="openerpSaleOrderFeedJob"/>
+        <property name="targetMethod" value="processFeed"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="openerpSaleOrderFeedQuartzFailedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="openerpSaleOrderFeedFailedJob"/>
+        <property name="targetMethod" value="processFailedEvents"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+
+    <!-- simple trigger specify repeat interval and delay time -->
+    <bean id="customerFeedJobTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="openerpCustomerFeedQuartzJob" />
+        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="startDelay" value="${scheduler.initial.delay}" />
+    </bean>
+    <bean id="customerFeedfailedJobTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="openerpCustomerFeedQuartzFailedJob" />
+        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="startDelay" value="${scheduler.initial.delay}" />
+    </bean>
+    <bean id="saleOrderFeedJobTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="openerpSaleOrderFeedQuartzJob" />
+        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="startDelay" value="${scheduler.initial.delay}" />
+    </bean>
+    <bean id="saleOrderFeedFailedJobTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="openerpSaleOrderFeedQuartzFailedJob" />
+        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="startDelay" value="${scheduler.initial.delay}" />
+    </bean>
+
+    <!-- scheduler factory bean to bind,the executing code and time intervals
+   together -->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="customerFeedJobTrigger" />
+                <ref bean="customerFeedfailedJobTrigger" />
+                <ref bean="saleOrderFeedJobTrigger" />
+                <ref bean="saleOrderFeedFailedJobTrigger" />
+            </list>
+        </property>
+    </bean>
 
     <bean id="openerpCustomerFeedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob" >
         <constructor-arg ref="openMRSFeedJob"/>
-        <constructor-arg  name="feedName" ref="customerFeedName" />
+    </bean>
+
+    <bean id="openerpCustomerFeedFailedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedFailedEventJob" >
+        <constructor-arg ref="openMRSFeedJob"/>
     </bean>
 
     <bean id="openMRSFeedJob" class="org.bahmni.feed.openerp.job.OpenMRSFeedJob" scope="prototype">
@@ -46,20 +112,13 @@
         <constructor-arg ref="openERPClient"/>
     </bean>
 
-
-    <bean id="customerFeedName" class="java.lang.String">
-        <constructor-arg value="customer.feed.generator.uri"/>
-    </bean>
-
-   <bean id="saleorderFeedName" class="java.lang.String">
-        <constructor-arg value="saleorder.feed.generator.uri"/>
-    </bean>
-
     <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob" >
         <constructor-arg ref="openMRSFeedJob"/>
-        <constructor-arg  name="feedName" ref="saleorderFeedName" />
     </bean>
 
+    <bean id="openerpSaleOrderFeedFailedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedFailedEventJob" >
+        <constructor-arg ref="openMRSFeedJob"/>
+    </bean>
 
     <bean id="threadlocaljdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider">
         <constructor-arg ref="dataSource"/>

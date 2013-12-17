@@ -5,14 +5,13 @@ import com.sun.syndication.io.FeedException;
 public class OpenERPSaleOrderFeedJob {
     private OpenMRSFeedJob openMRSFeedJob;
     private static final String jobName = "openerp.saleorder.service";
-    private String feedName;
+    private String feedName="saleorder.feed.generator.uri";
 
     public OpenERPSaleOrderFeedJob() {
     }
 
-    public OpenERPSaleOrderFeedJob(OpenMRSFeedJob openMRSFeedJob, String feedName) throws FeedException {
+    public OpenERPSaleOrderFeedJob(OpenMRSFeedJob openMRSFeedJob) throws FeedException {
         this.openMRSFeedJob = openMRSFeedJob;
-        this.feedName = feedName;
     }
 
     public void processFeed()  {

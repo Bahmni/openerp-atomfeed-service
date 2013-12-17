@@ -2,19 +2,18 @@ package org.bahmni.feed.openerp.job;
 
 
 import com.sun.syndication.io.FeedException;
-import org.springframework.stereotype.Controller;
 
 public class OpenERPCustomerFeedJob {
     private OpenMRSFeedJob openMRSFeedJob;
     private static final String jobName = "openerp.customer.service";
-    private String feedName;
+    private String feedName = "customer.feed.generator.uri";
+    ;
 
     public OpenERPCustomerFeedJob() {
     }
 
-    public OpenERPCustomerFeedJob(OpenMRSFeedJob openMRSFeedJob, String feedName) throws FeedException {
+    public OpenERPCustomerFeedJob(OpenMRSFeedJob openMRSFeedJob) throws FeedException {
         this.openMRSFeedJob = openMRSFeedJob;
-        this.feedName = feedName;
     }
 
     public void processFeed()  {
