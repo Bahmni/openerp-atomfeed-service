@@ -36,7 +36,7 @@
     </bean>
 
     <bean id="openerpCustomerFeedQuartzFailedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="openerpCustomerFeedFailedJob"/>
+        <property name="targetObject" ref="openerpCustomerFeedJob"/>
         <property name="targetMethod" value="processFailedEvents"/>
         <property name="concurrent" value="false"/>
     </bean>
@@ -48,7 +48,7 @@
     </bean>
 
     <bean id="openerpSaleOrderFeedQuartzFailedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="openerpSaleOrderFeedFailedJob"/>
+        <property name="targetObject" ref="openerpSaleOrderFeedJob"/>
         <property name="targetMethod" value="processFailedEvents"/>
         <property name="concurrent" value="false"/>
     </bean>
@@ -97,9 +97,9 @@
         <constructor-arg ref="openMRSFeedJob"/>
     </bean>
 
-    <bean id="openerpCustomerFeedFailedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedFailedEventJob" >
-        <constructor-arg ref="openMRSFeedJob"/>
-    </bean>
+    <!--<bean id="openerpCustomerFeedFailedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedFailedEventJob" >-->
+        <!--<constructor-arg ref="openMRSFeedJob"/>-->
+    <!--</bean>-->
 
     <bean id="openMRSFeedJob" class="org.bahmni.feed.openerp.job.OpenMRSFeedJob" scope="prototype">
         <constructor-arg ref="atomFeedClientHelper"/>
@@ -116,9 +116,9 @@
         <constructor-arg ref="openMRSFeedJob"/>
     </bean>
 
-    <bean id="openerpSaleOrderFeedFailedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedFailedEventJob" >
-        <constructor-arg ref="openMRSFeedJob"/>
-    </bean>
+    <!--<bean id="openerpSaleOrderFeedFailedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedFailedEventJob" >-->
+        <!--<constructor-arg ref="openMRSFeedJob"/>-->
+    <!--</bean>-->
 
     <bean id="threadlocaljdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider">
         <constructor-arg ref="dataSource"/>
