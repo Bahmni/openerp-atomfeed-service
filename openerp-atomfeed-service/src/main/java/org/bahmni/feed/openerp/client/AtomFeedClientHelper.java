@@ -15,54 +15,50 @@ import org.ict4h.atomfeed.client.service.FeedClient;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 
 public class AtomFeedClientHelper {
-    private AtomFeedClient atomFeedClient;
     private OpenMRSWebClient openMRSWebClient;
-    private AllFeeds allFeeds;
-    private AllFailedEvents allFailedEvents;
-    private AllMarkers allMarkers;
     private OpenERPAtomFeedProperties atomFeedProperties;
     private JdbcConnectionProvider jdbcConnectionProvider;
-    private FeedClientFactory feedClientFactory;
     private OpenERPClient openERPClient;
+    private FeedClientFactory feedClientFactory;
+    private AllMarkers allMarkers;
+    private AllFeeds allFeeds;
+    private AllFailedEvents allFailedEvents;
 
-    public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, JdbcConnectionProvider jdbcConnectionProvider,OpenERPClient openERPClient) {
+    public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, JdbcConnectionProvider jdbcConnectionProvider, OpenERPClient openERPClient) {
         this.atomFeedProperties = atomFeedProperties;
         this.jdbcConnectionProvider = jdbcConnectionProvider;
         this.openERPClient = openERPClient;
     }
 
-    AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, JdbcConnectionProvider jdbcConnectionProvider,OpenERPClient openERPClient,FeedClientFactory feedClientFactory,AllMarkers allMarkers,AllFeeds allFeeds,AllFailedEvents allFailedEvents){
+    AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, JdbcConnectionProvider jdbcConnectionProvider, OpenERPClient openERPClient, FeedClientFactory feedClientFactory,OpenMRSWebClient openMRSWebClient, AllMarkers allMarkersJdbc, AllFeeds allFeeds, AllFailedEvents allFailedEvents) {
         this.atomFeedProperties = atomFeedProperties;
         this.jdbcConnectionProvider = jdbcConnectionProvider;
         this.openERPClient = openERPClient;
         this.feedClientFactory = feedClientFactory;
-        this.allMarkers = allMarkers;
+        this.allMarkers = allMarkersJdbc;
         this.allFeeds = allFeeds;
         this.allFailedEvents = allFailedEvents;
+        this.openMRSWebClient = openMRSWebClient;
     }
 
-    private void initializeAtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, JdbcConnectionProvider jdbcConnectionProvider, OpenERPClient openERPClient) {
-        this.openMRSWebClient = new OpenMRSWebClient(atomFeedProperties);
-        this.atomFeedProperties = atomFeedProperties;
-        this.jdbcConnectionProvider = jdbcConnectionProvider;
-        this.openERPClient = openERPClient;
-        this.feedClientFactory =  new FeedClientFactory(openMRSWebClient);
-        this.allFeeds = getAllFeeds(atomFeedProperties, openMRSWebClient.getCookies());
-        if(this.allMarkers == null) {
-            this.allMarkers = new AllMarkersJdbcImpl(jdbcConnectionProvider);
+    public FeedClient getAtomFeedClient(String feedName, String jobName) throws FeedException {
+        if(this.openMRSWebClient == null){
+            this.openMRSWebClient = new OpenMRSWebClient(atomFeedProperties);
+            feedClientFactory = new FeedClientFactory(openMRSWebClient);
         }
-        if(this.allFailedEvents == null) {
-            this.allFailedEvents = new AllFailedEventsJdbcImpl(jdbcConnectionProvider);
-        }
+        return getAtomFeedClient(feedName, jobName,openMRSWebClient, feedClientFactory);
     }
 
-    public FeedClient getAtomFeedClient(String feedName,String jobName) throws FeedException {
-        if (atomFeedClient == null) {
-            if(feedClientFactory == null) {
-                initializeAtomFeedClientHelper(atomFeedProperties, jdbcConnectionProvider, openERPClient);
-            }
-            atomFeedClient = feedClientFactory.getFeedClient(atomFeedProperties, jdbcConnectionProvider, feedName, openERPClient, allFeeds, allMarkers, allFailedEvents, jobName);
+    FeedClient getAtomFeedClient(String feedName, String jobName, OpenMRSWebClient openMRSWebClient, FeedClientFactory feedClientFactory) throws FeedException {
+
+        ClientCookies cookies = openMRSWebClient.getCookies();
+        if(cookies == null || cookies.size() == 0){
+             return null;
         }
+        allFeeds = getAllFeeds(atomFeedProperties, cookies);
+        allMarkers = new AllMarkersJdbcImpl(jdbcConnectionProvider);
+        allFailedEvents = new AllFailedEventsJdbcImpl(jdbcConnectionProvider);
+        AtomFeedClient atomFeedClient = feedClientFactory.getFeedClient(atomFeedProperties, jdbcConnectionProvider, feedName, openERPClient, allFeeds, allMarkers, allFailedEvents, jobName);
         return atomFeedClient;
     }
 
@@ -74,8 +70,8 @@ public class AtomFeedClientHelper {
         return new AllFeeds(feedProperties, cookies);
     }
 
-    public void reInitializeAtomFeedClient(String feedName,String jobName) throws FeedException {
+   /* public void reInitializeAtomFeedClient(String feedName, String jobName) throws FeedException {
         initializeAtomFeedClientHelper(atomFeedProperties, jdbcConnectionProvider, openERPClient);
-        atomFeedClient = feedClientFactory.getFeedClient(atomFeedProperties, jdbcConnectionProvider, feedName, openERPClient, allFeeds, allMarkers, allFailedEvents, jobName);
-    }
+        return feedClientFactory.getFeedClient(atomFeedProperties, jdbcConnectionProvider, feedName, openERPClient, allFeeds, allMarkers, allFailedEvents, jobName);
+    }*/
 }
