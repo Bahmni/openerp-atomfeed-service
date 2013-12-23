@@ -165,7 +165,7 @@ public class OpenERPCustomerFeedIT {
         when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
         AtomFeedClientHelper clientHelper = new AtomFeedClientHelper(atomFeedProperties,jdbcConnectionProvider,openERPClient,
-                new FeedClientFactory(webClient),allMarkersJdbc,allFeedsMock,
+                new FeedClientFactory(webClient),webClient,allMarkersJdbc,allFeedsMock,
                 allFailedEvents);
         OpenMRSFeedJob openMRSFeedJob = new OpenMRSFeedJob(clientHelper,mock(TaskMonitor.class));
         OpenERPCustomerFeedJob feedJob = new OpenERPCustomerFeedJob(openMRSFeedJob);
