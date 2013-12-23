@@ -14,7 +14,7 @@ public class OpenMRSFeedJob {
     private AtomFeedClientHelper atomFeedClientHelper;
     TaskMonitor taskMonitor;
 
-    @Autowired
+    //@Autowired
     public OpenMRSFeedJob(
             AtomFeedClientHelper atomFeedClientHelper,
             TaskMonitor taskMonitor) throws com.sun.syndication.io.FeedException {
