@@ -1,7 +1,7 @@
 package org.bahmni.openerp.web.service;
 
 import junit.framework.TestCase;
-import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,7 +14,7 @@ public class OpenERPServiceIntegrationTest extends TestCase {
     @Autowired
     OpenERPService openerpService;
 
-    @Ignore
+    @Test
     public void shouldCreateFindAndDeleteCustomer() throws Exception {
         String name= "Mario Areias";
         String patientId ="122678984333";
