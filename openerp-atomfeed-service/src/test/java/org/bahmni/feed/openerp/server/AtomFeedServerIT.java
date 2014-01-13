@@ -35,7 +35,7 @@ import static org.springframework.test.web.server.result.MockMvcResultMatchers.c
 public class AtomFeedServerIT extends IntegrationTest {
 
     private DbEventRecordCreator recordCreator;
-    private Connection connection;
+    private JdbcConnectionProvider connectionProvider;
     private OpenERPAllEventRecordsJdbcImpl eventRecords;
     private AtomFeedClient atomFeedClient;
     String contents ="  <entry>\n" +
@@ -59,13 +59,14 @@ public class AtomFeedServerIT extends IntegrationTest {
 
     @Before
     public void before() throws SQLException {
-        connection = getConnection();
-        eventRecords = new OpenERPAllEventRecordsJdbcImpl(getProvider(connection));
+        connectionProvider = getConnectionProvider();
+        eventRecords = new OpenERPAllEventRecordsJdbcImpl(connectionProvider);
         recordCreator = new DbEventRecordCreator(eventRecords);
     }
 
     @After
     public void after() throws SQLException {
+        Connection connection = connectionProvider.getConnection();
         Statement statement = connection.createStatement();
         statement.execute("TRUNCATE public.event_records  RESTART IDENTITY;");
         statement.close();
