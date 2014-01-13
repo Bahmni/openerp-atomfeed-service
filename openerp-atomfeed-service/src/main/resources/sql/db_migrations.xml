@@ -26,7 +26,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
         <addAutoIncrement tableName="chunking_history" columnName="id" columnDataType="int"/>
     </changeSet>
     <changeSet id="102" author="ict4h">
@@ -40,4 +39,14 @@
             <column name="error_hash_code" type="int" />
         </addColumn>
     </changeSet>
+	<changeSet author="ict4h" id="104">
+	    <createTable tableName="event_records_offset_marker" schemaName="public">
+	       <column name="id" type="int" autoIncrement="true">
+	          <constraints nullable="false" primaryKey="true"/>
+	       </column>
+	       <column name="event_id" type="int"/>
+	       <column name="event_count" type="int"/>
+	       <column name="category" type="varchar(255)"/>
+	    </createTable>
+	</changeSet>
 </databaseChangeLog>
