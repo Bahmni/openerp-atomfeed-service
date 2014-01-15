@@ -49,4 +49,9 @@
 	       <column name="category" type="varchar(255)"/>
 	    </createTable>
 	</changeSet>
+    <changeSet id="105" author="ict4h">
+        <addColumn tableName="failed_events" schemaName="public">
+            <column name="title" type="varchar(255)" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
