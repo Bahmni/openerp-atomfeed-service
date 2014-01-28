@@ -93,7 +93,7 @@
         </property>
     </bean>
 
-    <bean id="openerpCustomerFeedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob" >
+    <bean id="openerpCustomerFeedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob" scope="prototype">
         <constructor-arg ref="openMRSFeedJob"/>
     </bean>
 
@@ -112,7 +112,7 @@
         <constructor-arg ref="openERPClient"/>
     </bean>
 
-    <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob" >
+    <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob" scope="prototype" >
         <constructor-arg ref="openMRSFeedJob"/>
     </bean>
 
@@ -120,7 +120,7 @@
         <!--<constructor-arg ref="openMRSFeedJob"/>-->
     <!--</bean>-->
 
-    <bean id="threadlocaljdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider">
+    <bean id="threadlocaljdbcConnectionProvider"  class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider" scope="prototype">
         <constructor-arg ref="dataSource"/>
     </bean>
 
