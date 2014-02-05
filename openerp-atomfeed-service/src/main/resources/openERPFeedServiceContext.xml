@@ -22,13 +22,6 @@
     <context:component-scan base-package="org.bahmni.feed.openerp"/>
     <context:component-scan base-package="org.ict4h.atomfeed.spring.resource"/>
 
-    <!--<task:scheduled-tasks>-->
-        <!--<task:scheduled ref="openerpCustomerFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>-->
-        <!--<task:scheduled ref="openerpCustomerFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>-->
-        <!--<task:scheduled ref="openerpSaleOrderFeedJob" method="processFeed" fixed-delay="${scheduler.fixed.delay}"/>-->
-        <!--<task:scheduled ref="openerpSaleOrderFeedJob" method="processFailedEvents" fixed-delay="${scheduler.fixed.delay}"/>-->
-    <!--</task:scheduled-tasks>-->
-
     <bean id="openerpCustomerFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="openerpCustomerFeedJob"/>
         <property name="targetMethod" value="processFeed"/>
@@ -82,7 +75,7 @@
 
     <!-- scheduler factory bean to bind,the executing code and time intervals
    together -->
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <bean id="quartzSchedulerBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
                 <ref bean="customerFeedJobTrigger" />
@@ -97,13 +90,8 @@
         <constructor-arg ref="openMRSFeedJob"/>
     </bean>
 
-    <!--<bean id="openerpCustomerFeedFailedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedFailedEventJob" >-->
-        <!--<constructor-arg ref="openMRSFeedJob"/>-->
-    <!--</bean>-->
-
     <bean id="openMRSFeedJob" class="org.bahmni.feed.openerp.job.OpenMRSFeedJob" scope="prototype">
         <constructor-arg ref="atomFeedClientHelper"/>
-        <constructor-arg ref="customerFeedClientMonitor"/>
     </bean>
 
     <bean id="atomFeedClientHelper" class="org.bahmni.feed.openerp.client.AtomFeedClientHelper" scope="prototype">
@@ -116,16 +104,8 @@
         <constructor-arg ref="openMRSFeedJob"/>
     </bean>
 
-    <!--<bean id="openerpSaleOrderFeedFailedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedFailedEventJob" >-->
-        <!--<constructor-arg ref="openMRSFeedJob"/>-->
-    <!--</bean>-->
-
     <bean id="threadlocaljdbcConnectionProvider"  class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider" scope="prototype">
         <constructor-arg ref="dataSource"/>
-    </bean>
-
-    <bean id="customerFeedClientMonitor" class="org.bahmni.feed.openerp.TaskMonitor">
-        <constructor-arg value="OpenERPCustomerFeedClientService"/>
     </bean>
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">

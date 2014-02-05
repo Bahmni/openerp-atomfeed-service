@@ -7,7 +7,6 @@ import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
-import org.bahmni.feed.openerp.TaskMonitor;
 import org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob;
 import org.bahmni.feed.openerp.job.OpenMRSFeedJob;
 import org.bahmni.openerp.web.client.OpenERPClient;
@@ -167,7 +166,7 @@ public class OpenERPCustomerFeedIT {
         AtomFeedClientHelper clientHelper = new AtomFeedClientHelper(atomFeedProperties,jdbcConnectionProvider,openERPClient,
                 new FeedClientFactory(webClient),webClient,allMarkersJdbc,allFeedsMock,
                 allFailedEvents);
-        OpenMRSFeedJob openMRSFeedJob = new OpenMRSFeedJob(clientHelper,mock(TaskMonitor.class));
+        OpenMRSFeedJob openMRSFeedJob = new OpenMRSFeedJob(clientHelper);
         OpenERPCustomerFeedJob feedJob = new OpenERPCustomerFeedJob(openMRSFeedJob);
 
         feedJob.processFeed();

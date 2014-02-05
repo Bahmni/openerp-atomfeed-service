@@ -1,28 +1,50 @@
 package org.bahmni.feed.openerp.controller;
 
-import org.bahmni.feed.openerp.TaskMonitor;
+import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.TasksMonitoringResponse;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequestMapping("/tasks")
 // TODO : Mujir - this doesnt have any authentication right now. Change nagios when we add basic auth.
 public class TaskMonitorController {
-    private TaskMonitor taskMonitor;
+    private SchedulerFactoryBean schedulerFactoryBean;
+
+    private static Logger logger = Logger.getLogger(TaskMonitorController.class);
 
     @Autowired
-    public TaskMonitorController(TaskMonitor taskMonitor) {
-        this.taskMonitor = taskMonitor;
+    public TaskMonitorController(SchedulerFactoryBean schedulerFactoryBean) {
+        this.schedulerFactoryBean = schedulerFactoryBean;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody List<TasksMonitoringResponse> taskStatus() {
-        return taskMonitor.getStatus();
+        List<TasksMonitoringResponse> monitoringResponses = new ArrayList<>();
+        try {
+            Scheduler scheduler = schedulerFactoryBean.getScheduler();
+            for (String groupName : scheduler.getJobGroupNames()) {
+                for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
+                    List<Trigger> triggers = (List<Trigger>) scheduler.getTriggersOfJob(jobKey);
+                    Trigger trigger = triggers.get(0);
+                    monitoringResponses.add(new TasksMonitoringResponse(scheduler.isStarted(), jobKey.getName(), trigger.getPreviousFireTime(), trigger.getNextFireTime()));
+                }
+            }
+        } catch (SchedulerException e) {
+            logger.error(e);
+        }
+        return monitoringResponses;
     }
 }
