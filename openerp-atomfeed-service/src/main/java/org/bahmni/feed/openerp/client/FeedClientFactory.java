@@ -1,6 +1,7 @@
 package org.bahmni.feed.openerp.client;
 
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
+import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.ict4h.atomfeed.client.factory.AtomFeedProperties;
@@ -18,18 +19,19 @@ import java.net.URL;
 
 public class FeedClientFactory {
 
-    private OpenMRSWebClient webClient;
 
-    public FeedClientFactory(OpenMRSWebClient webClient){
-        this.webClient = webClient;
+    private WorkerFactory workerFactory;
+
+    public FeedClientFactory(WorkerFactory workerFactory) {
+        this.workerFactory = workerFactory;
     }
 
     public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties,JdbcConnectionProvider jdbcConnectionProvider,
-                                        String feedName, OpenERPClient openERPClient, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, String jobName)  {
+                                        String feedName, OpenERPClient openERPClient, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName)  {
         String feedUri = openERPAtomFeedProperties.getFeedUri(feedName);
         try {
-            String urlPrefix = getURLPrefix(openERPAtomFeedProperties);
-            EventWorker eventWorker = new WorkerFactory(webClient).getWorker(jobName, openERPAtomFeedProperties.getFeedUri(feedName), openERPClient,
+            String urlPrefix = getURLPrefix(jobName,openERPAtomFeedProperties);
+            EventWorker eventWorker = workerFactory.getWorker(jobName, openERPAtomFeedProperties.getFeedUri(feedName), openERPClient,
                     urlPrefix);
             return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(openERPAtomFeedProperties), jdbcConnectionProvider, new URI(feedUri), eventWorker) ;
         } catch (URISyntaxException e) {
@@ -37,16 +39,24 @@ public class FeedClientFactory {
         }
     }
 
-    static String getURLPrefix(OpenERPAtomFeedProperties atomFeedProperties) {
-        String authenticationURI = atomFeedProperties.getAuthenticationURI();
+    static String getURLPrefix(Jobs jobName,OpenERPAtomFeedProperties atomFeedProperties) {
+        String endpointURI = getURIForJob(jobName,atomFeedProperties);
         try {
-            URL openMRSAuthURL = new URL(authenticationURI);
-            return String.format("%s://%s", openMRSAuthURL.getProtocol(), openMRSAuthURL.getAuthority());
+            URL endpointUrl = new URL(endpointURI);
+            return String.format("%s://%s", endpointUrl.getProtocol(), endpointUrl.getAuthority());
         } catch (MalformedURLException e) {
-            throw new RuntimeException("Is not a valid URI - " + authenticationURI);
+            throw new RuntimeException("Is not a valid URI - " + endpointURI);
         }
     }
 
+    private static String getURIForJob(Jobs jobName,OpenERPAtomFeedProperties atomFeedProperties){
+        switch (jobName){
+            case CUSTOMER_FEED: return atomFeedProperties.getAuthenticationURI();
+            case SALEORDER_FEED: return atomFeedProperties.getAuthenticationURI();
+            case REFERENCE_DATA_FEED: return atomFeedProperties.getReferenceDataEndpointURI();
+            default: return null;
+        }
+    }
 
     static AtomFeedProperties atomFeedProperties(OpenERPAtomFeedProperties openERPAtomFeedProperties) {
         AtomFeedProperties atomFeedProperties = new AtomFeedProperties();

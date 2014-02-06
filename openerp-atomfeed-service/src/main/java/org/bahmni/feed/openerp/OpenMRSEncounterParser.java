@@ -25,7 +25,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 
-public class OpenMRSEncounterParser implements EncounterEventParser {
+public class OpenMRSEncounterParser implements WebClientResponseParser {
     private ObjectMapper objectMapper;
 
     public OpenMRSEncounterParser(ObjectMapper objectMapper) {
@@ -33,9 +33,14 @@ public class OpenMRSEncounterParser implements EncounterEventParser {
     }
 
     @Override
-    public OpenERPRequest parse(String encounterEventContent, ProductService productService, String eventId,
+    public OpenERPRequest parse(String encounterResponseContent, ProductService productService, String eventId,
                                 String feedURIForLastReadEntry, String feedURI) throws IOException {
-        OpenMRSEncounter openMRSEncounter = objectMapper.readValue(encounterEventContent, OpenMRSEncounter.class);
+        return parse(encounterResponseContent, null,productService, eventId, feedURIForLastReadEntry, feedURI);
+    }
+
+    @Override
+    public OpenERPRequest parse(String responseContent, String feedEventTitle, ProductService productService, String eventId, String feedURIForLastReadEntry, String feedURI) throws IOException {
+        OpenMRSEncounter openMRSEncounter = objectMapper.readValue(responseContent, OpenMRSEncounter.class);
         if (!openMRSEncounter.shouldERPConsumeEvent()) {
             return OpenERPRequest.DO_NOT_CONSUME;
         }
@@ -43,4 +48,5 @@ public class OpenMRSEncounterParser implements EncounterEventParser {
         List<Parameter> parameters = openMRSEncounter.getParameters(eventId, productService, feedURIForLastReadEntry, feedURI);
         return new OpenERPRequest("atom.event.worker", "process_event", parameters);
     }
+
 }

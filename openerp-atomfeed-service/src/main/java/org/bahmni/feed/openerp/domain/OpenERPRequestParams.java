@@ -1,6 +1,6 @@
 package org.bahmni.feed.openerp.domain;
 
-import org.bahmni.feed.openerp.EncounterEventParser;
+import org.bahmni.feed.openerp.WebClientResponseParser;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.service.ProductService;
 
@@ -10,16 +10,16 @@ import java.util.List;
 public class OpenERPRequestParams {
 
     private ProductService productService;
-    private List<EncounterEventParser> encounterEventParsers;
+    private List<WebClientResponseParser> webClientResponseParsers;
 
-    public OpenERPRequestParams(ProductService productService, List<EncounterEventParser> encounterEventParsers) {
+    public OpenERPRequestParams(ProductService productService, List<WebClientResponseParser> webClientResponseParsers) {
         this.productService = productService;
-        this.encounterEventParsers = encounterEventParsers;
+        this.webClientResponseParsers = webClientResponseParsers;
     }
 
-    public OpenERPRequest getRequest(String encounterEventContent, String feedURIForLastReadEntry, String feedURI, String eventId) throws IOException {
-        for (EncounterEventParser encounterEventParser : encounterEventParsers) {
-            OpenERPRequest openERPRequest = encounterEventParser.parse(encounterEventContent,
+    public OpenERPRequest getRequest(String eventContent, String feedURIForLastReadEntry, String feedURI, String eventId) throws IOException {
+        for (WebClientResponseParser webClientResponseParser : webClientResponseParsers) {
+            OpenERPRequest openERPRequest = webClientResponseParser.parse(eventContent,
                     productService, eventId, feedURIForLastReadEntry, feedURI);
             if (openERPRequest != OpenERPRequest.DO_NOT_CONSUME)
                 return openERPRequest;

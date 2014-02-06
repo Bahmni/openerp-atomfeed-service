@@ -1,0 +1,22 @@
+{
+    "class": "org.bahmni.referenceData.domain.Test",
+    "id": "2c11be15-1691-4809-9e3c-d82914edfaa0",
+    "dateCreated": "2014-01-30T07:17:24Z",
+    "department": {
+        "class": "Department",
+        "id": "55e4df9e-9af8-49ab-8675-1bf9b9636f72"
+    },
+    "description": "haemoglobin",
+    "isActive": true,
+    "lastUpdated": "2014-01-30T07:17:24Z",
+    "name": "haemoglobin",
+    "panels": [],
+    "resultType": "Numeric",
+    "salePrice": 10,
+    "sample": {
+        "class": "Sample",
+        "id": "cc7a897b-ba62-4bbf-8126-0226ac0289fe"
+    },
+    "shortName": "haemo",
+    "sortOrder": 0
+}

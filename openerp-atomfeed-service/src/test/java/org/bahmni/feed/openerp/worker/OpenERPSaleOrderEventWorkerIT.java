@@ -65,6 +65,14 @@ public class OpenERPSaleOrderEventWorkerIT {
         when(atomFeedProperties.getOpenMRSPassword()).thenReturn("mrspwd");
         when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
 
+        when(webClient.get((URI) any())).thenReturn(encounterResource);
+
+        when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
+
+        when(atomFeedProperties.getOpenMRSUser()).thenReturn("mrsuser");
+        when(atomFeedProperties.getOpenMRSPassword()).thenReturn("mrspwd");
+        when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
+
         OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
         authenticationResponse.setAuthenticated(true);
         authenticationResponse.setSessionId("sessionIdValue");

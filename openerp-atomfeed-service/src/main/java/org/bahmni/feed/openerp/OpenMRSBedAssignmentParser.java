@@ -25,7 +25,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 
-public class OpenMRSBedAssignmentParser implements EncounterEventParser {
+public class OpenMRSBedAssignmentParser implements WebClientResponseParser {
     private ObjectMapper objectMapper;
 
     public OpenMRSBedAssignmentParser(ObjectMapper objectMapper) {
@@ -33,9 +33,14 @@ public class OpenMRSBedAssignmentParser implements EncounterEventParser {
     }
 
     @Override
-    public OpenERPRequest parse(String encounterEventContent, ProductService productService, String eventId,
+    public OpenERPRequest parse(String responseContent, ProductService productService, String eventId, String feedURIForLastReadEntry, String feedURI) throws IOException {
+        return parse(responseContent,null, productService, eventId, feedURIForLastReadEntry, feedURI);
+    }
+
+    @Override
+    public OpenERPRequest parse(String responseContent,String feedEventTitle, ProductService productService, String eventId,
                                 String feedURIForLastReadEntry, String feedURI) throws IOException {
-        OpenMRSBedAssignment openMRSBedAssignment = objectMapper.readValue(encounterEventContent, OpenMRSBedAssignment.class);
+        OpenMRSBedAssignment openMRSBedAssignment = objectMapper.readValue(responseContent, OpenMRSBedAssignment.class);
         if (!openMRSBedAssignment.shouldERPConsumeEvent()) {
             return OpenERPRequest.DO_NOT_CONSUME;
         }

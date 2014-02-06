@@ -7,17 +7,19 @@ import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.client.AtomFeedClientHelper;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
 
-public class OpenMRSFeedJob {
-    private static Logger logger = Logger.getLogger(OpenMRSFeedJob.class);
+public class SimpleFeedJob {
+    private static Logger logger = Logger.getLogger(SimpleFeedJob.class);
 
     private AtomFeedClientHelper atomFeedClientHelper;
     private AtomFeedClient atomFeedClient;
 
-    public OpenMRSFeedJob(AtomFeedClientHelper atomFeedClientHelper) throws com.sun.syndication.io.FeedException {
+    //@Autowired
+    public SimpleFeedJob(
+            AtomFeedClientHelper atomFeedClientHelper) throws com.sun.syndication.io.FeedException {
         this.atomFeedClientHelper = atomFeedClientHelper;
     }
 
-    public void processFeed(String feedName, String jobName) {
+    public void processFeed(String feedName, Jobs jobName) {
         try {
             logger.info("Processing " + feedName + ". ");
             initAtomFeedClient(feedName, jobName);
@@ -30,13 +32,13 @@ public class OpenMRSFeedJob {
         }
     }
 
-    private void initAtomFeedClient(String feedName, String jobName) {
+    private void initAtomFeedClient(String feedName, Jobs jobName) {
         if(atomFeedClient == null){
             atomFeedClient = (AtomFeedClient) atomFeedClientHelper.getAtomFeedClient(feedName, jobName);
         }
     }
 
-    public void processFailedEvents(String feedName, String jobName) {
+    public void processFailedEvents(String feedName, Jobs jobName) {
         try {
             logger.info("Processing failed events for Customer Feed");
             initAtomFeedClient(feedName, jobName);
@@ -49,7 +51,7 @@ public class OpenMRSFeedJob {
         }
     }
 
-    protected void handleAuthorizationException(Throwable e, String feedName, String jobName) throws FeedException {
+    protected void handleAuthorizationException(Throwable e, String feedName, Jobs jobName) throws FeedException {
         if (e != null && ExceptionUtils.getStackTrace(e).contains("HTTP response code: 401")) {
             atomFeedClient = (AtomFeedClient) atomFeedClientHelper.getAtomFeedClient(feedName, jobName);
         }

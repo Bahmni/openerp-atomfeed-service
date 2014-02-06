@@ -79,4 +79,8 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     public String getOpenMRSPassword() {
         return resourceBundle.getString("openmrs.password");
     }
+
+    public String getReferenceDataEndpointURI(){
+        return  resourceBundle.getString("referencedata.endpoint");
+    }
 }

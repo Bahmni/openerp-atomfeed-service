@@ -1,0 +1,32 @@
+{
+    "class": "org.bahmni.referenceData.domain.Drug",
+    "id": "e1c7904a-366f-484a-a388-04d267073e85",
+    "category": {
+        "class": "DrugCategory",
+        "id": "249f3416-ad2b-4ef9-b8e9-d21965b05161"
+    },
+    "costPrice": 60,
+    "dateCreated": "2014-02-05T05:40:27Z",
+    "form": {
+        "class": "DrugForm",
+        "id": "031fbc15-b353-462e-882d-e0cf4861b17c"
+    },
+    "genericName": null,
+    "isActive": true,
+    "lastUpdated": "2014-02-05T05:40:27Z",
+    "manufacturer": null,
+    "name": "kofarrest",
+    "purchaseUnitOfMeasure": {
+        "class": "UnitOfMeasure",
+        "id": "810904ff-e601-4a9d-8935-d034a60d406d"
+    },
+    "route": null,
+    "salePrice": 2,
+    "saleUnitOfMeasure": {
+        "class": "UnitOfMeasure",
+        "id": "e97967f1-7d01-43d9-8533-063b274df7be"
+    },
+    "shortName": null,
+    "strength": null,
+    "strengthUnits": null
+}

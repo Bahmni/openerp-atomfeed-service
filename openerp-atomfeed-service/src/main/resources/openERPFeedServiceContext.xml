@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
+    <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:task="http://www.springframework.org/schema/task" xmlns:tx="http://www.springframework.org/schema/tx"
@@ -51,6 +51,18 @@
         <property name="targetMethod" value="execute"/>
         <property name="concurrent" value="false"/>
     </bean>
+    <bean id="referenceDataFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="referenceDataFeedJob"/>
+        <property name="targetMethod" value="processFeed"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="referenceDataFeedQuartzFailedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="referenceDataFeedJob"/>
+        <property name="targetMethod" value="processFailedEvents"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
 
     <!-- simple trigger specify repeat interval and delay time -->
     <bean id="customerFeedJobTrigger"
@@ -84,6 +96,21 @@
         <property name="startDelay" value="${scheduler.initial.delay}" />
     </bean>
 
+
+    <bean id="referenceDataFeedJobTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="referenceDataFeedQuartzJob" />
+        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="startDelay" value="${scheduler.initial.delay}" />
+    </bean>
+    <bean id="referenceDataFeedFailedJobTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="referenceDataFeedQuartzFailedJob" />
+        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="startDelay" value="${scheduler.initial.delay}" />
+    </bean>
+
+
     <!-- scheduler factory bean to bind,the executing code and time intervals
    together -->
     <bean id="quartzSchedulerBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -94,15 +121,21 @@
                 <ref bean="saleOrderFeedJobTrigger" />
                 <ref bean="saleOrderFeedFailedJobTrigger" />
                 <ref bean="eventRecordsNumberOffsetMarkerTrigger"/>
+                <ref bean="referenceDataFeedJobTrigger" />
+                <ref bean="referenceDataFeedFailedJobTrigger" />
             </list>
         </property>
     </bean>
 
     <bean id="openerpCustomerFeedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob" scope="prototype">
-        <constructor-arg ref="openMRSFeedJob"/>
+        <constructor-arg ref="simpleFeedJob"/>
     </bean>
 
-    <bean id="openMRSFeedJob" class="org.bahmni.feed.openerp.job.OpenMRSFeedJob" scope="prototype">
+    <!--<bean id="openerpCustomerFeedFailedJob" class="org.bahmni.feed.openerp.job.OpenERPCustomerFeedFailedEventJob" >-->
+        <!--<constructor-arg ref="openMRSFeedJob"/>-->
+    <!--</bean>-->
+
+    <bean id="simpleFeedJob" class="org.bahmni.feed.openerp.job.SimpleFeedJob" scope="prototype">
         <constructor-arg ref="atomFeedClientHelper"/>
     </bean>
 
@@ -113,7 +146,11 @@
     </bean>
 
     <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob" scope="prototype" >
-        <constructor-arg ref="openMRSFeedJob"/>
+        <constructor-arg ref="simpleFeedJob"/>
+    </bean>
+
+    <bean id="referenceDataFeedJob" class="org.bahmni.feed.openerp.job.ReferenceDataFeedJob" scope="prototype" >
+        <constructor-arg ref="simpleFeedJob"/>
     </bean>
 
     <bean id="openerpEventsOptimizerJob" class="org.bahmni.feed.openerp.job.OpenERPEventsOptimizerJob" scope="prototype">
@@ -136,6 +173,7 @@
         <property name="idleConnectionTestPeriod" value="${atomdb.c3p0.idle_test_period}"/>
         <property name="acquireIncrement" value="${atomdb.c3p0.acquire_increment}"/>
     </bean>
+
 
     <task:annotation-driven />
 </beans>

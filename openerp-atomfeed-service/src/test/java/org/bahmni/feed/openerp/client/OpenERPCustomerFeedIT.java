@@ -7,8 +7,10 @@ import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
+import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob;
-import org.bahmni.feed.openerp.job.OpenMRSFeedJob;
+import org.bahmni.feed.openerp.job.SimpleFeedJob;
+import org.bahmni.feed.openerp.worker.WorkerFactory;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
@@ -69,6 +71,14 @@ public class OpenERPCustomerFeedIT {
 
     @Mock
     private OpenERPClient openERPClient;
+
+    @Mock
+    private WorkerFactory workerFactory;
+
+    @Mock
+    private WebClientProvider webClientProvider;
+
+
 
     private URI notificationsUri;
     private URI firstFeedUri;
@@ -163,10 +173,12 @@ public class OpenERPCustomerFeedIT {
         authenticationResponse.setSessionId("sessionIdValue");
         when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
+        when(webClientProvider.getWebClient(any(Jobs.class))).thenReturn(webClient);
+
         AtomFeedClientHelper clientHelper = new AtomFeedClientHelper(atomFeedProperties,jdbcConnectionProvider,openERPClient,
-                new FeedClientFactory(webClient),webClient,allMarkersJdbc,allFeedsMock,
-                allFailedEvents);
-        OpenMRSFeedJob openMRSFeedJob = new OpenMRSFeedJob(clientHelper);
+                new FeedClientFactory(workerFactory),allMarkersJdbc,allFeedsMock,
+                allFailedEvents,webClientProvider);
+        SimpleFeedJob openMRSFeedJob = new SimpleFeedJob(clientHelper);
         OpenERPCustomerFeedJob feedJob = new OpenERPCustomerFeedJob(openMRSFeedJob);
 
         feedJob.processFeed();
@@ -206,7 +218,9 @@ public class OpenERPCustomerFeedIT {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             } finally {
-                connection.close();
+                if(connection != null){
+                    connection.close();
+                }
             }
         }
     }

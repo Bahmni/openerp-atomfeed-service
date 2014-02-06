@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp.domain;
 
 
-import org.bahmni.feed.openerp.EncounterEventParser;
+import org.bahmni.feed.openerp.WebClientResponseParser;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenMRSEncounterParser;
 import org.bahmni.feed.openerp.testhelper.SampleEncounter;
@@ -34,7 +34,7 @@ public class OpenERPRequestParamsTest {
     @Test
     public void shouldMapEncounterToOpenERPRequestparams() throws IOException {
         OpenMRSEncounterParser openMRSEncounterParser = new OpenMRSEncounterParser(ObjectMapperRepository.objectMapper);
-        List<EncounterEventParser> encounterParsers = new ArrayList<>();
+        List<WebClientResponseParser> encounterParsers = new ArrayList<>();
         encounterParsers.add(openMRSEncounterParser);
 
         OpenERPRequestParams requestParams = new OpenERPRequestParams(productService, encounterParsers);
