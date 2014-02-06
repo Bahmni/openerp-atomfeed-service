@@ -11,6 +11,7 @@ public class OpenERPOrder {
     private String type;
     private DateTime startDate;
     private String description;
+    private boolean voided;
 
     public String getId() {
         return id;
@@ -58,5 +59,13 @@ public class OpenERPOrder {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isVoided() {
+        return voided;
+    }
+
+    public void setVoided(boolean voided) {
+        this.voided = voided;
     }
 }

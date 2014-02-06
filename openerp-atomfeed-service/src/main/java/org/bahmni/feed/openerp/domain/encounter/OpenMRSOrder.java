@@ -7,6 +7,7 @@ public class OpenMRSOrder {
     private String uuid;
     private OpenMRSOrderType orderType;
     private OpenMRSConcept concept;
+    private boolean voided;
 
     public String getUuid() {
         return uuid;
@@ -20,4 +21,11 @@ public class OpenMRSOrder {
         return concept;
     }
 
+    public boolean isVoided() {
+        return voided;
+    }
+
+    public void setVoided(boolean voided) {
+        this.voided = voided;
+    }
 }

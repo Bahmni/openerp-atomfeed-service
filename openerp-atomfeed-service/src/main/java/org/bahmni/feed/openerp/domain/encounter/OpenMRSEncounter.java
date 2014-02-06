@@ -71,7 +71,7 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
     private void mapOrders(List<Parameter> parameters, OpenERPOrders orders, ProductService productService) throws IOException {
         if (hasOrders()) {
             for (OpenMRSOrder order : getOrders()) {
-                addNewOrders(orders, visit, order);
+                addNewOrder(orders, visit, order);
             }
         } else if (isAdmissionEncounter()) {
             addAdmissionChargeOrder(orders, visit, productService);
@@ -101,9 +101,10 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
         orders.getOpenERPOrders().add(openERPOrder);
     }
 
-    private void addNewOrders(OpenERPOrders orders, OpenMRSVisit visit, OpenMRSOrder order) {
+    private void addNewOrder(OpenERPOrders orders, OpenMRSVisit visit, OpenMRSOrder order) {
         OpenERPOrder openERPOrder = new OpenERPOrder();
         openERPOrder.setId(order.getUuid());
+        openERPOrder.setVoided(order.isVoided());
         openERPOrder.setVisitId(visit.getUuid());
         openERPOrder.setVisitType(visit.getVisitType());
         openERPOrder.setDescription(visit.getDescription());
