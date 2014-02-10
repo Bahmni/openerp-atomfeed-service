@@ -35,12 +35,7 @@ public class OpenMRSEncounterParser implements WebClientResponseParser {
     @Override
     public OpenERPRequest parse(String encounterResponseContent, ProductService productService, String eventId,
                                 String feedURIForLastReadEntry, String feedURI) throws IOException {
-        return parse(encounterResponseContent, null,productService, eventId, feedURIForLastReadEntry, feedURI);
-    }
-
-    @Override
-    public OpenERPRequest parse(String responseContent, String feedEventTitle, ProductService productService, String eventId, String feedURIForLastReadEntry, String feedURI) throws IOException {
-        OpenMRSEncounter openMRSEncounter = objectMapper.readValue(responseContent, OpenMRSEncounter.class);
+        OpenMRSEncounter openMRSEncounter = objectMapper.readValue(encounterResponseContent, OpenMRSEncounter.class);
         if (!openMRSEncounter.shouldERPConsumeEvent()) {
             return OpenERPRequest.DO_NOT_CONSUME;
         }

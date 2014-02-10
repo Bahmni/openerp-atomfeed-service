@@ -6,6 +6,7 @@ import org.bahmni.webclients.ClientCookies;
 import org.bahmni.webclients.ConnectionDetails;
 import org.bahmni.webclients.HttpClient;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -15,6 +16,11 @@ public abstract class AbstractWebClient {
 
     public String get(URI uri) {
         return httpClient.get(uri);
+    }
+
+
+    public <T> T get(String uri,Class<T> klass) throws IOException {
+        return httpClient.get(uri,klass);
     }
 
     protected abstract ConnectionDetails connectionDetails(OpenERPAtomFeedProperties properties);

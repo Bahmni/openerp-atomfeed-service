@@ -19,6 +19,7 @@ public class LabTest implements  ERPParameterizable{
     private String shortName;
     private String id;
     private double salePrice;
+    private boolean active;
 
     public String getCategory() {
         return category;
@@ -59,6 +60,15 @@ public class LabTest implements  ERPParameterizable{
     public void setSalePrice(double salePrice) {
         this.salePrice = salePrice;
     }
+
+    public boolean getIsActive() {
+        return active;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.active = isActive;
+    }
+
 
     public void setClass(String klass){
         category = klass.substring(klass.lastIndexOf('.')+1);

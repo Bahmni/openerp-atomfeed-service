@@ -34,12 +34,6 @@ public class OpenMRSBedAssignmentParser implements WebClientResponseParser {
 
     @Override
     public OpenERPRequest parse(String responseContent, ProductService productService, String eventId, String feedURIForLastReadEntry, String feedURI) throws IOException {
-        return parse(responseContent,null, productService, eventId, feedURIForLastReadEntry, feedURI);
-    }
-
-    @Override
-    public OpenERPRequest parse(String responseContent,String feedEventTitle, ProductService productService, String eventId,
-                                String feedURIForLastReadEntry, String feedURI) throws IOException {
         OpenMRSBedAssignment openMRSBedAssignment = objectMapper.readValue(responseContent, OpenMRSBedAssignment.class);
         if (!openMRSBedAssignment.shouldERPConsumeEvent()) {
             return OpenERPRequest.DO_NOT_CONSUME;

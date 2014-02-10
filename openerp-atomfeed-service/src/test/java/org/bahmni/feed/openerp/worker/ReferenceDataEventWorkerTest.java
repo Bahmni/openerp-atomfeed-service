@@ -17,7 +17,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.net.URI;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
@@ -52,7 +51,9 @@ public class ReferenceDataEventWorkerTest  {
     @Test
     public void shouldMapToLabRequest() throws Exception {
         Event event = new Event("event-id","","test",feedUri);
-        when(webClient.get((URI) any())).thenReturn(labOrderJson);
+        ObjectMapper objectMapper = new ObjectMapper();
+        LabTest labTestFromFeed = objectMapper.readValue(labOrderJson, LabTest.class);
+        when(webClient.get(any(String.class),any(Class.class))).thenReturn(labTestFromFeed);
 
         referenceDataEventWorker.process(event);
 
@@ -67,7 +68,6 @@ public class ReferenceDataEventWorkerTest  {
         Assert.assertTrue(isCorrect(parameters.get(3),"feed_uri_for_last_read_entry", feedUri, "string"));
 
         String labTestJson = parameters.get(4).getValue();
-        ObjectMapper objectMapper = new ObjectMapper();
         LabTest labTest = objectMapper.readValue(labTestJson, LabTest.class);
 
         Assert.assertEquals("Test",labTest.getCategory());
@@ -82,7 +82,9 @@ public class ReferenceDataEventWorkerTest  {
     @Test
     public void shouldMapToDrugRequest() throws Exception {
         Event event = new Event("event-id","","drug",feedUri);
-        when(webClient.get((URI) any())).thenReturn(drugOrderJson);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Drug drugFromFeed = objectMapper.readValue(drugOrderJson, Drug.class);
+        when(webClient.get(any(String.class),any(Class.class))).thenReturn(drugFromFeed);
 
         referenceDataEventWorker.process(event);
 
@@ -97,7 +99,6 @@ public class ReferenceDataEventWorkerTest  {
         Assert.assertTrue(isCorrect(parameters.get(3),"feed_uri_for_last_read_entry", feedUri, "string"));
 
         String drugJson = parameters.get(4).getValue();
-        ObjectMapper objectMapper = new ObjectMapper();
         Drug drug = objectMapper.readValue(drugJson, Drug.class);
 
         Assert.assertEquals("249f3416-ad2b-4ef9-b8e9-d21965b05161",drug.getCategory().getId());
@@ -110,6 +111,7 @@ public class ReferenceDataEventWorkerTest  {
         Assert.assertEquals(60.0, drug.getCostPrice(),0.00009);
 
     }
+
 
 
 
