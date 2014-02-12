@@ -34,17 +34,17 @@
         <property name="concurrent" value="false"/>
     </bean>
 
-    <bean id="openerpSaleOrderFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="openerpSaleOrderFeedJob"/>
-        <property name="targetMethod" value="processFeed"/>
-        <property name="concurrent" value="false"/>
-    </bean>
+    <!--<bean id="openerpSaleOrderFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="openerpSaleOrderFeedJob"/>-->
+        <!--<property name="targetMethod" value="processFeed"/>-->
+        <!--<property name="concurrent" value="false"/>-->
+    <!--</bean>-->
 
-    <bean id="openerpSaleOrderFeedQuartzFailedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="openerpSaleOrderFeedJob"/>
-        <property name="targetMethod" value="processFailedEvents"/>
-        <property name="concurrent" value="false"/>
-    </bean>
+    <!--<bean id="openerpSaleOrderFeedQuartzFailedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="openerpSaleOrderFeedJob"/>-->
+        <!--<property name="targetMethod" value="processFailedEvents"/>-->
+        <!--<property name="concurrent" value="false"/>-->
+    <!--</bean>-->
 
     <bean id="eventRecordsNumberOffsetMarkerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="openerpEventsOptimizerJob"/>
@@ -77,18 +77,18 @@
         <property name="repeatInterval" value="${scheduler.fixed.delay}" />
         <property name="startDelay" value="${scheduler.initial.delay}" />
     </bean>
-    <bean id="saleOrderFeedJobTrigger"
-          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-        <property name="jobDetail" ref="openerpSaleOrderFeedQuartzJob" />
-        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
-    </bean>
-    <bean id="saleOrderFeedFailedJobTrigger"
-          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
-        <property name="jobDetail" ref="openerpSaleOrderFeedQuartzFailedJob" />
-        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
-    </bean>
+    <!--<bean id="saleOrderFeedJobTrigger"-->
+          <!--class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">-->
+        <!--<property name="jobDetail" ref="openerpSaleOrderFeedQuartzJob" />-->
+        <!--<property name="repeatInterval" value="${scheduler.fixed.delay}" />-->
+        <!--<property name="startDelay" value="${scheduler.initial.delay}" />-->
+    <!--</bean>-->
+    <!--<bean id="saleOrderFeedFailedJobTrigger"-->
+          <!--class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">-->
+        <!--<property name="jobDetail" ref="openerpSaleOrderFeedQuartzFailedJob" />-->
+        <!--<property name="repeatInterval" value="${scheduler.fixed.delay}" />-->
+        <!--<property name="startDelay" value="${scheduler.initial.delay}" />-->
+    <!--</bean>-->
     <bean id="eventRecordsNumberOffsetMarkerTrigger"
           class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
         <property name="jobDetail" ref="eventRecordsNumberOffsetMarkerJob"/>
@@ -118,8 +118,8 @@
             <list>
                 <ref bean="customerFeedJobTrigger" />
                 <ref bean="customerFeedfailedJobTrigger" />
-                <ref bean="saleOrderFeedJobTrigger" />
-                <ref bean="saleOrderFeedFailedJobTrigger" />
+                <!--<ref bean="saleOrderFeedJobTrigger" />-->
+                <!--<ref bean="saleOrderFeedFailedJobTrigger" />-->
                 <ref bean="eventRecordsNumberOffsetMarkerTrigger"/>
                 <ref bean="referenceDataFeedJobTrigger" />
                 <ref bean="referenceDataFeedFailedJobTrigger" />
