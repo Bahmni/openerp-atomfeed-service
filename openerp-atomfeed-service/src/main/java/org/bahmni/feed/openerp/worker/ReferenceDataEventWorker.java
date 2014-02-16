@@ -1,23 +1,16 @@
 package org.bahmni.feed.openerp.worker;
 
-import org.apache.log4j.Logger;
-import org.bahmni.feed.openerp.client.ReferenceDataWebClient;
-import org.bahmni.feed.openerp.domain.referencedata.Drug;
-import org.bahmni.feed.openerp.domain.referencedata.DrugCategory;
-import org.bahmni.feed.openerp.domain.referencedata.ERPParameterizable;
-import org.bahmni.feed.openerp.domain.referencedata.EventToIgnore;
-import org.bahmni.feed.openerp.domain.referencedata.LabTest;
-import org.bahmni.feed.openerp.domain.referencedata.ProductUOM;
-import org.bahmni.feed.openerp.domain.referencedata.ProductUOMCategory;
-import org.bahmni.openerp.web.client.OpenERPClient;
-import org.bahmni.openerp.web.request.OpenERPRequest;
-import org.bahmni.openerp.web.request.builder.Parameter;
-import org.ict4h.atomfeed.client.domain.Event;
-import org.ict4h.atomfeed.client.service.EventWorker;
+import org.apache.log4j.*;
+import org.bahmni.feed.openerp.client.*;
+import org.bahmni.feed.openerp.domain.referencedata.*;
+import org.bahmni.openerp.web.client.*;
+import org.bahmni.openerp.web.request.*;
+import org.bahmni.openerp.web.request.builder.*;
+import org.ict4h.atomfeed.client.domain.*;
+import org.ict4h.atomfeed.client.service.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class ReferenceDataEventWorker implements EventWorker {
     private final String feedUrl;
@@ -38,11 +31,16 @@ public class ReferenceDataEventWorker implements EventWorker {
     @Override
     public void process(Event event) {
         try {
+            if (!canProcess(event)) return;
             OpenERPRequest openERPRequest = mapToERPRequest(event);
             openERPClient.execute(openERPRequest);
         } catch (IOException e) {
             logger.error("Error processing reference data event : "+event.toString(),e);
         }
+    }
+
+    private boolean canProcess(Event event) throws IOException {
+        return (getObjectType(event.getTitle()) != null);
     }
 
     private OpenERPRequest mapToERPRequest(Event event) throws IOException {
@@ -63,15 +61,14 @@ public class ReferenceDataEventWorker implements EventWorker {
 
     private <T> Class<T> getObjectType(String feedEventTitle) throws IOException {
 
-        switch(feedEventTitle){
+        switch(feedEventTitle.toLowerCase()){
             case "test" :   return  (Class<T>) LabTest.class;
             case "panel" :   return  (Class<T>)LabTest.class;
             case "drug" :   return (Class<T>)Drug.class;
             case "drug_category" :   return (Class<T>)DrugCategory.class;
-            case "unit_of_measure" :   return  (Class<T>)ProductUOM.class;
-            case "unit_of_measure_category" :   return (Class<T>)ProductUOMCategory.class;
-            default: return (Class<T>)EventToIgnore.class;
-
+            case "product_unit_of_measure" :   return  (Class<T>)ProductUOM.class;
+            case "product_unit_of_measure_category" :   return (Class<T>)ProductUOMCategory.class;
+            default: return null;
         }
     }
     @Override

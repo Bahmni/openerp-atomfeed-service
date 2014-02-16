@@ -78,6 +78,14 @@ public class ReferenceDataEventWorkerTest  {
 
     }
 
+    @Test
+    public void shouldNotMakeWebClientCallIfWeAreNotProcessingThisfeed() throws Exception {
+        Event event = new Event("event-id","","INVALID TITLE",feedUri);
+        when(webClient.get(any(String.class),any(Class.class))).thenThrow(new RuntimeException("Should never have been called"));
+
+        referenceDataEventWorker.process(event);
+    }
+
 
     @Test
     public void shouldMapToDrugRequest() throws Exception {
