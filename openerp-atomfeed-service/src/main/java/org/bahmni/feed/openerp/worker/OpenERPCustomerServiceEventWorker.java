@@ -1,10 +1,12 @@
 package org.bahmni.feed.openerp.worker;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenMRSPatientMapper;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.OpenMRSPatient;
+import org.bahmni.feed.openerp.domain.OpenMRSPersonAddress;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
@@ -62,7 +64,10 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         List<Parameter> parameters = new ArrayList<Parameter>();
         parameters.add(createParameter("name", openMRSPatient.getName(), "string"));
         parameters.add(createParameter("ref", openMRSPatient.getIdentifiers().get(0).getIdentifier(), "string"));
-        parameters.add(createParameter("village", openMRSPatient.getPerson().getPreferredAddress().getCityVillage(), "string"));
+        String village = identifyVillage(openMRSPatient);
+        if (!StringUtils.isBlank(village)) {
+            parameters.add(createParameter("village", village, "string"));
+        }
 
         parameters.add(createParameter("category", "create.customer", "string"));
         if((feedUrl != null && feedUrl.contains("$param.value")) || (feedUri != null && feedUri.contains("$param.value")))
@@ -73,6 +78,11 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         if (isFailedEvent)
             parameters.add(createParameter("is_failed_event", "1", "boolean"));
         return parameters;
+    }
+
+    private String identifyVillage(OpenMRSPatient openMRSPatient) {
+        OpenMRSPersonAddress preferredAddress = openMRSPatient.getPerson().getPreferredAddress();
+        return (preferredAddress != null) ?  preferredAddress.getCityVillage() : null;
     }
 
 
