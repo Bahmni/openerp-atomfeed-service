@@ -68,13 +68,13 @@
     <bean id="customerFeedJobTrigger"
           class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
         <property name="jobDetail" ref="openerpCustomerFeedQuartzJob" />
-        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="repeatInterval" value="${customerFeedJobTrigger.delay}" />
         <property name="startDelay" value="${scheduler.initial.delay}" />
     </bean>
     <bean id="customerFeedfailedJobTrigger"
           class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
         <property name="jobDetail" ref="openerpCustomerFeedQuartzFailedJob" />
-        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="repeatInterval" value="${customerFeedfailedJobTrigger.delay}" />
         <property name="startDelay" value="${scheduler.initial.delay}" />
     </bean>
     <!--<bean id="saleOrderFeedJobTrigger"-->
@@ -92,7 +92,7 @@
     <bean id="eventRecordsNumberOffsetMarkerTrigger"
           class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
         <property name="jobDetail" ref="eventRecordsNumberOffsetMarkerJob"/>
-        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="repeatInterval" value="${eventRecordsNumberOffsetMarkerTrigger.delay}" />
         <property name="startDelay" value="${scheduler.initial.delay}" />
     </bean>
 
@@ -100,13 +100,13 @@
     <bean id="referenceDataFeedJobTrigger"
           class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
         <property name="jobDetail" ref="referenceDataFeedQuartzJob" />
-        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="repeatInterval" value="${referenceDataFeedJobTrigger.delay}" />
         <property name="startDelay" value="${scheduler.initial.delay}" />
     </bean>
     <bean id="referenceDataFeedFailedJobTrigger"
           class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
         <property name="jobDetail" ref="referenceDataFeedQuartzFailedJob" />
-        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="repeatInterval" value="${referenceDataFeedFailedJobTrigger.delay}" />
         <property name="startDelay" value="${scheduler.initial.delay}" />
     </bean>
 
