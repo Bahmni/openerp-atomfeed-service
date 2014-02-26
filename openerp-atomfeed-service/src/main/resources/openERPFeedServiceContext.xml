@@ -45,6 +45,21 @@
         <property name="targetMethod" value="processFailedEvents"/>
         <property name="concurrent" value="false"/>
     </bean>
+<<<<<<< HEAD
+=======
+
+    <bean id="openelisSaleOrderFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="openelisSaleOrderFeedJob"/>
+        <property name="targetMethod" value="processFeed"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="openelisSaleOrderFeedQuartzFailedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="openelisSaleOrderFeedJob"/>
+        <property name="targetMethod" value="processFailedEvents"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+>>>>>>> Neha, RT | #1855 | elis to mrs lab order consume
 
     <bean id="eventRecordsNumberOffsetMarkerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="openerpEventsOptimizerJob"/>
@@ -89,6 +104,21 @@
         <property name="repeatInterval" value="${scheduler.fixed.delay}" />
         <property name="startDelay" value="${scheduler.initial.delay}" />
     </bean>
+<<<<<<< HEAD
+=======
+    <bean id="openelisSaleOrderFeedJobTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="openelisSaleOrderFeedQuartzJob" />
+        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="startDelay" value="${scheduler.initial.delay}" />
+    </bean>
+    <bean id="openelisSaleOrderFeedFailedJobTrigger"
+          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="openelisSaleOrderFeedQuartzFailedJob" />
+        <property name="repeatInterval" value="${scheduler.fixed.delay}" />
+        <property name="startDelay" value="${scheduler.initial.delay}" />
+    </bean>
+>>>>>>> Neha, RT | #1855 | elis to mrs lab order consume
     <bean id="eventRecordsNumberOffsetMarkerTrigger"
           class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
         <property name="jobDetail" ref="eventRecordsNumberOffsetMarkerJob"/>
@@ -120,6 +150,8 @@
                 <ref bean="customerFeedfailedJobTrigger" />
                 <ref bean="saleOrderFeedJobTrigger" />
                 <ref bean="saleOrderFeedFailedJobTrigger" />
+                <ref bean="openelisSaleOrderFeedJobTrigger" />
+                <ref bean="openelisSaleOrderFeedFailedJobTrigger" />
                 <ref bean="eventRecordsNumberOffsetMarkerTrigger"/>
                 <ref bean="referenceDataFeedJobTrigger" />
                 <ref bean="referenceDataFeedFailedJobTrigger" />
@@ -146,6 +178,10 @@
     </bean>
 
     <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob" scope="prototype" >
+        <constructor-arg ref="simpleFeedJob"/>
+    </bean>
+
+    <bean id="openelisSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenElisSaleOrderFeedJob" scope="prototype" >
         <constructor-arg ref="simpleFeedJob"/>
     </bean>
 

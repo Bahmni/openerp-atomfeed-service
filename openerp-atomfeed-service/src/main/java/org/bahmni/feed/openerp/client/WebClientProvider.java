@@ -9,6 +9,7 @@ import java.util.Map;
 public class WebClientProvider {
 
     private static final String OPENMRS_WEBCLIENT = "openmrs.webclient";
+    private static final String OPENELIS_WEBCLIENT = "openelis.webclient";
     private static final String REFDATA_WEBCLIENT = "referencedata.webclient";
     private OpenERPAtomFeedProperties openERPAtomFeedProperties;
 
@@ -42,7 +43,17 @@ public class WebClientProvider {
             case CUSTOMER_FEED: return getOpenMRSWebClient() ;
             case SALEORDER_FEED: return getOpenMRSWebClient() ;
             case REFERENCE_DATA_FEED: return referenceDataWebClient() ;
+            case OPENELIS_SALEORDER_FEED: return openElisWebClient();
             default: return null;
         }
+    }
+
+    public OpenElisWebClient openElisWebClient() {
+        OpenElisWebClient openElisWebClient = (OpenElisWebClient) webClients.get(OPENELIS_WEBCLIENT);
+        if(openElisWebClient == null){
+            openElisWebClient = new OpenElisWebClient(openERPAtomFeedProperties);
+            webClients.put(OPENELIS_WEBCLIENT,openElisWebClient);
+        }
+        return openElisWebClient;
     }
 }
