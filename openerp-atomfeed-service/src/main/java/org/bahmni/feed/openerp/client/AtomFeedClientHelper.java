@@ -17,7 +17,6 @@ import org.ict4h.atomfeed.client.service.FeedClient;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 
 public class AtomFeedClientHelper {
-    private AbstractWebClient abstractWebClient;
     private OpenERPAtomFeedProperties atomFeedProperties;
     private JdbcConnectionProvider jdbcConnectionProvider;
     private OpenERPClient openERPClient;
@@ -57,9 +56,7 @@ public class AtomFeedClientHelper {
     FeedClient getAtomFeedClient(String feedName, Jobs jobName, FeedClientFactory feedClientFactory) throws FeedException {
 
         ClientCookies cookies = webClientProvider.getWebClient(jobName).getCookies();
-       /* if(cookies == null || cookies.size() == 0){
-             return null;
-        }*/
+
         allFeeds = getAllFeeds(atomFeedProperties, cookies);
         allMarkers = new AllMarkersJdbcImpl(jdbcConnectionProvider);
         allFailedEvents = new AllFailedEventsJdbcImpl(jdbcConnectionProvider);
@@ -75,8 +72,4 @@ public class AtomFeedClientHelper {
         return new AllFeeds(feedProperties, cookies);
     }
 
-   /* public void reInitializeAtomFeedClient(String feedName, String jobName) throws FeedException {
-        initializeAtomFeedClientHelper(atomFeedProperties, jdbcConnectionProvider, openERPClient);
-        return feedClientFactory.getFeedClient(atomFeedProperties, jdbcConnectionProvider, feedName, openERPClient, allFeeds, allMarkers, allFailedEvents, jobName);
-    }*/
 }
