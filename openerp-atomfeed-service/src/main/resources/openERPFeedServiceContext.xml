@@ -21,6 +21,9 @@
     <context:annotation-config/>
     <context:component-scan base-package="org.bahmni.feed.openerp"/>
     <context:component-scan base-package="org.ict4h.atomfeed.spring.resource"/>
+    <context:component-scan base-package="org.ict4h.atomfeed.server.transaction"/>
+
+
 
     <bean id="openerpCustomerFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="openerpCustomerFeedJob"/>
@@ -206,6 +209,14 @@
         <property name="acquireIncrement" value="${atomdb.c3p0.acquire_increment}"/>
     </bean>
 
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="atomFeedSpringTxManager" class="org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport">
+        <constructor-arg ref="transactionManager"/>
+        <constructor-arg ref="dataSource"/>
+    </bean>
 
     <task:annotation-driven />
 </beans>
