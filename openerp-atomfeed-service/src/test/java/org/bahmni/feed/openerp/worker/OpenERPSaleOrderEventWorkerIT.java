@@ -8,12 +8,12 @@ import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
-import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
-import org.ict4h.atomfeed.jdbc.PropertiesJdbcConnectionProvider;
+import org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -43,12 +43,12 @@ public class OpenERPSaleOrderEventWorkerIT {
     @Mock
     private AllFailedEvents allFailedEvents;
 
-    private JdbcConnectionProvider jdbcConnectionProvider;
+    @Autowired
+    private AtomFeedSpringTransactionSupport transactionSupport;
 
     @Before
     public void setUp() throws URISyntaxException {
         initMocks(this);
-        jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
         openMRSAuthenticator = mock(OpenMRSAuthenticator.class);
     }
 

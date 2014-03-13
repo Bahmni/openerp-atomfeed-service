@@ -10,7 +10,9 @@ import org.ict4h.atomfeed.jdbc.JdbcUtils;
 import org.ict4h.atomfeed.server.domain.EventRecord;
 import org.ict4h.atomfeed.server.exceptions.AtomFeedRuntimeException;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
+import org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport;
 import org.ict4h.atomfeed.spring.resource.EventResource;
+import org.ict4h.atomfeed.transaction.AFTransactionWork;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,9 +37,12 @@ import static org.springframework.test.web.server.result.MockMvcResultMatchers.c
 public class AtomFeedServerIT extends IntegrationTest {
 
     private DbEventRecordCreator recordCreator;
-    private JdbcConnectionProvider connectionProvider;
     private OpenERPAllEventRecordsJdbcImpl eventRecords;
     private AtomFeedClient atomFeedClient;
+
+    @Autowired
+    private AtomFeedSpringTransactionSupport transactionSupport;
+    
     String contents ="  <entry>\n" +
             "    <title>Hello, DiscWorld6</title>\n" +
             "    <category term=\"product\" />\n" +
@@ -55,22 +60,34 @@ public class AtomFeedServerIT extends IntegrationTest {
 
     @Autowired
     private EventResource eventResource;
-    private JdbcConnectionProvider jdbcConnectionProvider;
 
     @Before
     public void before() throws SQLException {
-        connectionProvider = getConnectionProvider();
-        eventRecords = new OpenERPAllEventRecordsJdbcImpl(connectionProvider);
+        eventRecords = new OpenERPAllEventRecordsJdbcImpl(transactionSupport);
         recordCreator = new DbEventRecordCreator(eventRecords);
     }
 
     @After
     public void after() throws SQLException {
-        Connection connection = connectionProvider.getConnection();
-        Statement statement = connection.createStatement();
-        statement.execute("TRUNCATE public.event_records  RESTART IDENTITY;");
-        statement.close();
-        connection.close();
+        transactionSupport.executeWithTransaction(new AFTransactionWork<Object>() {
+            @Override
+            public Object execute() {
+                try {
+                    Connection connection = transactionSupport.getConnection();
+                    Statement statement = connection.createStatement();
+                    statement.execute("TRUNCATE public.event_records  RESTART IDENTITY;");
+                    statement.close();
+                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public PropagationDefinition getTxPropagationDefinition() {
+                return PropagationDefinition.PROPAGATION_REQUIRED;
+            }
+        });
     }
 
 //    @Test
@@ -91,9 +108,24 @@ public class AtomFeedServerIT extends IntegrationTest {
 //    }
    @Test
     public void shouldPublishFeedOfEvents() throws Exception, URISyntaxException {
-        List<EventRecord> events = createEvents(7, "Hello, DiscWorld");
+       List<EventRecord> events = transactionSupport.executeWithTransaction(new AFTransactionWork<List<EventRecord>>() {
+           @Override
+           public List<EventRecord> execute() {
+               try {
+                return createEvents(7, "Hello, DiscWorld");
+               } catch (Exception e) {
+                   throw new RuntimeException(e);
+               }
+           }
+
+           @Override
+           public PropagationDefinition getTxPropagationDefinition() {
+               return PropagationDefinition.PROPAGATION_REQUIRED;
+           }
+       });
+       
        String responseAsString = null;
-        MVCTestUtils.mockMvc(eventResource)
+       MVCTestUtils.mockMvc(eventResource)
                 .perform(get("/feed/product/recent"))
                 .andExpect(compareContent());
     }
@@ -118,19 +150,16 @@ public class AtomFeedServerIT extends IntegrationTest {
     }
 
 
-    class OpenERPAllEventRecordsJdbcImpl  extends  AllEventRecordsJdbcImpl{
-
+    class OpenERPAllEventRecordsJdbcImpl  extends  AllEventRecordsJdbcImpl {
         public OpenERPAllEventRecordsJdbcImpl(JdbcConnectionProvider provider) {
             super(provider);
-            jdbcConnectionProvider = provider;
         }
-
         @Override
         public void add(EventRecord eventRecord) {
             Connection connection;
             PreparedStatement stmt = null;
             try {
-                connection = jdbcConnectionProvider.getConnection();
+                connection = transactionSupport.getConnection();
                 String insertSql = String.format("insert into %s (uuid, title, uri, object,category,timestamp) values (?, ?, ?, ?,?,?)",
                         JdbcUtils.getTableName(Configuration.getInstance().getSchema(), "event_records"));
                 stmt = connection.prepareStatement(insertSql);

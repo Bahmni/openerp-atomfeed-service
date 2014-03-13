@@ -23,9 +23,7 @@ public class SimpleFeedJob {
         try {
             logger.info("Processing " + feedName + ". ");
             initAtomFeedClient(feedName, jobName);
-            if(atomFeedClient != null){
-                atomFeedClient.processEvents();
-            }
+            atomFeedClient.processEvents();
         } catch (Exception e) {
             logger.error("failed customer feed execution ", e);
             handleAuthorizationException(e, feedName, jobName);

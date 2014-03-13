@@ -4,13 +4,13 @@ import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
 import org.bahmni.openerp.web.client.OpenERPClient;
-import org.ict4h.atomfeed.client.factory.AtomFeedProperties;
+import org.ict4h.atomfeed.client.AtomFeedProperties;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.repository.AllMarkers;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
 import org.ict4h.atomfeed.client.service.EventWorker;
-import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
+import org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -26,14 +26,14 @@ public class FeedClientFactory {
         this.workerFactory = workerFactory;
     }
 
-    public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties,JdbcConnectionProvider jdbcConnectionProvider,
+    public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager,
                                         String feedName, OpenERPClient openERPClient, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName)  {
         String feedUri = openERPAtomFeedProperties.getFeedUri(feedName);
         try {
             String urlPrefix = getURLPrefix(jobName,openERPAtomFeedProperties);
             EventWorker eventWorker = workerFactory.getWorker(jobName, openERPAtomFeedProperties.getFeedUri(feedName), openERPClient,
                     urlPrefix);
-            return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(openERPAtomFeedProperties), jdbcConnectionProvider, new URI(feedUri), eventWorker) ;
+            return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(openERPAtomFeedProperties), transactionManager, new URI(feedUri), eventWorker) ;
         } catch (URISyntaxException e) {
             throw new RuntimeException("error for uri:" + feedUri);
         }

@@ -10,6 +10,7 @@ import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob;
 import org.bahmni.feed.openerp.job.SimpleFeedJob;
+import org.bahmni.feed.openerp.worker.OpenERPCustomerServiceEventWorker;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
@@ -19,15 +20,17 @@ import org.ict4h.atomfeed.client.domain.Marker;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
+import org.ict4h.atomfeed.client.service.AtomFeedClient;
 import org.ict4h.atomfeed.client.service.FeedEnumerator;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.jdbc.JdbcUtils;
-import org.ict4h.atomfeed.jdbc.PropertiesJdbcConnectionProvider;
+import org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -46,6 +49,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -74,6 +79,9 @@ public class OpenERPCustomerFeedIT {
 
     @Mock
     private WorkerFactory workerFactory;
+    
+    @Mock
+    private OpenERPCustomerServiceEventWorker openERPCustomerServiceEventWorker;
 
     @Mock
     private WebClientProvider webClientProvider;
@@ -87,17 +95,17 @@ public class OpenERPCustomerFeedIT {
     Feed first;
     Feed second;
     Feed last;
+    
     OpenERPAllMarkersJdbcImpl allMarkersJdbc;
-    private JdbcConnectionProvider jdbcConnectionProvider;
-
-
+    
+    @Autowired
+    private AtomFeedSpringTransactionSupport transactionSupport;
 
     @Before
     public void setUp() throws URISyntaxException {
         initMocks(this);
 
-        jdbcConnectionProvider = new PropertiesJdbcConnectionProvider();
-        allMarkersJdbc = new OpenERPAllMarkersJdbcImpl(jdbcConnectionProvider);
+        allMarkersJdbc = new OpenERPAllMarkersJdbcImpl(transactionSupport);
 
         first = new Feed();
         second = new Feed();
@@ -132,7 +140,7 @@ public class OpenERPCustomerFeedIT {
     }
 
     private List<Entry> getEntries(int startNum, int endNum) {
-        List<Entry> entries = new ArrayList<Entry>();
+        List<Entry> entries = new ArrayList<>();
         for (int i = startNum; i <= endNum; i++) {
             Entry entry = createEntry();
             entry.setId("" + i);
@@ -149,9 +157,18 @@ public class OpenERPCustomerFeedIT {
         return entryIds;
     }
 
+    /**
+     * TODO: WORST TEST EVER. 
+     * 1 - Write proper Integration test or mock. Don't do half way
+     * 2 - Ensure that the test passes. 
+     * 3 - Write proper assertion
+     */
     @Test
     public void shouldCreateCustomerInOpenERP() throws URISyntaxException, FeedException {
-        when(atomFeedProperties.getFeedUri("customer.feed.generator.uri")).thenReturn("http://host/patients/notifications");
+        String feedUrl = "http://host/patients/notifications";
+        String feedname = "customer.feed.generator.uri";
+        
+        when(atomFeedProperties.getFeedUri(feedname)).thenReturn(feedUrl);
         when(allFeedsMock.getFor(notificationsUri)).thenReturn(last);
         when(allFeedsMock.getFor(recentFeedUri)).thenReturn(last);
         when(allFeedsMock.getFor(secondFeedUri)).thenReturn(second);
@@ -161,12 +178,13 @@ public class OpenERPCustomerFeedIT {
         String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
 
         when(webClient.get((URI) any())).thenReturn(patientResource);
-
+        
         when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
 
         when(atomFeedProperties.getOpenMRSUser()).thenReturn("mrsuser");
         when(atomFeedProperties.getOpenMRSPassword()).thenReturn("mrspwd");
         when(atomFeedProperties.getAuthenticationURI()).thenReturn("http://mrs.auth.uri");
+        when(atomFeedProperties.getMaxFailedEvents()).thenReturn(10);
 
         OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
         authenticationResponse.setAuthenticated(true);
@@ -174,10 +192,15 @@ public class OpenERPCustomerFeedIT {
         when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
         when(webClientProvider.getWebClient(any(Jobs.class))).thenReturn(webClient);
+        when(workerFactory.getWorker(Jobs.CUSTOMER_FEED, feedUrl,openERPClient, "http://mrs.auth.uri")).thenReturn(openERPCustomerServiceEventWorker);
 
-        AtomFeedClientHelper clientHelper = new AtomFeedClientHelper(atomFeedProperties,jdbcConnectionProvider,openERPClient,
-                new FeedClientFactory(workerFactory),allMarkersJdbc,allFeedsMock,
-                allFailedEvents,webClientProvider);
+        AtomFeedClientHelper clientHelper = mock(AtomFeedClientHelper.class);
+        AtomFeedClient atomFeedClient = new AtomFeedClient(allFeedsMock, allMarkersJdbc, allFailedEvents, FeedClientFactory.atomFeedProperties(atomFeedProperties),
+                transactionSupport, new URI(feedUrl), openERPCustomerServiceEventWorker);
+        
+        when(clientHelper.getAtomFeedClient(feedname, Jobs.CUSTOMER_FEED)).
+                thenReturn(atomFeedClient);
+        
         SimpleFeedJob openMRSFeedJob = new SimpleFeedJob(clientHelper);
         OpenERPCustomerFeedJob feedJob = new OpenERPCustomerFeedJob(openMRSFeedJob);
 
@@ -209,7 +232,7 @@ public class OpenERPCustomerFeedIT {
             Connection connection = null;
             PreparedStatement stmt;
             try {
-                connection = jdbcConnectionProvider.getConnection();
+                connection = transactionSupport.getConnection();
                 String sql = String.format("delete from %s where feed_uri = ?",
                         JdbcUtils.getTableName(Configuration.getInstance().getSchema(), "markers"));
                 stmt = connection.prepareStatement(sql);

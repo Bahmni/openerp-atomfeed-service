@@ -16,6 +16,12 @@
     <context:property-placeholder location="classpath:atomfeed.properties"/>
     <import resource="classpath:applicationContext-openerp-client.xml"/>
     <import resource="classpath:atomFeedContext.xml"/>
+    
+    <!--
+     "atomFeedTrasactionSupport" is actually defined in ict4h's atomFeed spring server's 
+     atomFeedJdbcContext.xml file. 
+     TODO: use context configuration location of spring dispatcher servlet
+    -->
 
     <context:spring-configured/>
     <context:annotation-config/>
@@ -172,7 +178,7 @@
 
     <bean id="atomFeedClientHelper" class="org.bahmni.feed.openerp.client.AtomFeedClientHelper" scope="prototype">
         <constructor-arg ref="openERPAtomFeedProperties"/>
-        <constructor-arg ref="threadlocaljdbcConnectionProvider" />
+        <constructor-arg ref="atomFeedTrasactionSupport" />
         <constructor-arg ref="openERPClient"/>
     </bean>
 
@@ -189,12 +195,9 @@
     </bean>
 
     <bean id="openerpEventsOptimizerJob" class="org.bahmni.feed.openerp.job.OpenERPEventsOptimizerJob" scope="prototype">
-        <constructor-arg ref="threadlocaljdbcConnectionProvider"/>
+        <constructor-arg ref="atomFeedTrasactionSupport"/>
     </bean>
-
-    <bean id="threadlocaljdbcConnectionProvider" class="org.ict4h.atomfeed.server.repository.jdbc.ThreadLocalJdbcConnectionProvider" scope="prototype">
-        <constructor-arg ref="dataSource"/>
-    </bean>
+    
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${jdbc.driverClassName}"/>
@@ -213,10 +216,10 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="atomFeedSpringTxManager" class="org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport">
-        <constructor-arg ref="transactionManager"/>
-        <constructor-arg ref="dataSource"/>
-    </bean>
+    <!--<bean id="atomFeedSpringTxManager" class="org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport">-->
+        <!--<constructor-arg ref="transactionManager"/>-->
+        <!--<constructor-arg ref="dataSource"/>-->
+    <!--</bean>-->
 
     <task:annotation-driven />
 </beans>
