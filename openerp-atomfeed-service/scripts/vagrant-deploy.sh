@@ -3,7 +3,7 @@
 #All config is here
 TEMP_ERP_FEED_SERVICE_WAR_FOLDER=/tmp/deploy_erp_feed_service
 MACHINE_IP=192.168.33.10
-SCRIPTS_DIR=../scripts
+SCRIPTS_DIR=scripts
 KEY_FILE=~/.vagrant.d/insecure_private_key
 ERP_FEED_SERVICE_WAR=./target/openerp-atomfeed-service.war
 

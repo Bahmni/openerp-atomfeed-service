@@ -10,7 +10,7 @@ REM All config is here
 
 set MACHINE_IP=192.168.33.10
 set TEMP_ERP_FEED_SERVICE_WAR_FOLDER=/tmp/deploy_erp_feed_service
-set SCRIPTS_DIR=..\scripts
+set SCRIPTS_DIR=scripts
 set KEY_FILE=%USERPROFILE%\.vagrant.d\win_insecure_private_key.ppk
 set ERP_FEED_SERVICE_WAR=.\target\openerp-atomfeed-service.war
 
