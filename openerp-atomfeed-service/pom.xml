@@ -292,6 +292,7 @@
                     <username>${db.user}</username>
                     <password>${db.password}</password>
                     <defaultSchemaName>${db.schema}</defaultSchemaName>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -305,5 +306,62 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <profiles>
+        <profile>
+            <id>Windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <script.extension>.bat</script.extension>
+            </properties>
+        </profile>
+        <profile>
+            <id>unix</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
+            <properties>
+                <script.extension>.sh</script.extension>
+            </properties>
+        </profile>
+        <profile>
+            <id>vagrant-deploy</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <inherited>false</inherited>
+                        <executions>
+                            <execution>
+                                <id>Deploy</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>../scripts/vagrant-deploy${script.extension}</executable>
+                                    <arguments>
+                                        <argument>${basedir}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 
 </project>
