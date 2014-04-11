@@ -5,6 +5,7 @@ import org.bahmni.feed.openerp.domain.encounter.OpenERPOrder;
 import org.bahmni.feed.openerp.domain.encounter.OpenERPOrders;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.bahmni.openerp.web.service.ProductService;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenElisLabOrder {
     private String accessionUuid;
     private String patientUuid;
