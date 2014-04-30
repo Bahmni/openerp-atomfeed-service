@@ -1,0 +1,92 @@
+{
+    "accessionUuid": "476f110b-70d9-43c7-99c0-2ec04e228f71",
+    "patientUuid": "6d8425f4-687e-4a70-bbea-b5025d399b49",
+    "patientIdentifier": "GAN200186",
+    "patientFirstName": "Mohit",
+    "patientLastName": "Chauhan",
+    "dateTime": "2014-04-15T12:23:17+0530",
+    "accessionNotes": [
+        {
+            "note": "i am done testing",
+            "providerUuid": "1",
+            "dateTime": "2014-04-15T12:24:05+05:30"
+        }
+    ],
+    "testDetails": [
+        {
+            "testName": "RBC Count",
+            "testUnitOfMeasurement": null,
+            "testUuid": "acc354e1-5d88-4c19-8c52-1e109be70bb4",
+            "panelUuid": null,
+            "minNormal": 0,
+            "maxNormal": 0,
+            "result": "22",
+            "notes": "Some note",
+            "resultType": "R",
+            "providerUuid": "1",
+            "dateTime": "2014-04-15T12:23:51+0530",
+            "status": "Results final",
+            "abnormal": false
+        },
+        {
+            "testName": "Blood Group (Relative)",
+            "testUnitOfMeasurement": null,
+            "testUuid": "c1394d25-e721-435e-81ba-50307fde6214",
+            "panelUuid": null,
+            "minNormal": 0,
+            "maxNormal": 0,
+            "result": "11",
+            "notes": null,
+            "resultType": "N",
+            "providerUuid": "1",
+            "dateTime": "2014-04-15T12:23:51+0530",
+            "status": "Results final",
+            "abnormal": false
+        },
+        {
+            "testName": "Sickling Test",
+            "testUnitOfMeasurement": null,
+            "testUuid": "cacbc625-c734-404d-b123-882debb67fb0",
+            "panelUuid": null,
+            "minNormal": 0,
+            "maxNormal": 0,
+            "result": "12",
+            "notes": null,
+            "resultType": "N",
+            "providerUuid": "1",
+            "dateTime": "2014-04-30T11:32:39+0530",
+            "status": "Results final",
+            "abnormal": false
+        },
+        {
+            "testName": "Sugar (CSF)",
+            "testUnitOfMeasurement": null,
+            "testUuid": "c809054f-d019-4389-90ff-61bec0dc1f4c",
+            "panelUuid": null,
+            "minNormal": 0,
+            "maxNormal": 0,
+            "result": "12",
+            "notes": null,
+            "resultType": "N",
+            "providerUuid": "1",
+            "dateTime": "2014-04-30T11:32:33+0530",
+            "status": "Results final",
+            "abnormal": false
+        },
+        {
+            "testName": "Differential Count (Pus)",
+            "testUnitOfMeasurement": null,
+            "testUuid": "25baa791-608a-40b8-8d0b-c64431074e36",
+            "panelUuid": null,
+            "minNormal": 0,
+            "maxNormal": 0,
+            "result": "121212",
+            "notes": null,
+            "resultType": "N",
+            "providerUuid": "1",
+            "dateTime": "2014-04-30T11:26:50+0530",
+            "status": "Results final",
+            "abnormal": false
+        }
+    ]
+}

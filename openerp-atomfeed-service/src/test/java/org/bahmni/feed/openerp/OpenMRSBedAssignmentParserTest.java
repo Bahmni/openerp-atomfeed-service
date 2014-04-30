@@ -1,6 +1,6 @@
 package org.bahmni.feed.openerp;
 
-import org.bahmni.feed.openerp.testhelper.SampleEncounter;
+import org.bahmni.feed.openerp.testhelper.FileConverter;
 import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
@@ -24,7 +24,7 @@ public class OpenMRSBedAssignmentParserTest {
         when(productService.findProductByName("General")).thenReturn(generalBedProductIdInERP);
 
         OpenMRSBedAssignmentParser openMRSBedAssignmentParser = new OpenMRSBedAssignmentParser(ObjectMapperRepository.objectMapper);
-        OpenERPRequest erpRequest = openMRSBedAssignmentParser.parse(SampleEncounter.json("encounterResourceForBedAssignment.json"),
+        OpenERPRequest erpRequest = openMRSBedAssignmentParser.parse(FileConverter.convertToString("encounterResourceForBedAssignment.json"),
                 productService, "eventId", "http://lastReadEntry", "http://feedUrl");
 
         Assert.assertNotSame(OpenERPRequest.DO_NOT_CONSUME, erpRequest);
@@ -47,7 +47,7 @@ public class OpenMRSBedAssignmentParserTest {
     @Test
     public void does_not_consume_lab_order_encounter() throws Exception {
         OpenMRSBedAssignmentParser openMRSBedAssignmentParser = new OpenMRSBedAssignmentParser(ObjectMapperRepository.objectMapper);
-        OpenERPRequest encounter = openMRSBedAssignmentParser.parse(SampleEncounter.json("admissionEncounterResourceWithoutOrders.json"),
+        OpenERPRequest encounter = openMRSBedAssignmentParser.parse(FileConverter.convertToString("admissionEncounterResourceWithoutOrders.json"),
                 null, "eventId", "http://feeduri", "http://feedUrl");
         Assert.assertSame(OpenERPRequest.DO_NOT_CONSUME, encounter);
     }
@@ -55,7 +55,7 @@ public class OpenMRSBedAssignmentParserTest {
     @Test
     public void does_not_consume_admission_encounter() throws Exception {
         OpenMRSBedAssignmentParser openMRSBedAssignmentParser = new OpenMRSBedAssignmentParser(ObjectMapperRepository.objectMapper);
-        OpenERPRequest encounter = openMRSBedAssignmentParser.parse(SampleEncounter.json("encounterResourceForLabOrder.json"),
+        OpenERPRequest encounter = openMRSBedAssignmentParser.parse(FileConverter.convertToString("encounterResourceForLabOrder.json"),
                 null, "eventId", "http://feeduri", "http://feedUrl");
         Assert.assertSame(OpenERPRequest.DO_NOT_CONSUME, encounter);
     }
@@ -66,7 +66,7 @@ public class OpenMRSBedAssignmentParserTest {
         OpenMRSBedAssignmentParser openMRSBedAssignmentParser= new OpenMRSBedAssignmentParser(ObjectMapperRepository.objectMapper);
         ProductService productService = mock(ProductService.class);
         when(productService.findProductByName("General Bed")).thenReturn(null);
-        openMRSBedAssignmentParser.parse(SampleEncounter.json("encounterResourceForBedAssignment.json"),
+        openMRSBedAssignmentParser.parse(FileConverter.convertToString("encounterResourceForBedAssignment.json"),
             productService, "eventID", "http://feeduri", "http://feedUrl");
     }
 

@@ -4,7 +4,7 @@ import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.client.ReferenceDataWebClient;
 import org.bahmni.feed.openerp.domain.referencedata.Drug;
 import org.bahmni.feed.openerp.domain.referencedata.LabTest;
-import org.bahmni.feed.openerp.testhelper.SampleEncounter;
+import org.bahmni.feed.openerp.testhelper.FileConverter;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
@@ -40,8 +40,8 @@ public class ReferenceDataEventWorkerTest  {
 
     @Before
     public void setUp(){
-        labOrderJson = SampleEncounter.json("referenceDataTest.json");
-        drugOrderJson = SampleEncounter.json("referenceDataDrug.json");
+        labOrderJson = FileConverter.convertToString("referenceDataTest.json");
+        drugOrderJson = FileConverter.convertToString("referenceDataDrug.json");
         MockitoAnnotations.initMocks(this);
         referenceDataEventWorker = new ReferenceDataEventWorker(feedUri,openERPClient,webClient,"prefix");
 
