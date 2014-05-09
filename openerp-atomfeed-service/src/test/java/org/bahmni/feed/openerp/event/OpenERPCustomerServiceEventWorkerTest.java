@@ -18,7 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class OpenERPCustomerServiceEventWorkerTest {
     private OpenERPClient openERPClient;
@@ -52,6 +55,7 @@ public class OpenERPCustomerServiceEventWorkerTest {
     private OpenERPRequest createOpenERPRequest(Event event) {
         List<Parameter> parameters = new ArrayList<Parameter>();
         parameters.add(createParameter("name","mareez naam","string"));
+        parameters.add(createParameter("local_name", "राम बाई", "string"));
         parameters.add(createParameter("ref","GAN200066","string"));
         parameters.add(createParameter("village", "Ganiyari", "string"));
         parameters.add(createParameter("category", "create.customer", "string"));

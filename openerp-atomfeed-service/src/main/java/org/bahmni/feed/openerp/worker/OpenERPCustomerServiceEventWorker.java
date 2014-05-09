@@ -63,6 +63,7 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
     private List<Parameter> mapParameters(OpenMRSPatient openMRSPatient, String eventId, String feedUri, boolean isFailedEvent) {
         List<Parameter> parameters = new ArrayList<Parameter>();
         parameters.add(createParameter("name", openMRSPatient.getName(), "string"));
+        parameters.add(createParameter("local_name", openMRSPatient.getLocalName(), "string"));
         parameters.add(createParameter("ref", openMRSPatient.getIdentifiers().get(0).getIdentifier(), "string"));
         String village = identifyVillage(openMRSPatient);
         if (!StringUtils.isBlank(village)) {

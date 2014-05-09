@@ -48,6 +48,10 @@ public class OpenMRSPatient {
         return "";
     }
 
+    public String getLocalName() {
+        return getPerson().getLocalName();
+    }
+
     public String getUuid() {
         return uuid;
     }

@@ -1,7 +1,9 @@
 package org.bahmni.feed.openerp.domain;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+import java.util.Arrays;
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -12,14 +14,16 @@ public class OpenMRSPerson {
     private Date birthdate;
     private boolean birthdateEstimated;
     private OpenMRSPersonAddress preferredAddress;
+    private OpenMRSPersonAttributes attributes;
 
-    public OpenMRSPerson(OpenMRSName preferredName, String uuid, String gender, Date birthdate, boolean birthdateEstimated, OpenMRSPersonAddress preferredAddress) {
+    public OpenMRSPerson(OpenMRSName preferredName, String uuid, String gender, Date birthdate, boolean birthdateEstimated, OpenMRSPersonAddress preferredAddress, OpenMRSPersonAttributes attributes) {
         this.preferredName = preferredName;
         this.uuid = uuid;
         this.gender = gender;
         this.birthdate = birthdate;
         this.preferredAddress = preferredAddress;
         this.birthdateEstimated = birthdateEstimated;
+        this.attributes = attributes;
     }
 
     public OpenMRSPerson() {
@@ -71,5 +75,17 @@ public class OpenMRSPerson {
 
     public void setBirthdateEstimated(boolean birthdateEstimated) {
         this.birthdateEstimated = birthdateEstimated;
+    }
+
+    public OpenMRSPersonAttributes getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(OpenMRSPersonAttributes attributes) {
+        this.attributes = attributes;
+    }
+
+    public String getLocalName() {
+        return StringUtils.join(Arrays.asList(attributes.getGivenLocalName(), attributes.getMiddleLocalName(), attributes.getFamilyLocalName()), " ").trim();
     }
 }
