@@ -38,7 +38,7 @@ public class RequestBuilderTest {
         String requestXml = requestBuilder.buildNewRequest(request, id, database, password);
         //String requestXmlForComparison = requestXml.replace("", " ");
 
-        String expected = "<?xml version='1.0'?>\n" +
+        String expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
                 "<methodCall>" +
                 "    <methodName>execute</methodName>" +
                 "    <params>" +

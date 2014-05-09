@@ -2,7 +2,10 @@ package org.bahmni.openerp.web.http.client;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.client.CommonsClientHttpRequestFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -22,7 +25,9 @@ public class HttpClient {
     public String post(String url, String formPostData) {
         try {
             logger.debug("Post Data: " + formPostData);
-            String response = restTemplate.postForObject(url, formPostData, String.class);
+            HttpEntity<String> stringHttpEntity = new HttpEntity<String>(formPostData, getHttpHeaders());
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, stringHttpEntity, String.class);
+            String response = responseEntity != null ? responseEntity.getBody() : "";
             logger.debug("Post Data output: " + response);
             return response;
         } catch (Exception e) {
@@ -30,6 +35,12 @@ public class HttpClient {
             logger.error("Post data: " + formPostData);
             throw new RuntimeException("Could not post message", e);
         }
+    }
+
+    private HttpHeaders getHttpHeaders() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("content-type", "application/xml; charset=UTF-8");
+        return httpHeaders;
     }
 
     public void setTimeout(int replyTimeoutInMilliseconds) {
