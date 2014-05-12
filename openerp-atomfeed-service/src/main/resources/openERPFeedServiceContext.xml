@@ -155,8 +155,8 @@
                 <ref bean="customerFeedfailedJobTrigger" />
                 <ref bean="saleOrderFeedJobTrigger" />
                 <ref bean="saleOrderFeedFailedJobTrigger" />
-                <ref bean="openelisSaleOrderFeedJobTrigger" />
-                <ref bean="openelisSaleOrderFeedFailedJobTrigger" />
+                <!--<ref bean="openelisSaleOrderFeedJobTrigger" />-->
+                <!--<ref bean="openelisSaleOrderFeedFailedJobTrigger" />-->
                 <ref bean="eventRecordsNumberOffsetMarkerTrigger"/>
                 <ref bean="referenceDataFeedJobTrigger" />
                 <ref bean="referenceDataFeedFailedJobTrigger" />
