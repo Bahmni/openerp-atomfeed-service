@@ -58,6 +58,8 @@ public class OpenERPCustomerServiceEventWorkerTest {
         parameters.add(createParameter("local_name", "राम बाई", "string"));
         parameters.add(createParameter("ref","GAN200066","string"));
         parameters.add(createParameter("village", "Ganiyari", "string"));
+        parameters.add(createParameter("attributes", "{\"class\":\"ST\",\"healthCenter\":\"2\",\"givenNameLocal\":\"राम बाई\"}", "string"));
+
         parameters.add(createParameter("category", "create.customer", "string"));
 
         parameters.add(createParameter("feed_uri", "www.openmrs.com", "string"));
@@ -86,5 +88,4 @@ public class OpenERPCustomerServiceEventWorkerTest {
     private Parameter createParameter(String name, String value, String type) {
         return new Parameter(name, value, type);
     }
-
 }
