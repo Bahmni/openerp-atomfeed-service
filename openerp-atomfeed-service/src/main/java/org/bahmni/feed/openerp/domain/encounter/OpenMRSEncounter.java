@@ -73,9 +73,10 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
             for (OpenMRSOrder order : getOrders()) {
                 addNewOrder(orders, visit, order);
             }
-        } else if (isAdmissionEncounter()) {
-            addAdmissionChargeOrder(orders, visit, productService);
         }
+//        else if (isAdmissionEncounter()) {
+//            addAdmissionChargeOrder(orders, visit, productService);
+//        }
         String ordersJson = ObjectMapperRepository.objectMapper.writeValueAsString(orders);
         parameters.add(createParameter("orders", ordersJson, "string"));
     }
