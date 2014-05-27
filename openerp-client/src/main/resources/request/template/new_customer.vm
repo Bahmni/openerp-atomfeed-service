@@ -22,7 +22,7 @@
             #foreach( $param in $parametersList )
                 <member>
                     <name>$param.name</name>
-                    <value><$param.type>$param.value</$param.type></value>
+                    <value><$param.type>$!param.value</$param.type></value>
                 </member>
             #end
         </struct></value>
