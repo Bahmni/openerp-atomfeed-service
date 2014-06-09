@@ -1,5 +1,7 @@
 package org.bahmni.feed.openerp;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TasksMonitoringResponse {
@@ -7,6 +9,8 @@ public class TasksMonitoringResponse {
     private String taskClass;
     private Date lastExecutionTime;
     private Date nextExecutionTime;
+    private String lastExecutionTimeString;
+    private String nextExecutionTimeString;
 
     TasksMonitoringResponse() {
     }
@@ -16,6 +20,10 @@ public class TasksMonitoringResponse {
         this.taskClass = taskClass;
         this.lastExecutionTime = lastExecutionTime;
         this.nextExecutionTime = nextExecutionTime;
+        
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy 'T' HH:mm:ss");
+        this.lastExecutionTimeString = df.format(lastExecutionTime);
+        this.nextExecutionTimeString = df.format(nextExecutionTime);
     }
 
     public Boolean getStarted() {
@@ -48,5 +56,21 @@ public class TasksMonitoringResponse {
 
     public void setNextExecutionTime(Date nextExecutionTime) {
         this.nextExecutionTime = nextExecutionTime;
+    }
+
+    public String getLastExecutionTimeString() {
+        return lastExecutionTimeString;
+    }
+
+    public void setLastExecutionTimeString(String lastExecutionTimeString) {
+        this.lastExecutionTimeString = lastExecutionTimeString;
+    }
+
+    public String getNextExecutionTimeString() {
+        return nextExecutionTimeString;
+    }
+
+    public void setNextExecutionTimeString(String nextExecutionTimeString) {
+        this.nextExecutionTimeString = nextExecutionTimeString;
     }
 }
