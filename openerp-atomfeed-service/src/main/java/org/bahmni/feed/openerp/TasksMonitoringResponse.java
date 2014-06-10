@@ -20,10 +20,14 @@ public class TasksMonitoringResponse {
         this.taskClass = taskClass;
         this.lastExecutionTime = lastExecutionTime;
         this.nextExecutionTime = nextExecutionTime;
-        
+
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy 'T' HH:mm:ss");
-        this.lastExecutionTimeString = df.format(lastExecutionTime);
-        this.nextExecutionTimeString = df.format(nextExecutionTime);
+        if (lastExecutionTime != null) {
+            this.lastExecutionTimeString = df.format(lastExecutionTime);
+        }
+        if (nextExecutionTime != null) {
+            this.nextExecutionTimeString = df.format(nextExecutionTime);
+        }
     }
 
     public Boolean getStarted() {
