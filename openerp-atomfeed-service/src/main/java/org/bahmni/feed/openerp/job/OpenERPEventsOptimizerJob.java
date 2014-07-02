@@ -10,7 +10,6 @@ import org.ict4h.atomfeed.server.repository.jdbc.ChunkingEntriesJdbcImpl;
 import org.ict4h.atomfeed.server.service.NumberOffsetMarkerServiceImpl;
 import org.ict4h.atomfeed.server.service.OffsetMarkerService;
 import org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport;
-import org.ict4h.atomfeed.transaction.AFTransactionWork;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
 
 public class OpenERPEventsOptimizerJob {
@@ -23,18 +22,19 @@ public class OpenERPEventsOptimizerJob {
     }
 
     public void execute() {
-        AllEventRecords allEventRecords = new AllEventRecordsJdbcImpl(transactionSupport);
-        AllEventRecordsOffsetMarkers eventRecordsOffsetMarkers = new AllEventRecordsOffsetMarkersJdbcImpl(transactionSupport);
-        ChunkingEntries chunkingEntries = new ChunkingEntriesJdbcImpl(transactionSupport);
-        final OffsetMarkerService markerService = new NumberOffsetMarkerServiceImpl(allEventRecords, chunkingEntries, eventRecordsOffsetMarkers);
         transactionSupport.executeWithTransaction(new AFTransactionWorkWithoutResult() {
             @Override
             protected void doInTransaction() {
+                AllEventRecords allEventRecords = new AllEventRecordsJdbcImpl(transactionSupport);
+                AllEventRecordsOffsetMarkers eventRecordsOffsetMarkers = new AllEventRecordsOffsetMarkersJdbcImpl(transactionSupport);
+                ChunkingEntries chunkingEntries = new ChunkingEntriesJdbcImpl(transactionSupport);
+
+                final OffsetMarkerService markerService = new NumberOffsetMarkerServiceImpl(allEventRecords, chunkingEntries, eventRecordsOffsetMarkers);
                 markerService.markEvents(OFFSET_BY_NUMBER_OF_RECORDS_PER_CATEGORY);
             }
             @Override
             public PropagationDefinition getTxPropagationDefinition() {
-                return PropagationDefinition.PROPAGATION_REQUIRED; 
+                return PropagationDefinition.PROPAGATION_REQUIRED;
             }
         });
     }
