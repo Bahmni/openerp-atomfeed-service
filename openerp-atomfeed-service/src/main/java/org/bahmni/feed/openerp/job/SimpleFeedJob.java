@@ -50,7 +50,9 @@ public class SimpleFeedJob {
     }
 
     protected void handleAuthorizationException(Throwable e, String feedName, Jobs jobName) throws FeedException {
-        if (e != null && ExceptionUtils.getStackTrace(e).contains("HTTP response code: 401")) {
+        if (e != null &&
+                (ExceptionUtils.getStackTrace(e).contains("HTTP response code: 401") || ExceptionUtils.getStackTrace(e).contains("Bad response code of 403"))
+           ) {
             atomFeedClient = (AtomFeedClient) atomFeedClientHelper.getAtomFeedClient(feedName, jobName);
         }
     }
