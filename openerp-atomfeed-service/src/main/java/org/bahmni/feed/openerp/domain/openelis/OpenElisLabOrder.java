@@ -33,9 +33,7 @@ public class OpenElisLabOrder {
         parameters.add(createParameter("last_read_entry_id", eventId, "string"));
         parameters.add(createParameter("feed_uri_for_last_read_entry", feedURIForLastReadEntry, "string"));
 
-        OpenERPOrders orders = new OpenERPOrders();
-        orders.setId(getAccessionUuid());
-
+        OpenERPOrders orders = new OpenERPOrders(getAccessionUuid());
         mapOrders(parameters, orders, productService);
         return parameters;
     }
@@ -55,7 +53,7 @@ public class OpenElisLabOrder {
     private boolean orderAlreadyPresent(OpenERPOrders orders, OpenElisTestDetail testDetail) {
         for (OpenERPOrder openERPOrder : orders.getOpenERPOrders()) {
             String conceptUuid = testDetail.getPanelUuid() != null ? testDetail.getPanelUuid() : testDetail.getTestUuid();
-            if(openERPOrder.getProductIds().contains(conceptUuid)) {
+            if(openERPOrder.getProductId().equalsIgnoreCase(conceptUuid)) {
                 return true;
             }
         }
@@ -68,20 +66,18 @@ public class OpenElisLabOrder {
 
     private void addNewOrder(OpenERPOrders orders, OpenElisTestDetail testDetail) {
         OpenERPOrder openERPOrder = new OpenERPOrder();
-        openERPOrder.setId(getAccessionUuid());
+        openERPOrder.setEncounterId(getAccessionUuid());
         openERPOrder.setVoided(testDetail.isCancelled());
         // no visit info in elis
 //        openERPOrder.setVisitId(visit.getUuid());
 //        openERPOrder.setVisitType(visit.getVisitType());
 //        openERPOrder.setDescription(visit.getDescription());
 
-        List<String> productIds = new ArrayList<>();
         if(testDetail.getPanelUuid() != null) {
-            productIds.add(testDetail.getPanelUuid());
+            openERPOrder.setProductId(testDetail.getPanelUuid());
         } else {
-            productIds.add(testDetail.getTestUuid());
+            openERPOrder.setProductId(testDetail.getTestUuid());
         }
-        openERPOrder.setProductIds(productIds);
         orders.getOpenERPOrders().add(openERPOrder);
     }
 

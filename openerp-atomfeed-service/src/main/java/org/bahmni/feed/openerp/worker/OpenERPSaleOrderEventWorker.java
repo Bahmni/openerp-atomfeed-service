@@ -1,10 +1,9 @@
 package org.bahmni.feed.openerp.worker;
 
 import org.apache.log4j.Logger;
-import org.bahmni.feed.openerp.WebClientResponseParser;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
-import org.bahmni.feed.openerp.OpenMRSBedAssignmentParser;
 import org.bahmni.feed.openerp.OpenMRSEncounterParser;
+import org.bahmni.feed.openerp.WebClientResponseParser;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.OpenERPRequestParams;
 import org.bahmni.openerp.web.client.OpenERPClient;
@@ -57,7 +56,6 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
         List<WebClientResponseParser> encounterWebClientResponseParsers = new ArrayList<>();
         encounterWebClientResponseParsers.add(new OpenMRSEncounterParser(ObjectMapperRepository.objectMapper));
-        encounterWebClientResponseParsers.add(new OpenMRSBedAssignmentParser(ObjectMapperRepository.objectMapper));
 
         OpenERPRequestParams openERPRequestParams = new OpenERPRequestParams(new ProductService(openERPClient), encounterWebClientResponseParsers);
         OpenERPRequest openERPRequest = openERPRequestParams.getRequest(encounterOrBedAssignmentEventContent,

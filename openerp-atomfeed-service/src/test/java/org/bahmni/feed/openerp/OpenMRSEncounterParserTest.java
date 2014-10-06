@@ -13,7 +13,7 @@ public class OpenMRSEncounterParserTest {
     @Test
     public void shouldMapAllValuesFromContractSuccessfully() throws IOException {
         OpenMRSEncounterParser openMRSEncounterParser = new OpenMRSEncounterParser(ObjectMapperRepository.objectMapper);
-        OpenERPRequest encounter = openMRSEncounterParser.parse(FileConverter.convertToString("encounterResourceForLabOrder.json"),
+        OpenERPRequest encounter = openMRSEncounterParser.parse(FileConverter.convertToString("encounterResourceForDrugOrder.json"),
                 null, "eventId", "http://feeduri", "http://feedUrl");
         Assert.assertNotNull(encounter);
     }

@@ -1,0 +1,64 @@
+{
+    "patientId": "GAN200039",
+    "visitType": null,
+    "drugOrders": [
+        {
+            "uuid": "bd9ce26d-cb04-4e87-a7d2-acc4958da9ae",
+            "action": "NEW",
+            "orderType": "Drug Order",
+            "effectiveStartDate": 1412587778000,
+            "effectiveStopDate": 1412846978000,
+            "voidReason": null,
+            "drug": {
+                "uuid": "bbee5662-32f6-4101-888d-baf037bba206",
+                "strength": null,
+                "form": "Tablet(s)",
+                "name": "Ibuprofen 600mg"
+            },
+            "dosingInstructions": {
+                "quantity": 3,
+                "doseUnits": "Tablet(s)",
+                "frequency": "Once a day",
+                "asNeeded": false,
+                "quantityUnits": "Tablet(s)",
+                "dose": 1,
+                "route": "Orally",
+                "administrationInstructions": "{\"instructions\":\"As directed\"}",
+                "numberOfRefills": null
+            },
+            "durationUnits": "Day(s)",
+            "autoExpireDate": 1412846978000,
+            "scheduledDate": null,
+            "dateStopped": null,
+            "instructions": null,
+            "dateActivated": 1412587778000,
+            "commentToFulfiller": null,
+            "careSetting": "Outpatient",
+            "duration": 3,
+            "voided": false,
+            "dosingInstructionType": "org.openmrs.module.bahmniemrapi.drugorder.dosinginstructions.FlexibleDosingInstructions",
+            "previousOrderUuid": null,
+            "orderReasonText": null,
+            "orderReasonConcept": null
+        }
+    ],
+    "encounterType": "TRANSFER",
+    "providers": [
+        {
+            "uuid": "35ba3170-cf80-4749-9672-b3b678c77b6a",
+            "name": "superman"
+        }
+    ],
+    "observations": [],
+    "accessionNotes": [],
+    "encounterTypeUuid": "a37ffb07-a2a1-11e3-af88-005056821db0",
+    "bahmniDiagnoses": [],
+    "patientUuid": "f0e4b703-5bd7-450a-97ed-828384561a2b",
+    "locationUuid": "a01ec898-a2a1-11e3-af88-005056821db0",
+    "visitUuid": "5de144d7-554b-45f9-9201-4e35f1f21bea",
+    "visitTypeUuid": "5ef3db9f-d5d8-11e3-be87-005056821db0",
+    "testOrders": [],
+    "encounterUuid": "52619b81-d4a2-467a-b407-fbb316b64df8",
+    "disposition": null,
+    "encounterDateTime": "2014-10-06T14:59:38.000+0530"
+}

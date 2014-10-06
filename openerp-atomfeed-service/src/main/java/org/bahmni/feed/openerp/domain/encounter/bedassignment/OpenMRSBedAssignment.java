@@ -48,16 +48,13 @@ public class OpenMRSBedAssignment extends OpenMRSEncounterEvent {
             throw new OpenERPException("Product " + bed.getBedType().getName() + " not Found");
 
         OpenERPOrder openERPOrder = new OpenERPOrder();
-        openERPOrder.setVisitId(encounter.getVisit().getUuid());
-        openERPOrder.setVisitType(encounter.getVisit().getVisitType());
-        openERPOrder.setDescription(encounter.getVisit().getDescription());
+        openERPOrder.setVisitId(encounter.getVisitUuid());
+//        openERPOrder.setVisitType(encounter.getVisit().getVisitType());
+//        openERPOrder.setDescription(encounter.getVisit().getDescription());
 
-        List<String> productIds = new ArrayList<>();
-        productIds.add(productId);
-        openERPOrder.setProductIds(productIds);
+        openERPOrder.setProductId(productId);
 
-        OpenERPOrders orders = new OpenERPOrders();
-        orders.setId(bed.getId());
+        OpenERPOrders orders = new OpenERPOrders(bed.getId());
         orders.getOpenERPOrders().add(openERPOrder);
 
         return ObjectMapperRepository.objectMapper.writeValueAsString(orders);

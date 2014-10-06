@@ -40,7 +40,7 @@ public class OpenMRSEncounterParser implements WebClientResponseParser {
             return OpenERPRequest.DO_NOT_CONSUME;
         }
 
-        List<Parameter> parameters = openMRSEncounter.getParameters(eventId, productService, feedURIForLastReadEntry, feedURI);
+        List<Parameter> parameters = openMRSEncounter.getParameters(eventId, feedURIForLastReadEntry, feedURI);
         return new OpenERPRequest("atom.event.worker", "process_event", parameters);
     }
 

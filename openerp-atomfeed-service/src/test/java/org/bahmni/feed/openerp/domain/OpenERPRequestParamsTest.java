@@ -1,9 +1,9 @@
 package org.bahmni.feed.openerp.domain;
 
 
-import org.bahmni.feed.openerp.WebClientResponseParser;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenMRSEncounterParser;
+import org.bahmni.feed.openerp.WebClientResponseParser;
 import org.bahmni.feed.openerp.testhelper.FileConverter;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class OpenERPRequestParamsTest {
@@ -39,8 +39,8 @@ public class OpenERPRequestParamsTest {
 
         OpenERPRequestParams requestParams = new OpenERPRequestParams(productService, encounterParsers);
 
-        OpenERPRequest openERPRequest = requestParams.getRequest(FileConverter.convertToString("encounterResourceForLabOrder.json"), "http://feedUriLastReadEntry", "http://feedUri", "eventId");
+        OpenERPRequest openERPRequest = requestParams.getRequest(FileConverter.convertToString("encounterResourceForDrugOrder.json"), "http://feedUriLastReadEntry", "http://feedUri", "eventId");
         List<Parameter> parameters = openERPRequest.getParameters();
-        assertTrue(parameters.size() == 6);
+        assertEquals(7, parameters.size());
     }
 }

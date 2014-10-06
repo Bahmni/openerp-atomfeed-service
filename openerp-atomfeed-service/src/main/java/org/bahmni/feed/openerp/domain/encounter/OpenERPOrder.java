@@ -1,32 +1,25 @@
 package org.bahmni.feed.openerp.domain.encounter;
 
-import org.joda.time.DateTime;
-
-import java.util.List;
-
 public class OpenERPOrder {
-    private String id; // encounterId
-    private List<String> productIds;
+    private String orderId;
+    private String previousOrderId;
+    private String encounterId;
+    private String productId;
+    private String productName;
+    private Double quantity;
+    private String quantityUnits;
+    private String action;
     private String visitId;
     private String type;
-    private DateTime startDate;
     private String description;
     private boolean voided;
 
-    public String getId() {
-        return id;
+    public String getEncounterId() {
+        return encounterId;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<String> getProductIds() {
-        return productIds;
-    }
-
-    public void setProductIds(List<String> productIds) {
-        this.productIds = productIds;
+    public void setEncounterId(String encounterId) {
+        this.encounterId = encounterId;
     }
 
     public void setVisitId(String visitId) {
@@ -49,14 +42,6 @@ public class OpenERPOrder {
         return type;
     }
 
-    public void setVisitStartDate(DateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public DateTime getStartDate() {
-        return startDate;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -67,5 +52,61 @@ public class OpenERPOrder {
 
     public void setVoided(boolean voided) {
         this.voided = voided;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public Double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getQuantityUnits() {
+        return quantityUnits;
+    }
+
+    public void setQuantityUnits(String quantityUnits) {
+        this.quantityUnits = quantityUnits;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getPreviousOrderId() {
+        return previousOrderId;
+    }
+
+    public void setPreviousOrderId(String previousOrderId) {
+        this.previousOrderId = previousOrderId;
     }
 }

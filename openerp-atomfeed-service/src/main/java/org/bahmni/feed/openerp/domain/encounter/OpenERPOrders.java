@@ -7,12 +7,20 @@ public class OpenERPOrders {
     private String id;
     private List<OpenERPOrder> openERPOrders;
 
-    public OpenERPOrders(){
+    public OpenERPOrders(String id){
+        this.id = id;
         this.openERPOrders = new ArrayList<OpenERPOrder>();
     }
 
     public List<OpenERPOrder> getOpenERPOrders() {
         return openERPOrders;
+    }
+
+    public void add(OpenERPOrder order) {
+        if(openERPOrders == null) {
+            openERPOrders = new ArrayList<>();
+        }
+        openERPOrders.add(order);
     }
 
     public void setOpenERPOrders(List<OpenERPOrder> openERPOrders) {
