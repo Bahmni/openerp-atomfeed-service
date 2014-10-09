@@ -66,6 +66,7 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         parameters.add(createParameter("name", openMRSPatient.getName(), "string"));
         parameters.add(createParameter("local_name", openMRSPatient.getLocalName(), "string"));
         parameters.add(createParameter("ref", openMRSPatient.getIdentifiers().get(0).getIdentifier(), "string"));
+        parameters.add(createParameter("uuid", openMRSPatient.getUuid(), "string"));
         String village = identifyVillage(openMRSPatient);
         if (!StringUtils.isBlank(village)) {
             parameters.add(createParameter("village", village, "string"));

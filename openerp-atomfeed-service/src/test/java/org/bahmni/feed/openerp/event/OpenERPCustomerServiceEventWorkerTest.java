@@ -57,6 +57,7 @@ public class OpenERPCustomerServiceEventWorkerTest {
         parameters.add(createParameter("name","mareez naam","string"));
         parameters.add(createParameter("local_name", "राम बाई", "string"));
         parameters.add(createParameter("ref","GAN200066","string"));
+        parameters.add(createParameter("uuid","d6729333-bc31-4886-a864-0a6e7ae570a9","string"));
         parameters.add(createParameter("village", "cityVillage", "string"));
         parameters.add(createParameter("attributes", "{\"class\":\"ST\",\"healthCenter\":\"2\",\"givenNameLocal\":\"राम बाई\"}", "string"));
         parameters.add(createParameter("preferredAddress", "{\"address1\":\"address1\",\"address2\":\"address2\"," +
