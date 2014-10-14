@@ -51,6 +51,7 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
         OpenERPOrders openERPOrders = new OpenERPOrders(getEncounterUuid());
         for (OpenMRSDrugOrder drugOrder : getDrugOrders()) {
             OpenERPOrder openERPOrder = new OpenERPOrder();
+            openERPOrder.setVisitId(getVisitUuid());
             openERPOrder.setOrderId(drugOrder.getUuid());
             openERPOrder.setPreviousOrderId(drugOrder.getPreviousOrderUuid());
             openERPOrder.setEncounterId(getEncounterUuid());
