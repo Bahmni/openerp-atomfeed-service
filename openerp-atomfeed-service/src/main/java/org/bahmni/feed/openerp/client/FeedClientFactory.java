@@ -53,6 +53,7 @@ public class FeedClientFactory {
         switch (jobName){
             case CUSTOMER_FEED: return atomFeedProperties.getAuthenticationURI();
             case SALEORDER_FEED: return atomFeedProperties.getAuthenticationURI();
+            case DRUG_FEED: return atomFeedProperties.getAuthenticationURI();
             case REFERENCE_DATA_FEED: return atomFeedProperties.getReferenceDataEndpointURI();
             case OPENELIS_SALEORDER_FEED: return atomFeedProperties.getOpenElisURI();
             default: return null;

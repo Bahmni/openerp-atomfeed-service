@@ -13,6 +13,10 @@ public class Parameter {
         this.type = type;
     }
 
+    public Parameter(String name, String value) {
+        this(name, value, "string");
+    }
+
     public String getName() {
         return name;
     }

@@ -2,7 +2,6 @@ package org.bahmni.feed.openerp.worker;
 
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.client.ReferenceDataWebClient;
-import org.bahmni.feed.openerp.domain.referencedata.Drug;
 import org.bahmni.feed.openerp.domain.referencedata.LabTest;
 import org.bahmni.feed.openerp.testhelper.FileConverter;
 import org.bahmni.openerp.web.client.OpenERPClient;
@@ -85,43 +84,6 @@ public class ReferenceDataEventWorkerTest  {
 
         referenceDataEventWorker.process(event);
     }
-
-
-    @Test
-    public void shouldMapToDrugRequest() throws Exception {
-        Event event = new Event("event-id","","drug",feedUri);
-        ObjectMapper objectMapper = new ObjectMapper();
-        Drug drugFromFeed = objectMapper.readValue(drugOrderJson, Drug.class);
-        when(webClient.get(any(String.class),any(Class.class))).thenReturn(drugFromFeed);
-
-        referenceDataEventWorker.process(event);
-
-        ArgumentCaptor<OpenERPRequest> drugRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPClient).execute(drugRequestCatcher.capture());
-
-        OpenERPRequest labTestRequest = drugRequestCatcher.getValue();
-        List<Parameter> parameters = labTestRequest.getParameters();
-
-        Assert.assertTrue(isCorrect(parameters.get(0),"category", "create.drug", "string"));
-        Assert.assertTrue(isCorrect(parameters.get(2),"last_read_entry_id", "event-id", "string"));
-        Assert.assertTrue(isCorrect(parameters.get(3),"feed_uri_for_last_read_entry", feedUri, "string"));
-
-        String drugJson = parameters.get(4).getValue();
-        Drug drug = objectMapper.readValue(drugJson, Drug.class);
-
-        Assert.assertEquals("249f3416-ad2b-4ef9-b8e9-d21965b05161",drug.getCategory().getId());
-        Assert.assertEquals("e1c7904a-366f-484a-a388-04d267073e85",drug.getId());
-        Assert.assertEquals("kofarrest",drug.getName());
-        Assert.assertTrue(drug.getIsActive());
-        Assert.assertEquals("810904ff-e601-4a9d-8935-d034a60d406d",drug.getPurchaseUnitOfMeasure().getId());
-        Assert.assertEquals("e97967f1-7d01-43d9-8533-063b274df7be",drug.getSaleUnitOfMeasure().getId());
-        Assert.assertEquals(2.0, drug.getSalePrice(),0.00009);
-        Assert.assertEquals(60.0, drug.getCostPrice(),0.00009);
-
-    }
-
-
-
 
     private  boolean isCorrect(Parameter parameter, String name,String value,String type){
         if(!name.equals(parameter.getName())){

@@ -41,6 +41,7 @@ public class WebClientProvider {
     public AbstractWebClient getWebClient(Jobs jobName){
         switch (jobName){
             case CUSTOMER_FEED: return getOpenMRSWebClient() ;
+            case DRUG_FEED: return getOpenMRSWebClient() ;
             case SALEORDER_FEED: return getOpenMRSWebClient() ;
             case REFERENCE_DATA_FEED: return referenceDataWebClient() ;
             case OPENELIS_SALEORDER_FEED: return openElisWebClient();

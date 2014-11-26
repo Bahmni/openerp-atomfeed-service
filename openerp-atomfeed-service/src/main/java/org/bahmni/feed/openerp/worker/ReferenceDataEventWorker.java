@@ -64,7 +64,6 @@ public class ReferenceDataEventWorker implements EventWorker {
         switch(feedEventTitle.toLowerCase()){
             case "test" :   return  (Class<T>) LabTest.class;
             case "panel" :   return  (Class<T>)LabTest.class;
-            case "drug" :   return (Class<T>)Drug.class;
             case "drug_category" :   return (Class<T>)DrugCategory.class;
             case "product_unit_of_measure" :   return  (Class<T>)ProductUOM.class;
             case "product_unit_of_measure_category" :   return (Class<T>)ProductUOMCategory.class;

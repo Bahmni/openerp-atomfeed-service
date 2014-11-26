@@ -21,11 +21,11 @@ public class SimpleFeedJob {
 
     public void processFeed(String feedName, Jobs jobName) {
         try {
-            logger.info("Processing " + feedName + ". ");
+            logger.info("Processing Feed [" + feedName + "] Job ["+jobName+"]");
             initAtomFeedClient(feedName, jobName);
             atomFeedClient.processEvents();
         } catch (Exception e) {
-            logger.error("failed customer feed execution ", e);
+            logger.error("Failed ["+feedName+"] execution. Job ["+jobName+"]", e);
             handleAuthorizationException(e, feedName, jobName);
         }
     }
@@ -38,13 +38,13 @@ public class SimpleFeedJob {
 
     public void processFailedEvents(String feedName, Jobs jobName) {
         try {
-            logger.info("Processing failed events for Customer Feed");
+            logger.info("Processing failed events for "+feedName+"Feed");
             initAtomFeedClient(feedName, jobName);
             if(atomFeedClient != null){
                 atomFeedClient.processFailedEvents();
             }
         } catch (Exception e) {
-            logger.error("failed customer feed execution ", e);
+            logger.error("Failed ["+feedName+"] execution. Job ["+jobName+"]", e);
             handleAuthorizationException(e, feedName, jobName);
         }
     }
