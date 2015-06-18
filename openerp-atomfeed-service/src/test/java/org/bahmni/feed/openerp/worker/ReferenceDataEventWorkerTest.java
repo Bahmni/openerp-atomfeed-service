@@ -16,6 +16,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
@@ -49,7 +50,7 @@ public class ReferenceDataEventWorkerTest  {
 
     @Test
     public void shouldMapToLabRequest() throws Exception {
-        Event event = new Event("event-id","","test",feedUri);
+        Event event = new Event("event-id","","test",feedUri, new Date());
         ObjectMapper objectMapper = new ObjectMapper();
         LabTest labTestFromFeed = objectMapper.readValue(labOrderJson, LabTest.class);
         when(webClient.get(any(String.class),any(Class.class))).thenReturn(labTestFromFeed);
@@ -79,7 +80,7 @@ public class ReferenceDataEventWorkerTest  {
 
     @Test
     public void shouldNotMakeWebClientCallIfWeAreNotProcessingThisfeed() throws Exception {
-        Event event = new Event("event-id","","INVALID TITLE",feedUri);
+        Event event = new Event("event-id","","INVALID TITLE",feedUri, new Date());
         when(webClient.get(any(String.class),any(Class.class))).thenThrow(new RuntimeException("Should never have been called"));
 
         referenceDataEventWorker.process(event);

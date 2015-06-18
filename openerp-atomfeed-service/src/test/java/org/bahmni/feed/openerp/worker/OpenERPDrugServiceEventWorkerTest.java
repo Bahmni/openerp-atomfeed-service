@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
@@ -54,7 +55,7 @@ public class OpenERPDrugServiceEventWorkerTest {
 
     @Test
     public void testProcess() throws IOException {
-        Event event = new Event("event-id","content","test",feedUri);
+        Event event = new Event("event-id","content","test",feedUri, new Date());
         when(webClient.get(URI.create("http://prefix/content"))).thenReturn(drugOrderJson);
 
         worker.process(event);
@@ -81,7 +82,7 @@ public class OpenERPDrugServiceEventWorkerTest {
 
     @Test
     public void testFailedEvent() throws IOException{
-        Event event = new Event("event-id","content","test",null);
+        Event event = new Event("event-id","content","test",null, new Date());
         when(webClient.get(URI.create("http://prefix/content"))).thenReturn(drugOrderJson);
 
         worker.process(event);
