@@ -2,6 +2,7 @@ package org.bahmni.openerp.web.request;
 
 import org.bahmni.openerp.web.request.builder.Parameter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OpenERPRequest {
@@ -9,7 +10,7 @@ public class OpenERPRequest {
     private final String operation;
     private final List<Parameter> parameters;
 
-    public static final OpenERPRequest DO_NOT_CONSUME = new OpenERPRequest(null, null, null) {
+    public static final OpenERPRequest DO_NOT_CONSUME = new OpenERPRequest(null, null, new ArrayList<Parameter>()) {
         @Override
         public boolean shouldERPConsumeEvent() {
             return false;
