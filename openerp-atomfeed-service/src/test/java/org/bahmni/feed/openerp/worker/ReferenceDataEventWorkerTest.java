@@ -1,5 +1,6 @@
 package org.bahmni.feed.openerp.worker;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.client.ReferenceDataWebClient;
 import org.bahmni.feed.openerp.domain.referencedata.LabTest;
@@ -67,7 +68,7 @@ public class ReferenceDataEventWorkerTest  {
         Assert.assertTrue(isCorrect(parameters.get(2),"last_read_entry_id", "event-id", "string"));
         Assert.assertTrue(isCorrect(parameters.get(3),"feed_uri_for_last_read_entry", feedUri, "string"));
 
-        String labTestJson = parameters.get(4).getValue();
+        String labTestJson = StringEscapeUtils.unescapeXml(parameters.get(4).getValue());
         LabTest labTest = objectMapper.readValue(labTestJson, LabTest.class);
 
         Assert.assertEquals("Test",labTest.getCategory());
