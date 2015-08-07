@@ -42,6 +42,10 @@ public class OpenERPOrder {
         return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -109,4 +113,5 @@ public class OpenERPOrder {
     public void setPreviousOrderId(String previousOrderId) {
         this.previousOrderId = previousOrderId;
     }
+
 }

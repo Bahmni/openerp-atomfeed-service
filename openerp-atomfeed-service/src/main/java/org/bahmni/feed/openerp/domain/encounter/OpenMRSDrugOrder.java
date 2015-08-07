@@ -10,6 +10,7 @@ public class OpenMRSDrugOrder {
     private String action;
     private String uuid;
     private String previousOrderUuid;
+    private String orderType;
     private boolean voided;
 
     public OpenMRSDrug getDrug() {
@@ -50,6 +51,10 @@ public class OpenMRSDrugOrder {
 
     public boolean isVoided() {
         return voided;
+    }
+
+    public String getOrderType() {
+        return orderType;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

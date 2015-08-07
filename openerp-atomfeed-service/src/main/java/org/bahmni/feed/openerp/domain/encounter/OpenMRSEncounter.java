@@ -27,6 +27,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSEncounter extends OpenMRSEncounterEvent {
     private List<OpenMRSDrugOrder> drugOrders = new ArrayList<>();
+    private List<OpenMRSOrder> orders = new ArrayList<>();
     private String patientUuid;
     private String patientId;
     private String encounterUuid;
@@ -61,6 +62,24 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
             openERPOrder.setQuantity(drugOrder.getQuantity());
             openERPOrder.setQuantityUnits(drugOrder.getQuantityUnits());
             openERPOrder.setVoided(drugOrder.isVoided());
+            openERPOrder.setType(drugOrder.getOrderType());
+
+            openERPOrders.add(openERPOrder);
+        }
+
+        for (OpenMRSOrder order : getOrders()) {
+            OpenERPOrder openERPOrder = new OpenERPOrder();
+            openERPOrder.setVisitId(getVisitUuid());
+            openERPOrder.setOrderId(order.getUuid());
+            openERPOrder.setPreviousOrderId(order.getPreviousOrderUuid());
+            openERPOrder.setEncounterId(getEncounterUuid());
+            openERPOrder.setProductId(order.getConceptUuid());
+            openERPOrder.setProductName(order.getConceptName());
+            openERPOrder.setAction(order.getAction());
+            openERPOrder.setQuantity((double) 1);
+            openERPOrder.setQuantityUnits("Unit(s)");
+            openERPOrder.setVoided(order.isVoided());
+            openERPOrder.setType(order.getOrderType());
 
             openERPOrders.add(openERPOrder);
         }
@@ -69,7 +88,7 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
     }
 
     public boolean shouldERPConsumeEvent() {
-        return hasDrugOrders();
+        return hasDrugOrders() || hasOrders();
     }
 
     public String getEncounterUuid() {
@@ -78,6 +97,10 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
 
     private boolean hasDrugOrders() {
         return getDrugOrders().size() > 0;
+    }
+
+    private boolean hasOrders() {
+        return getOrders().size() > 0;
     }
 
     public String getPatientUuid() {
@@ -90,6 +113,10 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
 
     public List<OpenMRSDrugOrder> getDrugOrders() {
         return drugOrders;
+    }
+
+    public List<OpenMRSOrder> getOrders() {
+        return orders;
     }
 
     public String getVisitUuid() {
