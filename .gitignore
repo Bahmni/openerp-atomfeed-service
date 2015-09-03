@@ -3,3 +3,6 @@ openerp-atomfeed-service.iml
 .idea
 logs
 *.iml
+*.ipr
+*.iws
+
