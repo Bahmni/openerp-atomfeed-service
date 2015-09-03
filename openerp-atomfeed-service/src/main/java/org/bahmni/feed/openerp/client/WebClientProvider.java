@@ -42,6 +42,7 @@ public class WebClientProvider {
         switch (jobName){
             case CUSTOMER_FEED: return getOpenMRSWebClient() ;
             case DRUG_FEED: return getOpenMRSWebClient() ;
+            case LAB_FEED: return getOpenMRSWebClient() ;
             case SALEORDER_FEED: return getOpenMRSWebClient() ;
             case REFERENCE_DATA_FEED: return referenceDataWebClient() ;
             case OPENELIS_SALEORDER_FEED: return openElisWebClient();

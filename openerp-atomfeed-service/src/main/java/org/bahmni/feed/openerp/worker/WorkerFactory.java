@@ -21,9 +21,9 @@ public class WorkerFactory {
         switch (jobName){
             case CUSTOMER_FEED: return new OpenERPCustomerServiceEventWorker(feedUrl, openERPClient, webClientProvider.getOpenMRSWebClient(), urlPrefix);
             case SALEORDER_FEED: return new OpenERPSaleOrderEventWorker(feedUrl, openERPClient, webClientProvider.getOpenMRSWebClient(), urlPrefix);
-            case REFERENCE_DATA_FEED: return new ReferenceDataEventWorker(feedUrl, openERPClient,webClientProvider.referenceDataWebClient(), urlPrefix);
             case OPENELIS_SALEORDER_FEED: return  new OpenElisSaleOrderEventWorker(feedUrl, openERPClient, webClientProvider.openElisWebClient(), urlPrefix);
             case DRUG_FEED: return new OpenERPDrugServiceEventWorker(feedUrl, openERPClient, webClientProvider.getOpenMRSWebClient(), urlPrefix);
+            case LAB_FEED: return new OpenERPLabOrderTypeServiceEventWorker(feedUrl, openERPClient, webClientProvider.getOpenMRSWebClient(), urlPrefix);
         }
 
         throw new RuntimeException(String.format("No worker for %s", jobName));

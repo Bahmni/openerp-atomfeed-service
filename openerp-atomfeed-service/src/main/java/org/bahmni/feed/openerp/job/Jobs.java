@@ -6,5 +6,6 @@ public enum Jobs {
     SALEORDER_FEED,
     REFERENCE_DATA_FEED,
     OPENELIS_SALEORDER_FEED,
-    DRUG_FEED
+    DRUG_FEED,
+    LAB_FEED
 }
