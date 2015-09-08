@@ -8,21 +8,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenMRSRadiologyTestEvent extends OpenMRSLabOrderTypeEvent<OpenMRSRadiologyTest> {
-    public static final String RADIOLOGY_TEST_EVENT_NAME = "radiology";
+public class OpenMRSLabTestEvent extends OpenMRSLabOrderTypeEvent<OpenMRSLabTest> {
+    public static final String LAB_TEST_EVENT_NAME = "test";
 
     @Override
-    protected List<Parameter> buildParameters(Event event, OpenMRSRadiologyTest openMRSLabOrderTypeEvent) {
+    protected List<Parameter> buildParameters(Event event, OpenMRSLabTest openMRSLabOrderTypeEvent) {
         List<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", openMRSLabOrderTypeEvent.getName()));
         parameters.add(new Parameter("uuid", openMRSLabOrderTypeEvent.getUuid()));
         parameters.add(new Parameter("is_active", openMRSLabOrderTypeEvent.getActive(), "boolean"));
-        parameters.add(new Parameter("category", "create.radiology.test"));
+        parameters.add(new Parameter("category", "create.lab.test"));
         return parameters;
     }
 
     @Override
-    protected OpenMRSRadiologyTest readLabOrderTypeEvent(String openMRSLabOrderTypeEventJson) throws IOException {
-        return ObjectMapperRepository.objectMapper.readValue(openMRSLabOrderTypeEventJson, OpenMRSRadiologyTest.class);
+    protected OpenMRSLabTest readLabOrderTypeEvent(String openMRSLabOrderTypeEventJson) throws IOException {
+        return ObjectMapperRepository.objectMapper.readValue(openMRSLabOrderTypeEventJson, OpenMRSLabTest.class);
     }
 }
