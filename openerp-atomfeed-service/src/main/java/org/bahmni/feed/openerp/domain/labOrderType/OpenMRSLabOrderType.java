@@ -6,6 +6,7 @@ public abstract class OpenMRSLabOrderType {
 
     private String uuid;
     private String name;
+    private boolean active;
 
     @JsonProperty("uuid")
     public String getUuid() {
@@ -23,5 +24,14 @@ public abstract class OpenMRSLabOrderType {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getActive() {
+        return active ? "1": "0";
+    }
+
+    @JsonProperty("isActive")
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

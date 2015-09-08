@@ -3,6 +3,7 @@ package org.bahmni.feed.openerp.worker;
 import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabOrderTypeEvent;
+import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabPanelEvent;
 import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabTestEvent;
 import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSRadiologyTestEvent;
 import org.bahmni.openerp.web.client.OpenERPClient;
@@ -34,6 +35,7 @@ public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
 
         labOrderTypeEventMap.put(OpenMRSRadiologyTestEvent.RADIOLOGY_TEST_EVENT_NAME, new OpenMRSRadiologyTestEvent());
         labOrderTypeEventMap.put(OpenMRSLabTestEvent.LAB_TEST_EVENT_NAME, new OpenMRSLabTestEvent());
+        labOrderTypeEventMap.put(OpenMRSLabPanelEvent.LAB_PANEL_EVENT_NAME, new OpenMRSLabPanelEvent());
     }
 
     @Override
