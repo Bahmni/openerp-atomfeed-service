@@ -1,7 +1,6 @@
-package org.bahmni.feed.openerp.worker;
+package org.bahmni.feed.openerp.domain.labOrderType;
 
 import org.bahmni.feed.openerp.ObjectMapperRepository;
-import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSRadiologyTest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
 
@@ -17,7 +16,7 @@ public class OpenMRSRadiologyTestEvent extends OpenMRSLabOrderTypeEvent<OpenMRSR
         List<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", openMRSLabOrderTypeEvent.getName()));
         parameters.add(new Parameter("uuid", openMRSLabOrderTypeEvent.getUuid()));
-        parameters.add(new Parameter("category", "create.radiologyTest"));
+        parameters.add(new Parameter("category", "create.radiology.test"));
         return parameters;
     }
 

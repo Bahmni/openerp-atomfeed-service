@@ -2,6 +2,9 @@ package org.bahmni.feed.openerp.worker;
 
 import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
+import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabOrderTypeEvent;
+import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabTestEvent;
+import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSRadiologyTestEvent;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -28,7 +31,9 @@ public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
         this.feedUrl = feedUrl;
         this.webClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
+
         labOrderTypeEventMap.put(OpenMRSRadiologyTestEvent.RADIOLOGY_TEST_EVENT_NAME, new OpenMRSRadiologyTestEvent());
+        labOrderTypeEventMap.put(OpenMRSLabTestEvent.LAB_TEST_EVENT_NAME, new OpenMRSLabTestEvent());
     }
 
     @Override
@@ -45,7 +50,7 @@ public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
 
     private OpenERPRequest mapRequest(Event event, OpenMRSLabOrderTypeEvent openMRSLabOrderTypeEvent) throws IOException {
         String labOrderTypeJson = webClient.get(URI.create(urlPrefix + event.getContent()));
-        return openMRSLabOrderTypeEvent.mapEventToOpenERPRequest(event, labOrderTypeJson);
+        return openMRSLabOrderTypeEvent.mapEventToOpenERPRequest(event, labOrderTypeJson, feedUrl);
     }
     @Override
     public void cleanUp(Event event) {
