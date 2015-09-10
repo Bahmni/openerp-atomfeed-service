@@ -41,6 +41,6 @@ public class OpenERPRequestParamsTest {
 
         OpenERPRequest openERPRequest = requestParams.getRequest(FileConverter.convertToString("encounterResourceForDrugOrder.json"), "http://feedUriLastReadEntry", "http://feedUri", "eventId");
         List<Parameter> parameters = openERPRequest.getParameters();
-        assertEquals(7, parameters.size());
+        assertEquals(8, parameters.size());
     }
 }
