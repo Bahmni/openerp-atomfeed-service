@@ -13,6 +13,7 @@ public class OpenERPOrder {
     private String type;
     private String description;
     private boolean voided;
+    private String locationName;
 
     public String getEncounterId() {
         return encounterId;
@@ -113,5 +114,9 @@ public class OpenERPOrder {
     public void setPreviousOrderId(String previousOrderId) {
         this.previousOrderId = previousOrderId;
     }
+
+    public String getLocationName() { return locationName;}
+
+    public void setLocationName(String locationName) { this.locationName = locationName; }
 
 }
