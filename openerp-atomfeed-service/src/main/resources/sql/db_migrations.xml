@@ -113,4 +113,19 @@
             <column name="error_hash_code" type="int"/>
         </createTable>
     </changeSet>
+    <changeSet author="Hemanth" id="14092015080020" context="bahmni">
+        <createTable tableName="event_records_queue" schemaName="public">
+            <column name="id" type="serial">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="uuid" type="varchar(40)"/>
+            <column name="title" type="varchar(255)"/>
+            <column name="timestamp" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP(6)"/>
+            <column name="uri" type="varchar(255)"/>
+            <!-- TODO: Change to CLOB -->
+            <column name="object" type="varchar(1000)"/>
+            <column name="category" type="varchar(255)"></column>
+        </createTable>
+
+    </changeSet>
 </databaseChangeLog>

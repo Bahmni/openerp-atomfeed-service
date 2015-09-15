@@ -32,7 +32,7 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
     private String patientId;
     private String encounterUuid;
     private String visitUuid;
-
+    private String locationName;
 
     public List<Parameter> getParameters(String eventId, String feedURIForLastReadEntry, String feedURI) throws IOException {
         List<Parameter> parameters = new ArrayList<>();
@@ -45,6 +45,7 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
         parameters.add(createParameter("last_read_entry_id", eventId, "string"));
         parameters.add(createParameter("feed_uri_for_last_read_entry", feedURIForLastReadEntry, "string"));
         parameters.add(createParameter("orders", mapOpenERPOrders(), "string"));
+        parameters.add(createParameter("locationName", getLocationName(), "string"));
         return parameters;
     }
 
@@ -122,4 +123,6 @@ public class OpenMRSEncounter extends OpenMRSEncounterEvent {
     public String getVisitUuid() {
         return visitUuid;
     }
+
+    public String getLocationName() { return locationName; }
 }
