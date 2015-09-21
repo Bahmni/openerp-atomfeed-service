@@ -84,6 +84,11 @@
         <property name="targetMethod" value="execute"/>
         <property name="concurrent" value="false"/>
     </bean>
+    <bean id="eventsPublisherJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="openerpEventsPublisherJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
     <bean id="openerpLabFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="openerpLabFeedJob"/>
         <property name="targetMethod" value="processFeed"/>
@@ -143,6 +148,12 @@
         <property name="startDelay" value="${scheduler.initial.delay}" />
     </bean>
 
+    <bean id="eventPublisherTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="eventsPublisherJob"/>
+        <property name="cronExpression" value="0/2 * * * * ?" />
+        <property name="startDelay" value="${scheduler.initial.delay}" />
+    </bean>
 
     <bean id="openerpLabFeedJobTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
@@ -180,6 +191,7 @@
                 <ref bean="openelisSaleOrderFeedJobTrigger" />
                 <ref bean="openelisSaleOrderFeedFailedJobTrigger" />
                 <ref bean="eventRecordsNumberOffsetMarkerTrigger"/>
+                <ref bean="eventPublisherTrigger"/>
                 <ref bean="openerpLabFeedJobTrigger" />
                 <ref bean="openerpLabFeedFailedJobTrigger" />
                 <ref bean="jobFilter"/>
@@ -234,7 +246,11 @@
     <bean id="openerpEventsOptimizerJob" class="org.bahmni.feed.openerp.job.OpenERPEventsOptimizerJob" scope="prototype">
         <constructor-arg ref="atomFeedTrasactionSupport"/>
     </bean>
-    
+
+    <bean id="openerpEventsPublisherJob" class="org.bahmni.feed.openerp.job.OpenERPEventsPublisherJob" scope="prototype">
+        <constructor-arg ref="atomFeedTrasactionSupport"/>
+    </bean>
+
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${jdbc.driverClassName}"/>
         <property name="jdbcUrl" value="${jdbc.url}"/>
