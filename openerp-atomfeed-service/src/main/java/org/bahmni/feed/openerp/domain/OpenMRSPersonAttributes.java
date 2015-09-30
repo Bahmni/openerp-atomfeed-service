@@ -8,7 +8,6 @@ import org.bahmni.feed.openerp.worker.OpenElisSaleOrderEventWorker;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class OpenMRSPersonAttributes extends ArrayList<OpenMRSPersonAttribute> implements Jsonify{
 
@@ -41,17 +40,22 @@ public class OpenMRSPersonAttributes extends ArrayList<OpenMRSPersonAttribute> i
 
     @Override
     public String toJsonString() {
-        Map personAttributes = new HashMap<String, String>();
-        String attrName, attrValue = null;
+        HashMap<String, Object> personAttributes = new HashMap<>();
+        String attrName;
+        Object attrValue = null;
         for (OpenMRSPersonAttribute openMRSPersonAttribute : this) {
             attrName = openMRSPersonAttribute.getAttributeType().getDisplay();
-            if (openMRSPersonAttribute.getValue() instanceof String) {
-                attrValue = (String) openMRSPersonAttribute.getValue();
-            } else if (openMRSPersonAttribute.getValue() instanceof HashMap) {
-                attrValue = (String) ((HashMap) openMRSPersonAttribute.getValue()).get("display");
-            } else {
-                continue;
+            try{
+                if (openMRSPersonAttribute.getValue() instanceof HashMap) {
+                    attrValue = ((HashMap) openMRSPersonAttribute.getValue()).get("display");
+                } else {
+                    attrValue = openMRSPersonAttribute.getValue();
+                }
             }
+             catch (ClassCastException e){
+                 Logger logger = Logger.getLogger(OpenElisSaleOrderEventWorker.class);
+                 logger.error("Unable to convert personAttributes"+ openMRSPersonAttribute.getValue().getClass() + "to json string. " + e.getMessage());
+             }
 
             personAttributes.put(attrName, attrValue);
         }
