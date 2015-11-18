@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSDrugOrder {
+    private String drugNonCoded;
     private OpenMRSDrug drug;
     private DosingInstructions dosingInstructions;
     private String action;
@@ -12,6 +13,10 @@ public class OpenMRSDrugOrder {
     private String previousOrderUuid;
     private String orderType;
     private boolean voided;
+
+    public String getDrugNonCoded() {
+        return drugNonCoded;
+    }
 
     public OpenMRSDrug getDrug() {
         return drug;
