@@ -10,6 +10,7 @@ public class OpenERPOrder {
     private String quantityUnits;
     private String action;
     private String visitId;
+    private String visitType;
     private String type;
     private String description;
     private boolean voided;
@@ -27,8 +28,8 @@ public class OpenERPOrder {
         this.visitId = visitId;
     }
 
-    public void setVisitType(String display) {
-        this.type = display;
+    public void setVisitType(String visitType) {
+        this.visitType = visitType;
     }
 
     public void setDescription(String description) {
@@ -47,6 +48,8 @@ public class OpenERPOrder {
         this.type = type;
     }
 
+
+
     public String getDescription() {
         return description;
     }
@@ -62,6 +65,11 @@ public class OpenERPOrder {
     public String getOrderId() {
         return orderId;
     }
+
+    public String getVisitType() {
+        return visitType;
+    }
+
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
