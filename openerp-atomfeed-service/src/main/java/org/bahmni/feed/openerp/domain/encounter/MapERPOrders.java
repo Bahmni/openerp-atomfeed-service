@@ -39,6 +39,9 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
     private String mapOpenERPOrders() throws IOException {
         OpenERPOrders openERPOrders = new OpenERPOrders(openMRSEncounter.getEncounterUuid());
         for (OpenMRSDrugOrder drugOrder : openMRSEncounter.getDrugOrders()) {
+            if(drugOrder.getDrugNonCoded() != null) {
+                continue;
+            }
             OpenERPOrder openERPOrder = new OpenERPOrder();
             openERPOrder.setVisitId(openMRSEncounter.getVisitUuid());
             openERPOrder.setOrderId(drugOrder.getUuid());
