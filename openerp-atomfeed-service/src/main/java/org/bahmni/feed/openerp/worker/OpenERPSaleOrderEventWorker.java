@@ -50,8 +50,12 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
     private OpenERPRequest mapRequest(Event event) throws IOException {
 
-        String encounterOrBedAssignmentEventContent = webClient.get(URI.create(urlPrefix + event.getContent()));
-        OpenMRSEncounter openMRSEncounter = ObjectMapperRepository.objectMapper.readValue(encounterOrBedAssignmentEventContent, OpenMRSEncounter.class);
+        String encounterEventContent = webClient.get(URI.create(urlPrefix + event.getContent()));
+        OpenMRSEncounter openMRSEncounter = ObjectMapperRepository.objectMapper.readValue(encounterEventContent, OpenMRSEncounter.class);
+
+        // Ignore Bed Assignment Encounter events
+        if(!openMRSEncounter.shouldERPConsumeEvent())
+            return OpenERPRequest.DO_NOT_CONSUME;
 
         String visitURL = "/openmrs/ws/rest/v1/visit/" + openMRSEncounter.getVisitUuid() + "?v=full";
         String visitContent = webClient.get(URI.create(urlPrefix + visitURL));
