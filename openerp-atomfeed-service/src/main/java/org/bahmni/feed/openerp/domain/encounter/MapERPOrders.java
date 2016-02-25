@@ -38,6 +38,8 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
 
     private String mapOpenERPOrders() throws IOException {
         OpenERPOrders openERPOrders = new OpenERPOrders(openMRSEncounter.getEncounterUuid());
+        List<Provider> providers = openMRSEncounter.getProviders();
+        String providerName = providers.size() != 0 ? providers.get(0).getName() : "";
         for (OpenMRSDrugOrder drugOrder : openMRSEncounter.getDrugOrders()) {
             if(drugOrder.getDrugNonCoded() != null) {
                 continue;
@@ -55,7 +57,9 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             openERPOrder.setVoided(drugOrder.isVoided());
             openERPOrder.setType(drugOrder.getOrderType());
             openERPOrder.setVisitType(getVisitType());
+            openERPOrder.setProviderName(providerName);
             openERPOrders.add(openERPOrder);
+
         }
 
         for (OpenMRSOrder order : openMRSEncounter.getOrders()) {
