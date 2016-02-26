@@ -16,11 +16,8 @@
 
 package org.bahmni.feed.openerp.domain.encounter;
 
-import org.bahmni.feed.openerp.ObjectMapperRepository;
-import org.bahmni.openerp.web.request.builder.Parameter;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +25,7 @@ import java.util.List;
 public class OpenMRSEncounter {
     private List<OpenMRSDrugOrder> drugOrders = new ArrayList<>();
     private List<OpenMRSOrder> orders = new ArrayList<>();
+    private List<Provider> providers = new ArrayList<>();
     private String patientUuid;
     private String patientId;
     private String encounterUuid;
@@ -76,4 +74,8 @@ public class OpenMRSEncounter {
     }
 
     public String getLocationName() { return locationName; }
+
+    public List<Provider> getProviders() {
+        return providers;
+    }
 }
