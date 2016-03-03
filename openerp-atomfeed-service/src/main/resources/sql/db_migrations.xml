@@ -3,6 +3,20 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet context="setup" author="Vikash, Preethi" id="201603031715">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="markers"/></not>
+        </preConditions>
+        <createTable tableName="markers" schemaName="public">
+            <column name="feed_uri" type="varchar(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="last_read_entry_id" type="varchar(255)"/>
+            <column name="feed_uri_for_last_read_entry" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
     <changeSet context="setup" author="ict4h" id="100">
         <preConditions onFail="MARK_RAN">
             <not><tableExists tableName="failed_events"/></not>
