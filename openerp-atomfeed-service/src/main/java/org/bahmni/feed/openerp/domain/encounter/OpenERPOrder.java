@@ -16,6 +16,8 @@ public class OpenERPOrder {
     private boolean voided;
     private String locationName;
     private String providerName;
+    private String dispensed;
+
 
     public String getEncounterId() {
         return encounterId;
@@ -135,4 +137,11 @@ public class OpenERPOrder {
     public void setProviderName(String providerName) {
         this.providerName = providerName;
     }
+
+    public String getDispensed() { return dispensed; }
+
+    public void setDispensed(String dispensed) {
+        this.dispensed = dispensed;
+    }
 }
+

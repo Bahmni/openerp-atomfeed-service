@@ -39,6 +39,8 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
     private String mapOpenERPOrders() throws IOException {
         OpenERPOrders openERPOrders = new OpenERPOrders(openMRSEncounter.getEncounterUuid());
         List<Provider> providers = openMRSEncounter.getProviders();
+
+        List<OpenMRSObservation> observations = openMRSEncounter.getObservations();
         String providerName = providers.size() != 0 ? providers.get(0).getName() : "";
         for (OpenMRSDrugOrder drugOrder : openMRSEncounter.getDrugOrders()) {
             if(drugOrder.getDrugNonCoded() != null) {
@@ -47,6 +49,14 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             OpenERPOrder openERPOrder = new OpenERPOrder();
             openERPOrder.setVisitId(openMRSEncounter.getVisitUuid());
             openERPOrder.setOrderId(drugOrder.getUuid());
+            openERPOrder.setDispensed("false");
+            if(observations.size() != 0){
+                for (OpenMRSObservation observation : observations) {
+                    if(observation.getOrderUuid().equals(openERPOrder.getOrderId())){
+                        openERPOrder.setDispensed(observation.getValue());
+                    }
+                }
+            }
             openERPOrder.setPreviousOrderId(drugOrder.getPreviousOrderUuid());
             openERPOrder.setEncounterId(openMRSEncounter.getEncounterUuid());
             openERPOrder.setProductId(drugOrder.getDrugUuid());
@@ -61,6 +71,8 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             openERPOrders.add(openERPOrder);
 
         }
+
+
 
         for (OpenMRSOrder order : openMRSEncounter.getOrders()) {
             OpenERPOrder openERPOrder = new OpenERPOrder();

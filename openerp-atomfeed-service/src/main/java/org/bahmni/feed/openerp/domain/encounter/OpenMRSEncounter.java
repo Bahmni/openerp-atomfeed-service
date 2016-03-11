@@ -25,6 +25,7 @@ import java.util.List;
 public class OpenMRSEncounter {
     private List<OpenMRSDrugOrder> drugOrders = new ArrayList<>();
     private List<OpenMRSOrder> orders = new ArrayList<>();
+    private List<OpenMRSObservation> observations = new ArrayList<>();
     private List<Provider> providers = new ArrayList<>();
     private String patientUuid;
     private String patientId;
@@ -63,6 +64,14 @@ public class OpenMRSEncounter {
 
     public List<OpenMRSOrder> getOrders() {
         return orders;
+    }
+
+    public List<OpenMRSObservation> getObservations() {
+        return observations;
+    }
+
+    public void setObservations(List<OpenMRSObservation> observations) {
+        this.observations = observations;
     }
 
     public String getVisitUuid() {
