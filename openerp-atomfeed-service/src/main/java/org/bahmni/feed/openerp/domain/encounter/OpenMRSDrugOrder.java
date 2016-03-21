@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSDrugOrder {
+    private OpenMRSConcept concept;
     private String drugNonCoded;
     private OpenMRSDrug drug;
     private DosingInstructions dosingInstructions;
@@ -13,6 +14,18 @@ public class OpenMRSDrugOrder {
     private String previousOrderUuid;
     private String orderType;
     private boolean voided;
+
+    public OpenMRSConcept getConcept() {
+        return concept;
+    }
+
+    public String getConceptName() {
+        return getConcept() != null ? getConcept().getName() : null;
+    }
+
+    public String getConceptClass() {
+        return getConcept() != null ? getConcept().getConceptClass() : null;
+    }
 
     public String getDrugNonCoded() {
         return drugNonCoded;

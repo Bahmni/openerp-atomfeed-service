@@ -68,6 +68,7 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             openERPOrder.setType(drugOrder.getOrderType());
             openERPOrder.setVisitType(getVisitType());
             openERPOrder.setProviderName(providerName);
+            openERPOrder.setConceptName(drugOrder.getConceptName());
             openERPOrders.add(openERPOrder);
 
         }
