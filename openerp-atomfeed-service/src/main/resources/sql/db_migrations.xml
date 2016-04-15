@@ -155,4 +155,17 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="130420160525" author="Chethan" context="bahmni">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                select count(*) from quartz_cron_scheduler where name = 'eventRecordsNumberOffsetMarkerTrigger';
+            </sqlCheck>
+        </preConditions>
+        <comment>eventRecordsNumberOffsetMarkerTrigger job to be run at 12 am every day</comment>
+        <update tableName="quartz_cron_scheduler" schemaName="openerp">
+            <column name="cron_statement" value="0 0 0 1/1 * ? *"/>
+            <where>name='eventRecordsNumberOffsetMarkerTrigger'</where>
+        </update>
+    </changeSet>
+
 </databaseChangeLog>
