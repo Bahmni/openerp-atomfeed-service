@@ -144,7 +144,7 @@
     <bean id="eventRecordsNumberOffsetMarkerTrigger"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="eventRecordsNumberOffsetMarkerJob"/>
-        <property name="cronExpression" value="0 0 12 * * ?" />
+        <property name="cronExpression" value="0 0 0 1/1 * ? *" />
         <property name="startDelay" value="${scheduler.initial.delay}" />
     </bean>
 
