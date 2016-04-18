@@ -162,7 +162,7 @@
             </sqlCheck>
         </preConditions>
         <comment>eventRecordsNumberOffsetMarkerTrigger job to be run at 12 am every day</comment>
-        <update tableName="quartz_cron_scheduler" schemaName="openerp">
+        <update tableName="quartz_cron_scheduler" schemaName="public">
             <column name="cron_statement" value="0 0 0 1/1 * ? *"/>
             <where>name='eventRecordsNumberOffsetMarkerTrigger'</where>
         </update>
