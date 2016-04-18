@@ -156,6 +156,7 @@
     </changeSet>
 
     <changeSet id="130420160525" author="Chethan" context="bahmni">
+        <validCheckSum>3:1dd5725064fe3ec2bfffa4ea381c4e78</validCheckSum>
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="1">
                 select count(*) from quartz_cron_scheduler where name = 'eventRecordsNumberOffsetMarkerTrigger';
