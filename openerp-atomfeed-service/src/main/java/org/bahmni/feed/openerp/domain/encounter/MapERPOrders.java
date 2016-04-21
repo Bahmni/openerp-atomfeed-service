@@ -52,7 +52,7 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             openERPOrder.setDispensed("false");
             if(observations.size() != 0){
                 for (OpenMRSObservation observation : observations) {
-                    if(observation.getOrderUuid().equals(openERPOrder.getOrderId())){
+                    if(openERPOrder.getOrderId().equals(observation.getOrderUuid())){
                         openERPOrder.setDispensed(observation.getValue());
                     }
                 }
