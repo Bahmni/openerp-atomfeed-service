@@ -168,5 +168,40 @@
             <where>name='eventRecordsNumberOffsetMarkerTrigger'</where>
         </update>
     </changeSet>
+    <changeSet id="atomfeed-201604221140" context="bahmni" author="angshu, dubey" >
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(i.relname)
+                from pg_class t,
+                pg_class i,
+                pg_index ix,
+                pg_attribute a
+                where
+                t.oid = ix.indrelid
+                and i.oid = ix.indexrelid
+                and a.attrelid = t.oid
+                and a.attnum = ANY(ix.indkey)
+                and t.relkind = 'r'
+                and t.relname = 'event_records'
+                and i.relname = 'event_records_category_idx'
+            </sqlCheck>
+        </preConditions>
+        <comment>Add index to the category column in event_records table for performance (if it is not already present)</comment>
+        <createIndex tableName="event_records" indexName="event_records_category_idx">
+            <column name="category"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="atomfeed-201604221141" context="bahmni" author="angshu, dubey">
+        <validCheckSum>3:6501c89cc91d7f2751b557eda804c8bd</validCheckSum>
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="date_created" tableName="event_records" schemaName="${schemaName}"/>
+            </not>
+        </preConditions>
+        <comment>Creating column date_created for queue table. This indicates the time event was raised or created.</comment>
+        <addColumn tableName="event_records" schemaName="public">
+            <column name="date_created" type="timestamp"></column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
