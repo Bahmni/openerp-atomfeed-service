@@ -79,6 +79,7 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             OpenERPOrder openERPOrder = new OpenERPOrder();
             openERPOrder.setVisitId(openMRSEncounter.getVisitUuid());
             openERPOrder.setOrderId(order.getUuid());
+            openERPOrder.setDispensed("false");
             openERPOrder.setPreviousOrderId(order.getPreviousOrderUuid());
             openERPOrder.setEncounterId(openMRSEncounter.getEncounterUuid());
             openERPOrder.setProductId(order.getConceptUuid());
