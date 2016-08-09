@@ -6,6 +6,7 @@ import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenMRSPatientMapper;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.OpenMRSPatient;
+import org.bahmni.feed.openerp.domain.OpenMRSPatientIdentifier;
 import org.bahmni.feed.openerp.domain.OpenMRSPerson;
 import org.bahmni.feed.openerp.domain.OpenMRSPersonAddress;
 import org.bahmni.openerp.web.client.OpenERPClient;
@@ -65,7 +66,7 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         List<Parameter> parameters = new ArrayList<Parameter>();
         parameters.add(createParameter("name", openMRSPatient.getName(), "string"));
         parameters.add(createParameter("local_name", openMRSPatient.getLocalName(), "string"));
-        parameters.add(createParameter("ref", openMRSPatient.getIdentifiers().get(0).getIdentifier(), "string"));
+        parameters.add(createParameter("ref", getPrimaryIdentifier(openMRSPatient).getIdentifier(), "string"));
         parameters.add(createParameter("uuid", openMRSPatient.getUuid(), "string"));
         String village = identifyVillage(openMRSPatient);
         if (!StringUtils.isBlank(village)) {
@@ -94,6 +95,15 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
         if (isFailedEvent)
             parameters.add(createParameter("is_failed_event", "1", "boolean"));
         return parameters;
+    }
+
+    private OpenMRSPatientIdentifier getPrimaryIdentifier(OpenMRSPatient patient) {
+        for (OpenMRSPatientIdentifier identifier : patient.getIdentifiers()) {
+            if (identifier.isPreferred()){
+                return identifier;
+            }
+        }
+        throw new RuntimeException("Preferred or Primary identifier is not available for the patient: "+patient.getName());
     }
 
     private String identifyVillage(OpenMRSPatient openMRSPatient) {
