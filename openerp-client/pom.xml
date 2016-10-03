@@ -6,13 +6,13 @@
     <parent>
         <artifactId>openerp-service</artifactId>
         <groupId>org.bahmni.openerp</groupId>
-        <version>0.85-SNAPSHOT</version>
+        <version>0.86-SNAPSHOT</version>
     </parent>
 
     <groupId>org.bahmni.openerp</groupId>
     <artifactId>openerp-client</artifactId>
     <packaging>jar</packaging>
-    <version>0.85-SNAPSHOT</version>
+    <version>0.86-SNAPSHOT</version>
     <name>openerp-client</name>
     <url>http://maven.apache.org</url>
 
