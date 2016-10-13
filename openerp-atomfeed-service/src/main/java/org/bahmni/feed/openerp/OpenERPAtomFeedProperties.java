@@ -76,6 +76,14 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         return resourceBundle.getString("openelis.uri");
     }
 
+    public String getOpenElisUser() {
+        return resourceBundle.getString("openelis.user");
+    }
+
+    public String getOpenElisPassword() {
+        return resourceBundle.getString("openelis.password");
+    }
+
     public String getOpenMRSUser() {
         return resourceBundle.getString("openmrs.user");
     }
