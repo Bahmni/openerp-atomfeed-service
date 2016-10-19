@@ -38,7 +38,6 @@ public class AtomFeedServerIT extends IntegrationTest {
 
     private DbEventRecordCreator recordCreator;
     private OpenERPAllEventRecordsJdbcImpl eventRecords;
-    private AtomFeedClient atomFeedClient;
 
     @Autowired
     private AtomFeedSpringTransactionSupport transactionSupport;

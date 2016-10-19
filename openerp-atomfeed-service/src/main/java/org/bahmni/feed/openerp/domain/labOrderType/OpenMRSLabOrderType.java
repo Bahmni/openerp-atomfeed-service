@@ -1,6 +1,6 @@
 package org.bahmni.feed.openerp.domain.labOrderType;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public abstract class OpenMRSLabOrderType {
 

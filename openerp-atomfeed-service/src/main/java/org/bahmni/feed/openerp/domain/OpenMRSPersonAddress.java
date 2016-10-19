@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.worker.Jsonify;
 import org.bahmni.feed.openerp.worker.OpenElisSaleOrderEventWorker;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.IOException;
 

@@ -44,8 +44,8 @@ public class OpenERPCustomerServiceEventWorkerTest {
         String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
 
         when(mockWebClient.get(any(URI.class))).thenReturn(patientResource);
+        Event event = new Event(createEntry(), "www.openmrs.com");
 
-        Event event = new Event(createEntry(),"www.openmrs.com");
         customerServiceEventWorker.process(event);
 
         verify(openERPClient).execute(createOpenERPRequest(event));
@@ -54,12 +54,12 @@ public class OpenERPCustomerServiceEventWorkerTest {
 
     private OpenERPRequest createOpenERPRequest(Event event) {
         List<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(createParameter("name","mareez naam","string"));
+        parameters.add(createParameter("name", "mareez naam", "string"));
         parameters.add(createParameter("local_name", "राम बाई", "string"));
-        parameters.add(createParameter("ref","GAN200066","string"));
-        parameters.add(createParameter("uuid","d6729333-bc31-4886-a864-0a6e7ae570a9","string"));
+        parameters.add(createParameter("ref", "GAN200066", "string"));
+        parameters.add(createParameter("uuid", "d6729333-bc31-4886-a864-0a6e7ae570a9", "string"));
         parameters.add(createParameter("village", "cityVillage", "string"));
-        parameters.add(createParameter("attributes", "{\"class\":\"ST\",\"healthCenter\":\"2\",\"givenNameLocal\":\"राम बाई\"}", "string"));
+        parameters.add(createParameter("attributes", "{\"healthCenter\":\"2\",\"givenNameLocal\":\"राम बाई\",\"class\":\"ST\"}", "string"));
         parameters.add(createParameter("preferredAddress", "{\"address1\":\"address1\",\"address2\":\"address2\"," +
                 "\"address3\":\"address3\",\"cityVillage\":\"cityVillage\",\"countyDistrict\":\"countyDistrict\"," +
                 "\"stateProvince\":\"stateProvince\",\"country\":\"country\"}", "string"));
@@ -71,7 +71,7 @@ public class OpenERPCustomerServiceEventWorkerTest {
         parameters.add(createParameter("feed_uri_for_last_read_entry", event.getFeedUri(), "string"));
 
 
-        return new OpenERPRequest("atom.event.worker","process_event",parameters);
+        return new OpenERPRequest("atom.event.worker", "process_event", parameters);
     }
 
     private Entry createEntry() throws FileNotFoundException {

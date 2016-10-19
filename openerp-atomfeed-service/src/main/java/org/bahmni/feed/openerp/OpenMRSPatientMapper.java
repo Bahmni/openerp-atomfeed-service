@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bahmni.feed.openerp.domain.OpenMRSPatient;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 

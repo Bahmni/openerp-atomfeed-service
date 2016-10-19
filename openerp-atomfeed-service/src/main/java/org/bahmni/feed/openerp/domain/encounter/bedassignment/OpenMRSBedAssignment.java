@@ -9,7 +9,7 @@ import org.bahmni.feed.openerp.domain.encounter.OpenMRSEncounterEvent;
 import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.bahmni.openerp.web.service.ProductService;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -16,11 +16,11 @@
 
 package org.bahmni.feed.openerp;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bahmni.feed.openerp.domain.encounter.bedassignment.OpenMRSBedAssignment;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.bahmni.openerp.web.service.ProductService;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.util.List;

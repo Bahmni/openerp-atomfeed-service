@@ -189,7 +189,7 @@ public class OpenERPCustomerFeedIT {
         OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
         authenticationResponse.setAuthenticated(true);
         authenticationResponse.setSessionId("sessionIdValue");
-        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
+//        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
         when(webClientProvider.getWebClient(any(Jobs.class))).thenReturn(webClient);
         when(workerFactory.getWorker(Jobs.CUSTOMER_FEED, feedUrl,openERPClient, "http://mrs.auth.uri")).thenReturn(openERPCustomerServiceEventWorker);

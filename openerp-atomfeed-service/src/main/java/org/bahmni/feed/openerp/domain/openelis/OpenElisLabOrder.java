@@ -1,11 +1,11 @@
 package org.bahmni.feed.openerp.domain.openelis;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.domain.encounter.OpenERPOrder;
 import org.bahmni.feed.openerp.domain.encounter.OpenERPOrders;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.bahmni.openerp.web.service.ProductService;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.io.IOException;
 import java.util.ArrayList;
