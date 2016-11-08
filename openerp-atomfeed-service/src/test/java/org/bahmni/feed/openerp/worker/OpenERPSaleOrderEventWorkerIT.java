@@ -79,7 +79,7 @@ public class OpenERPSaleOrderEventWorkerIT {
         OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
         authenticationResponse.setAuthenticated(true);
         authenticationResponse.setSessionId("sessionIdValue");
-        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
+//        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
         HashMap fieldMap = new HashMap();
         fieldMap.put("uuid","12345");
@@ -108,7 +108,7 @@ public class OpenERPSaleOrderEventWorkerIT {
         OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
         authenticationResponse.setAuthenticated(true);
         authenticationResponse.setSessionId("sessionIdValue");
-        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
+//        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
         HashMap fieldMap = new HashMap();
         fieldMap.put("uuid","12345");

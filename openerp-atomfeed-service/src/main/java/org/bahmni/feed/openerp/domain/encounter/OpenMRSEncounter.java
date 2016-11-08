@@ -16,7 +16,7 @@
 
 package org.bahmni.feed.openerp.domain.encounter;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.List;

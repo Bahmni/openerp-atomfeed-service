@@ -1,7 +1,6 @@
 package org.bahmni.feed.openerp.domain;
 
-import org.codehaus.jackson.annotate.JacksonAnnotation;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
