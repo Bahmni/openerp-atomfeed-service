@@ -5,3 +5,4 @@ logs
 *.iml
 *.ipr
 *.iws
+.DS_Store
