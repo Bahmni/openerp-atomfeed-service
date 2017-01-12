@@ -114,14 +114,23 @@
             <column name="enabled" type="boolean"/>
         </createTable>
     </changeSet>
-    <changeSet id="102" author="Sudhakar, Abishek">
+    <changeSet id="102-1" author="Possible">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="retries" tableName="failed_events" schemaName="public"/>
+            </not>
+        </preConditions>
         <addColumn tableName="failed_events" schemaName="public" >
             <column name="retries" type="int"
                     defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
-
+    </changeSet>
+    <changeSet id="102-2" author="Possible">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="failed_event_retry_log"/></not>
+        </preConditions>
         <createTable tableName="failed_event_retry_log" schemaName="public">
             <column name="id" type="serial">
                 <constraints nullable="false" primaryKey="true"/>
@@ -135,6 +144,9 @@
         </createTable>
     </changeSet>
     <changeSet author="Hemanth" id="14092015080020" context="bahmni">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="event_records_queue"/></not>
+        </preConditions>
         <createTable tableName="event_records_queue" schemaName="public">
             <column name="id" type="serial">
                 <constraints nullable="false" primaryKey="true"/>
@@ -201,7 +213,7 @@
         <validCheckSum>3:6501c89cc91d7f2751b557eda804c8bd</validCheckSum>
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists columnName="date_created" tableName="event_records" schemaName="${schemaName}"/>
+                <columnExists columnName="date_created" tableName="event_records" schemaName="public"/>
             </not>
         </preConditions>
         <comment>Creating column date_created for queue table. This indicates the time event was raised or created.</comment>
