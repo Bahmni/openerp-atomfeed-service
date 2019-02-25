@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp.client;
 
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
-import org.bahmni.feed.openerp.job.Jobs;
+import org.bahmni.feed.openerp.Jobs;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.ict4h.atomfeed.client.AtomFeedProperties;

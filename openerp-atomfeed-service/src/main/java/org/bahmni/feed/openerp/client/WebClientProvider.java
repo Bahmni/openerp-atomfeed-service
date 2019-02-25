@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp.client;
 
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
-import org.bahmni.feed.openerp.job.Jobs;
+import org.bahmni.feed.openerp.Jobs;
 
 import java.util.HashMap;
 import java.util.Map;

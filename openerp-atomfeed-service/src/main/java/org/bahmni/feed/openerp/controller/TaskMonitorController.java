@@ -1,6 +1,7 @@
 package org.bahmni.feed.openerp.controller;
 
 import org.apache.log4j.Logger;
+import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.TasksMonitoringResponse;
 import org.bahmni.openerp.web.service.CustomerService;
 import org.bahmni.openerp.web.service.OpenERPService;
@@ -18,20 +19,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
 // TODO : Mujir - this doesnt have any authentication right now. Change nagios when we add basic auth.
 public class TaskMonitorController {
     private OpenERPService openERPService;
+    private OpenERPAtomFeedProperties properties;
     private SchedulerFactoryBean schedulerFactoryBean;
 
     private static Logger logger = Logger.getLogger(TaskMonitorController.class);
 
     @Autowired
-    public TaskMonitorController(SchedulerFactoryBean schedulerFactoryBean, OpenERPService openERPService) {
+    public TaskMonitorController(SchedulerFactoryBean schedulerFactoryBean, OpenERPService openERPService, OpenERPAtomFeedProperties properties) {
         this.schedulerFactoryBean = schedulerFactoryBean;
         this.openERPService = openERPService;
+        this.properties = properties;
     }
 
     @RequestMapping(value = "/tasks", method = RequestMethod.GET)
@@ -58,5 +62,18 @@ public class TaskMonitorController {
     @ResponseBody
     public Object[] search(@RequestParam String patientId) {
         return openERPService.findCustomers(patientId);
+    }
+
+
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @ResponseBody
+    public HashMap<String, String> info() {
+        HashMap<String, String> info = properties.getInfo();
+        System.out.println("**************** CONTROLLER  ************************ ");
+        for (String s : info.keySet()) {
+            System.out.println(String.format("%s=%s", s, info.get(s)));
+        }
+        System.out.println("**************** CONTROLLER  ************************ ");
+        return info;
     }
 }

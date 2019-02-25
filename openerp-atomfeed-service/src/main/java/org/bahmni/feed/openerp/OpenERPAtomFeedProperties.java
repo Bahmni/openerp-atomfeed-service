@@ -1,7 +1,6 @@
 package org.bahmni.feed.openerp;
 
 import org.apache.log4j.Logger;
-import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.openerp.web.OpenERPProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
