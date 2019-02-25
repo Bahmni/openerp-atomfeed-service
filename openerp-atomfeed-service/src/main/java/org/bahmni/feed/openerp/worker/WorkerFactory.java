@@ -1,8 +1,7 @@
 package org.bahmni.feed.openerp.worker;
 
-import org.bahmni.feed.openerp.job.Jobs;
+import org.bahmni.feed.openerp.Jobs;
 import org.bahmni.feed.openerp.client.WebClientProvider;
-import org.bahmni.feed.openerp.job.OpenElisSaleOrderFeedJob;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.ict4h.atomfeed.client.service.EventWorker;
 

@@ -1,10 +1,10 @@
 package org.bahmni.feed.openerp.job;
 
 import com.sun.syndication.io.FeedException;
+import org.bahmni.feed.openerp.Jobs;
 
 public class OpenElisSaleOrderFeedJob {
     private SimpleFeedJob openElisFeedJob;
-    private String feedName="openelis.saleorder.feed.generator.uri";
 
     public OpenElisSaleOrderFeedJob() {
     }
@@ -14,11 +14,11 @@ public class OpenElisSaleOrderFeedJob {
     }
 
     public void processFeed()  {
-        openElisFeedJob.processFeed(feedName, Jobs.OPENELIS_SALEORDER_FEED);
+        openElisFeedJob.processFeed(Jobs.OPENELIS_SALEORDER_FEED);
     }
 
     public void processFailedEvents()  {
-        openElisFeedJob.processFailedEvents(feedName, Jobs.OPENELIS_SALEORDER_FEED);
+        openElisFeedJob.processFailedEvents(Jobs.OPENELIS_SALEORDER_FEED);
     }
 
 }

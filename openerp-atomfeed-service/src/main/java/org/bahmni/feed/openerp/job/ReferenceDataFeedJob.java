@@ -1,10 +1,10 @@
 package org.bahmni.feed.openerp.job;
 
 import com.sun.syndication.io.FeedException;
+import org.bahmni.feed.openerp.Jobs;
 
 public class ReferenceDataFeedJob {
     private SimpleFeedJob simpleFeedJob;
-    private String feedName="referencedata.feed.generator.uri";
 
     public ReferenceDataFeedJob() {
     }
@@ -14,11 +14,11 @@ public class ReferenceDataFeedJob {
     }
 
     public void processFeed()  {
-        simpleFeedJob.processFeed(feedName, Jobs.REFERENCE_DATA_FEED);
+        simpleFeedJob.processFeed(Jobs.REFERENCE_DATA_FEED);
     }
 
     public void processFailedEvents()  {
-        simpleFeedJob.processFailedEvents(feedName, Jobs.REFERENCE_DATA_FEED);
+        simpleFeedJob.processFailedEvents(Jobs.REFERENCE_DATA_FEED);
     }
 
 

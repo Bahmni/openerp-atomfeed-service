@@ -5,9 +5,8 @@ import com.sun.syndication.feed.atom.Entry;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
-import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
-import org.bahmni.feed.openerp.job.Jobs;
+import org.bahmni.feed.openerp.Jobs;
 import org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob;
 import org.bahmni.feed.openerp.job.SimpleFeedJob;
 import org.bahmni.feed.openerp.worker.OpenERPCustomerServiceEventWorker;
@@ -49,7 +48,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -115,10 +113,10 @@ public class OpenERPCustomerFeedIT {
         second.setEntries(getEntries(4,6));
         last.setEntries(getEntries(7,9));
 
-        notificationsUri = new URI("http://host/patients/notifications");
-        recentFeedUri = new URI("http://host/patients/3");
-        secondFeedUri = new URI("http://host/patients/2");
-        firstFeedUri = new URI("http://host/patients/1");
+        notificationsUri = new URI("http://HOST/patients/notifications");
+        recentFeedUri = new URI("http://HOST/patients/3");
+        secondFeedUri = new URI("http://HOST/patients/2");
+        firstFeedUri = new URI("http://HOST/patients/1");
 
         last.setOtherLinks(Arrays.asList(new Link[]{getLink("prev-archive", secondFeedUri),getLink("self", recentFeedUri),getLink("via", recentFeedUri)}));
 
@@ -165,10 +163,7 @@ public class OpenERPCustomerFeedIT {
      */
     @Test
     public void shouldCreateCustomerInOpenERP() throws URISyntaxException, FeedException {
-        String feedUrl = "http://host/patients/notifications";
-        String feedname = "customer.feed.generator.uri";
-        
-        when(atomFeedProperties.getFeedUri(feedname)).thenReturn(feedUrl);
+        String feedUrl = "http://HOST/patients/notifications";
         when(allFeedsMock.getFor(notificationsUri)).thenReturn(last);
         when(allFeedsMock.getFor(recentFeedUri)).thenReturn(last);
         when(allFeedsMock.getFor(secondFeedUri)).thenReturn(second);
@@ -198,7 +193,7 @@ public class OpenERPCustomerFeedIT {
         AtomFeedClient atomFeedClient = new AtomFeedClient(allFeedsMock, allMarkersJdbc, allFailedEvents, FeedClientFactory.atomFeedProperties(atomFeedProperties),
                 transactionSupport, new URI(feedUrl), openERPCustomerServiceEventWorker);
         
-        when(clientHelper.getAtomFeedClient(feedname, Jobs.CUSTOMER_FEED)).
+        when(clientHelper.getAtomFeedClient(Jobs.CUSTOMER_FEED)).
                 thenReturn(atomFeedClient);
         
         SimpleFeedJob openMRSFeedJob = new SimpleFeedJob(clientHelper);
