@@ -7,7 +7,8 @@ public enum Jobs {
     REFERENCE_DATA_FEED("referencedata.feed.generator.uri"),
     OPENELIS_SALEORDER_FEED("openelis.saleorder.feed.generator.uri"),
     DRUG_FEED("drug.feed.generator.uri"),
-    LAB_FEED("lab.feed.generator.uri");
+    LAB_FEED("lab.feed.generator.uri"),
+    SELLABLE_FEED("sellable.feed.generator.uri");
 
     private final String feedUri;
 

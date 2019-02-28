@@ -1,5 +1,7 @@
 package org.bahmni.feed.openerp.client;
 
+import org.apache.log4j.Logger;
+import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.Jobs;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
@@ -21,21 +23,29 @@ public class FeedClientFactory {
 
 
     private WorkerFactory workerFactory;
+    private static Logger logger = Logger.getLogger(FeedClientFactory.class);
 
     public FeedClientFactory(WorkerFactory workerFactory) {
         this.workerFactory = workerFactory;
     }
 
     public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager,
-                                        String feedName, OpenERPClient openERPClient, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName)  {
+                                        OpenERPClient openERPClient, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName)  {
         String feedUri = openERPAtomFeedProperties.getFeedUriForJob(jobName);
+        if (org.apache.commons.lang.StringUtils.isBlank(feedUri)) {
+            String message = String.format("No feed-uri defined for Job [%s][%s]", jobName, jobName.getFeedUri());
+            logger.warn(message);
+            throw new FeedException(message);
+        }
+
+
         try {
             String urlPrefix = getURLPrefix(jobName,openERPAtomFeedProperties);
             EventWorker eventWorker = workerFactory.getWorker(jobName, feedUri, openERPClient,
                     urlPrefix);
             return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(openERPAtomFeedProperties), transactionManager, new URI(feedUri), eventWorker) ;
         } catch (URISyntaxException e) {
-            throw new RuntimeException("error for uri:" + feedUri);
+            throw new RuntimeException("error for uri:" + feedUri, e);
         }
     }
 
@@ -45,7 +55,7 @@ public class FeedClientFactory {
             URL endpointUrl = new URL(endpointURI);
             return String.format("%s://%s", endpointUrl.getProtocol(), endpointUrl.getAuthority());
         } catch (MalformedURLException e) {
-            throw new RuntimeException("Is not a valid URI - " + endpointURI);
+            throw new RuntimeException("Is not a valid URI - " + endpointURI, e);
         }
     }
 
@@ -57,6 +67,7 @@ public class FeedClientFactory {
             case LAB_FEED: return atomFeedProperties.getAuthenticationURI();
             case REFERENCE_DATA_FEED: return atomFeedProperties.getReferenceDataEndpointURI();
             case OPENELIS_SALEORDER_FEED: return atomFeedProperties.getOpenElisURI();
+            case SELLABLE_FEED: return atomFeedProperties.getAuthenticationURI();
             default: return null;
         }
     }

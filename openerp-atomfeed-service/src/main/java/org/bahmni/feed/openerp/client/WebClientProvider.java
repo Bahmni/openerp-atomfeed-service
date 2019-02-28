@@ -46,6 +46,7 @@ public class WebClientProvider {
             case SALEORDER_FEED: return getOpenMRSWebClient() ;
             case REFERENCE_DATA_FEED: return referenceDataWebClient() ;
             case OPENELIS_SALEORDER_FEED: return openElisWebClient();
+            case SELLABLE_FEED: return getOpenMRSWebClient();
             default: return null;
         }
     }

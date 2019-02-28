@@ -26,16 +26,14 @@ import java.util.List;
 // TODO : Mujir - this doesnt have any authentication right now. Change nagios when we add basic auth.
 public class TaskMonitorController {
     private OpenERPService openERPService;
-    private OpenERPAtomFeedProperties properties;
     private SchedulerFactoryBean schedulerFactoryBean;
 
     private static Logger logger = Logger.getLogger(TaskMonitorController.class);
 
     @Autowired
-    public TaskMonitorController(SchedulerFactoryBean schedulerFactoryBean, OpenERPService openERPService, OpenERPAtomFeedProperties properties) {
+    public TaskMonitorController(SchedulerFactoryBean schedulerFactoryBean, OpenERPService openERPService) {
         this.schedulerFactoryBean = schedulerFactoryBean;
         this.openERPService = openERPService;
-        this.properties = properties;
     }
 
     @RequestMapping(value = "/tasks", method = RequestMethod.GET)
@@ -64,16 +62,4 @@ public class TaskMonitorController {
         return openERPService.findCustomers(patientId);
     }
 
-
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
-    @ResponseBody
-    public HashMap<String, String> info() {
-        HashMap<String, String> info = properties.getInfo();
-        System.out.println("**************** CONTROLLER  ************************ ");
-        for (String s : info.keySet()) {
-            System.out.println(String.format("%s=%s", s, info.get(s)));
-        }
-        System.out.println("**************** CONTROLLER  ************************ ");
-        return info;
-    }
 }
