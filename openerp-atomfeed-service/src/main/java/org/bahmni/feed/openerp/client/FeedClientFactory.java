@@ -28,10 +28,10 @@ public class FeedClientFactory {
 
     public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager,
                                         String feedName, OpenERPClient openERPClient, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName)  {
-        String feedUri = openERPAtomFeedProperties.getFeedUri(feedName);
+        String feedUri = openERPAtomFeedProperties.getFeedUriForJob(jobName);
         try {
             String urlPrefix = getURLPrefix(jobName,openERPAtomFeedProperties);
-            EventWorker eventWorker = workerFactory.getWorker(jobName, openERPAtomFeedProperties.getFeedUri(feedName), openERPClient,
+            EventWorker eventWorker = workerFactory.getWorker(jobName, feedUri, openERPClient,
                     urlPrefix);
             return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(openERPAtomFeedProperties), transactionManager, new URI(feedUri), eventWorker) ;
         } catch (URISyntaxException e) {
