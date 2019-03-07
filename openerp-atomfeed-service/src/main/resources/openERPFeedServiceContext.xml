@@ -51,7 +51,9 @@
     <import resource="classpath:jobs-context.xml"/>
 
 
-    <context:component-scan base-package="org.bahmni.feed.openerp"/>
-    <context:component-scan base-package="org.ict4h.atomfeed.spring.resource"/>
+    <context:component-scan base-package="org.bahmni.feed.openerp">
+        <context:exclude-filter type="regex" expression="org\.bahmni\.feed\.openerp\.controller\..*"/>
+    </context:component-scan>
+
 
 </beans>
