@@ -25,13 +25,13 @@ public class OpenERPLabFeedJobTest {
     public void testProcessFeed() throws FeedException {
         labFeedJob = new OpenERPLabFeedJob(openMRSFeedJob);
         labFeedJob.processFeed();
-        verify(openMRSFeedJob).processFeed("lab.feed.generator.uri", LAB_FEED);
+        verify(openMRSFeedJob).processFeed(LAB_FEED);
     }
 
     @Test
     public void testProcessFailedEvents() throws FeedException {
         labFeedJob = new OpenERPLabFeedJob(openMRSFeedJob);
         labFeedJob.processFailedEvents();
-        verify(openMRSFeedJob).processFailedEvents("lab.feed.generator.uri", LAB_FEED);
+        verify(openMRSFeedJob).processFailedEvents(LAB_FEED);
     }
 }
