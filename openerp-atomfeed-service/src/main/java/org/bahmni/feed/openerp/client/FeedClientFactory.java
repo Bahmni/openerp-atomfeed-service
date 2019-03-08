@@ -27,7 +27,7 @@ public class FeedClientFactory {
     }
 
     public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager,
-                                        String feedName, OpenERPClient openERPClient, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName)  {
+                                        OpenERPClient openERPClient, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName)  {
         String feedUri = openERPAtomFeedProperties.getFeedUriForJob(jobName);
         try {
             String urlPrefix = getURLPrefix(jobName,openERPAtomFeedProperties);

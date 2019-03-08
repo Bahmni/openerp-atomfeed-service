@@ -29,20 +29,20 @@ public class AtomFeedClientHelper {
         this.webClientProvider = new WebClientProvider(atomFeedProperties);
     }
     
-    public FeedClient getAtomFeedClient(String feedName, Jobs jobName) throws FeedException {
+    public FeedClient getAtomFeedClient(Jobs jobName) throws FeedException {
         if(this.feedClientFactory == null){
             WorkerFactory workerFactory = new WorkerFactory(webClientProvider);
             feedClientFactory = new FeedClientFactory(workerFactory);
         }
-        return getAtomFeedClient(feedName, jobName, feedClientFactory);
+        return getAtomFeedClient(jobName, feedClientFactory);
     }
 
-    FeedClient getAtomFeedClient(String feedName, Jobs jobName, FeedClientFactory feedClientFactory) throws FeedException {
+    FeedClient getAtomFeedClient(Jobs jobName, FeedClientFactory feedClientFactory) throws FeedException {
         ClientCookies cookies = webClientProvider.getWebClient(jobName).getCookies();
         AllFeeds allFeeds = getAllFeeds(atomFeedProperties, cookies);
         AllMarkers allMarkers = new AllMarkersJdbcImpl(transactionManager);
         AllFailedEvents allFailedEvents = new AllFailedEventsJdbcImpl(transactionManager);
-        return feedClientFactory.getFeedClient(atomFeedProperties, transactionManager, feedName, openERPClient, allFeeds, allMarkers, allFailedEvents, jobName);
+        return feedClientFactory.getFeedClient(atomFeedProperties, transactionManager, openERPClient, allFeeds, allMarkers, allFailedEvents, jobName);
     }
 
     static AllFeeds getAllFeeds(OpenERPAtomFeedProperties atomFeedProperties, ClientCookies cookies) {

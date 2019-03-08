@@ -5,7 +5,6 @@ import com.sun.syndication.feed.atom.Entry;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
-import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob;
@@ -49,7 +48,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -198,7 +196,7 @@ public class OpenERPCustomerFeedIT {
         AtomFeedClient atomFeedClient = new AtomFeedClient(allFeedsMock, allMarkersJdbc, allFailedEvents, FeedClientFactory.atomFeedProperties(atomFeedProperties),
                 transactionSupport, new URI(feedUrl), openERPCustomerServiceEventWorker);
         
-        when(clientHelper.getAtomFeedClient(feedname, Jobs.CUSTOMER_FEED)).
+        when(clientHelper.getAtomFeedClient(Jobs.CUSTOMER_FEED)).
                 thenReturn(atomFeedClient);
         
         SimpleFeedJob openMRSFeedJob = new SimpleFeedJob(clientHelper);
