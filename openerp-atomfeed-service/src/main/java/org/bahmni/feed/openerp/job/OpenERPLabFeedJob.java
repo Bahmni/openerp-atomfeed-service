@@ -6,8 +6,6 @@ public class OpenERPLabFeedJob {
 
     private SimpleFeedJob openMRSFeedJob;
 
-    private String feedName = "lab.feed.generator.uri";
-
     public OpenERPLabFeedJob() {
     }
 
@@ -16,11 +14,11 @@ public class OpenERPLabFeedJob {
     }
 
     public void processFeed()  {
-        openMRSFeedJob.processFeed(feedName, Jobs.LAB_FEED);
+        openMRSFeedJob.processFeed(Jobs.LAB_FEED);
     }
 
     public void processFailedEvents()  {
-        openMRSFeedJob.processFailedEvents(feedName, Jobs.LAB_FEED);
+        openMRSFeedJob.processFailedEvents(Jobs.LAB_FEED);
     }
 
 }

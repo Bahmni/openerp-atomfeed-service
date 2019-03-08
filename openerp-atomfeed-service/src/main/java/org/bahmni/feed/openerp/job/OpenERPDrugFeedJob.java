@@ -6,8 +6,6 @@ public class OpenERPDrugFeedJob {
 
     private SimpleFeedJob openMRSFeedJob;
 
-    private String feedName = "drug.feed.generator.uri";
-
     public OpenERPDrugFeedJob() {
     }
 
@@ -16,11 +14,11 @@ public class OpenERPDrugFeedJob {
     }
 
     public void processFeed()  {
-        openMRSFeedJob.processFeed(feedName, Jobs.DRUG_FEED);
+        openMRSFeedJob.processFeed(Jobs.DRUG_FEED);
     }
 
     public void processFailedEvents()  {
-        openMRSFeedJob.processFailedEvents(feedName, Jobs.DRUG_FEED);
+        openMRSFeedJob.processFailedEvents(Jobs.DRUG_FEED);
     }
 
 }
