@@ -25,13 +25,13 @@ public class OpenERPSellableFeedJobTest {
     public void testProcessFeed() throws FeedException {
         sellableFeedJob = new OpenERPSellableFeedJob(openMRSFeedJob);
         sellableFeedJob.processFeed();
-        verify(openMRSFeedJob).processFeed("sellable.feed.generator.uri", SELLABLE_FEED);
+        verify(openMRSFeedJob).processFeed(SELLABLE_FEED);
     }
 
     @Test
     public void testProcessFailedEvents() throws FeedException {
         sellableFeedJob = new OpenERPSellableFeedJob(openMRSFeedJob);
         sellableFeedJob.processFailedEvents();
-        verify(openMRSFeedJob).processFailedEvents("sellable.feed.generator.uri", SELLABLE_FEED);
+        verify(openMRSFeedJob).processFailedEvents(SELLABLE_FEED);
     }
 }
