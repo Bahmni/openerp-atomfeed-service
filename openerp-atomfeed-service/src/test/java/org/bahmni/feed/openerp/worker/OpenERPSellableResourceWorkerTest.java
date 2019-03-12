@@ -37,7 +37,7 @@ public class OpenERPSellableResourceWorkerTest {
     public void setUp() {
         resourceJson = "{\n" +
                 "    \"name\": \"A sellable\",\n" +
-                "    \"uuid\": \"3ea122c2-d39a-4376-a502-0b6d0e7d33ed\",\n" +
+                "    \"id\": \"3ea122c2-d39a-4376-a502-0b6d0e7d33ed\",\n" +
                 "    \"isActive\": \"true\"\n" +
                 "}";
         MockitoAnnotations.initMocks(this);

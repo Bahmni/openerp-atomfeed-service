@@ -21,6 +21,7 @@ public class OpenMRSResource {
         return uuid;
     }
 
+    @JsonProperty("id")
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
