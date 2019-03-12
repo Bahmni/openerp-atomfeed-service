@@ -20,7 +20,7 @@ import java.util.List;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class OpenERPSellableServiceWorkerTest {
+public class OpenERPSellableWorkerTest {
 
     @Mock
     private OpenERPAtomFeedProperties atomFeedProperties;
@@ -31,15 +31,17 @@ public class OpenERPSellableServiceWorkerTest {
 
     private String feedUri = "http://feeduri";
     private String resourceJson;
-    private OpenERPSellableServiceWorker worker;
+    private OpenERPSellableWorker worker;
 
     @Before
     public void setUp() {
         resourceJson = "{\n" +
-                "    \"name\": \"A sellable\"\n" +
+                "    \"name\": \"A sellable\",\n" +
+                "    \"uuid\": \"3ea122c2-d39a-4376-a502-0b6d0e7d33ed\",\n" +
+                "    \"isActive\": \"true\"\n" +
                 "}";
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPSellableServiceWorker(feedUri, openERPClient, webClient, "http://prefix/");
+        worker = new OpenERPSellableWorker(feedUri, openERPClient, webClient, "http://prefix/");
     }
 
     @Test
@@ -55,5 +57,7 @@ public class OpenERPSellableServiceWorkerTest {
         List<Parameter> actualParameters = openERPRequest.getParameters();
 
         Assert.assertTrue(actualParameters.contains(new Parameter("name", "A sellable")));
+        Assert.assertTrue(actualParameters.contains(new Parameter("uuid", "3ea122c2-d39a-4376-a502-0b6d0e7d33ed")));
+        Assert.assertTrue(actualParameters.contains(new Parameter("is_active", "true")));
     }
 }

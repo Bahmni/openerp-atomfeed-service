@@ -1,21 +1,28 @@
 package org.bahmni.feed.openerp.domain;
 
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Date;
+import java.util.Map;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSResource {
 
-    private String id;
+    private String uuid;
     private Date dateCreated;
     private Date lastUpdated;
     private String name;
-    private Boolean isActive;
+    private Boolean active;
 
-    public String getId() {
-        return id;
+    private Map<String, String> properties;
+
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public Date getDateCreated() {
@@ -42,11 +49,20 @@ public class OpenMRSResource {
         this.name = name;
     }
 
-    public Boolean getActive() {
-        return isActive;
+    public Boolean isActive() {
+        return active;
     }
 
+    @JsonProperty("isActive")
     public void setActive(Boolean active) {
-        isActive = active;
+        this.active = active;
+    }
+
+    public Map<String, String> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<String, String> properties) {
+        this.properties = properties;
     }
 }
