@@ -20,7 +20,7 @@ import java.util.List;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class OpenERPSellableWorkerTest {
+public class OpenERPSellableResourceWorkerTest {
 
     @Mock
     private OpenERPAtomFeedProperties atomFeedProperties;
@@ -31,7 +31,7 @@ public class OpenERPSellableWorkerTest {
 
     private String feedUri = "http://feeduri";
     private String resourceJson;
-    private OpenERPSellableWorker worker;
+    private OpenERPSellableResourceWorker worker;
 
     @Before
     public void setUp() {
@@ -41,7 +41,7 @@ public class OpenERPSellableWorkerTest {
                 "    \"isActive\": \"true\"\n" +
                 "}";
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPSellableWorker(feedUri, openERPClient, webClient, "http://prefix/");
+        worker = new OpenERPSellableResourceWorker(feedUri, openERPClient, webClient, "http://prefix/");
     }
 
     @Test

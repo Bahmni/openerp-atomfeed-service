@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenERPSellableWorker implements EventWorker {
+public class OpenERPSellableResourceWorker implements EventWorker {
 
     private OpenERPClient openERPClient;
     private String feedUrl;
@@ -22,7 +22,7 @@ public class OpenERPSellableWorker implements EventWorker {
     private String urlPrefix;
 
 
-    public OpenERPSellableWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPSellableResourceWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPClient = openERPClient;
         this.feedUrl = feedUrl;
         this.openMRSWebClient = openMRSWebClient;
