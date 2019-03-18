@@ -213,8 +213,8 @@
                     <ref bean="jobFilter"/>
                     <ref bean="openerpDrugFeedQuartzJobTrigger" />
                     <ref bean="openerpDrugFeedQuartzFailedJobTrigger" />
-                    <ref bean="openerpSellableFeedQuartzJob"/>
-                    <ref bean="openerpSellableFeedFailedQuartzJob"/>
+                    <ref bean="openerpSellableFeedJobTrigger"/>
+                    <ref bean="openerpSellableFeedFailedJobTrigger"/>
                 </list>
             </constructor-arg>
         </bean>
