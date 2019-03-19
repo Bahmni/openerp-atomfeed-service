@@ -44,6 +44,7 @@ public class WebClientProvider {
             case DRUG_FEED: return getOpenMRSWebClient() ;
             case LAB_FEED: return getOpenMRSWebClient() ;
             case SALEORDER_FEED: return getOpenMRSWebClient() ;
+            case SELLABLE_FEED: return getOpenMRSWebClient();
             case REFERENCE_DATA_FEED: return referenceDataWebClient() ;
             case OPENELIS_SALEORDER_FEED: return openElisWebClient();
             default: return null;

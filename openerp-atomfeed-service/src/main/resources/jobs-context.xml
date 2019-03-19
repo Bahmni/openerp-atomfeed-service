@@ -91,84 +91,110 @@
             <property name="concurrent" value="false"/>
         </bean>
 
+        <bean id="openerpSellableFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="openerpSellableFeedJob"/>
+            <property name="targetMethod" value="processFeed"/>
+            <property name="concurrent" value="false"/>
+        </bean>
+
+        <bean id="openerpSellableFeedFailedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="openerpSellableFeedJob"/>
+            <property name="targetMethod" value="processFailedEvents"/>
+            <property name="concurrent" value="false"/>
+        </bean>
+
 
                 <!-- simple trigger specify repeat interval and delay time -->
         <bean id="customerFeedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="openerpCustomerFeedQuartzJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="openerpCustomerFeedQuartzJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
         <bean id="customerFeedfailedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="openerpCustomerFeedQuartzFailedJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="openerpCustomerFeedQuartzFailedJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
         <bean id="saleOrderFeedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="openerpSaleOrderFeedQuartzJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="openerpSaleOrderFeedQuartzJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
         <bean id="saleOrderFeedFailedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="openerpSaleOrderFeedQuartzFailedJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="openerpSaleOrderFeedQuartzFailedJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
 
         <bean id="openelisSaleOrderFeedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="openelisSaleOrderFeedQuartzJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="openelisSaleOrderFeedQuartzJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
         <bean id="openelisSaleOrderFeedFailedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="openelisSaleOrderFeedQuartzFailedJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="openelisSaleOrderFeedQuartzFailedJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
 
         <bean id="eventRecordsNumberOffsetMarkerTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="eventRecordsNumberOffsetMarkerJob"/>
-        <property name="cronExpression" value="0 0 0 1/1 * ? *" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="eventRecordsNumberOffsetMarkerJob"/>
+            <property name="cronExpression" value="0 0 0 1/1 * ? *" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
 
         <bean id="eventPublisherTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="eventsPublisherJob"/>
-        <property name="cronExpression" value="0/2 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="eventsPublisherJob"/>
+            <property name="cronExpression" value="0/2 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
 
         <bean id="openerpLabFeedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="openerpLabFeedQuartzJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="openerpLabFeedQuartzJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
         <bean id="openerpLabFeedFailedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="openerpLabFeedFailedQuartzJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="openerpLabFeedFailedQuartzJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
 
         <bean id="openerpDrugFeedQuartzJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="openerpDrugFeedQuartzJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="openerpDrugFeedQuartzJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
         <bean id="openerpDrugFeedQuartzFailedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="openerpDrugFeedQuartzFailedJob" />
-        <property name="cronExpression" value="0/30 * * * * ?" />
-        <property name="startDelay" value="${scheduler.initial.delay}" />
+            <property name="jobDetail" ref="openerpDrugFeedQuartzFailedJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
+        </bean>
+
+        <bean id="openerpSellableFeedJobTrigger"
+            class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="openerpSellableFeedQuartzJob"/>
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
+        </bean>
+
+        <bean id="openerpSellableFeedFailedJobTrigger"
+              class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="openerpSellableFeedFailedQuartzJob"/>
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
 
         <bean name="beansFactory" class="org.bahmni.feed.openerp.job.JobFilterFactory" factory-method="create">
@@ -187,6 +213,8 @@
                     <ref bean="jobFilter"/>
                     <ref bean="openerpDrugFeedQuartzJobTrigger" />
                     <ref bean="openerpDrugFeedQuartzFailedJobTrigger" />
+                    <ref bean="openerpSellableFeedJobTrigger"/>
+                    <ref bean="openerpSellableFeedFailedJobTrigger"/>
                 </list>
             </constructor-arg>
         </bean>
@@ -207,6 +235,10 @@
         </bean>
 
         <bean id="openerpLabFeedJob" class="org.bahmni.feed.openerp.job.OpenERPLabFeedJob" scope="prototype">
+            <constructor-arg ref="simpleFeedJob"/>
+        </bean>
+
+        <bean id="openerpSellableFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSellableFeedJob" scope="prototype">
             <constructor-arg ref="simpleFeedJob"/>
         </bean>
 
