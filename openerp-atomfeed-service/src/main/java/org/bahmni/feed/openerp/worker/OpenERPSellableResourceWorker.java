@@ -1,5 +1,6 @@
 package org.bahmni.feed.openerp.worker;
 
+import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.OpenMRSResource;
@@ -16,11 +17,13 @@ import java.util.List;
 
 public class OpenERPSellableResourceWorker implements EventWorker {
 
+    public static final String ERP_EVENT_CATEGORY = "create.radiology.test";
     private OpenERPClient openERPClient;
     private String feedUrl;
     private OpenMRSWebClient openMRSWebClient;
     private String urlPrefix;
 
+    private static Logger logger = Logger.getLogger(OpenERPSellableResourceWorker.class);
 
     public OpenERPSellableResourceWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPClient = openERPClient;
@@ -31,10 +34,12 @@ public class OpenERPSellableResourceWorker implements EventWorker {
 
     @Override
     public void process(Event event) {
+        logger.debug(String.format("Process event [%s] with content: %s", event.getId(), event.getContent()));
         try {
             openERPClient.execute(mapToOpenERPRequest(event));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            logger.error(String.format("Error occurred while trying to process Sellable Event [%s]", event.getId()), e);
+            throw new RuntimeException(String.format("Error occurred while trying to process Sellable Event [%s]", event.getId()), e);
         }
     }
 
@@ -59,9 +64,10 @@ public class OpenERPSellableResourceWorker implements EventWorker {
         List<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", resource.getName()));
         parameters.add(new Parameter("uuid", resource.getUuid()));
-        parameters.add(new Parameter("is_active", Boolean.toString(resource.isActive())));
+        Boolean sellableActive = isSellableActive(resource);
+        parameters.add(new Parameter("is_active", (sellableActive ? "1" : "0"), "boolean"));
 
-        parameters.add(new Parameter("category", "create.radiology.test"));
+        parameters.add(new Parameter("category", ERP_EVENT_CATEGORY));
 
         parameters.add(new Parameter("feed_uri", event.getFeedUri()));
         parameters.add(new Parameter("last_read_entry_id",event.getId()));
@@ -71,5 +77,9 @@ public class OpenERPSellableResourceWorker implements EventWorker {
             parameters.add(new Parameter("is_failed_event","1","boolean"));
         }
         return parameters;
+    }
+
+    private Boolean isSellableActive(OpenMRSResource resource) {
+        return resource.isActive();
     }
 }
