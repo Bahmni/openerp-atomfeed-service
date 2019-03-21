@@ -95,7 +95,7 @@ public class OpenERPSellableResourceWorkerTest {
         List<Parameter> parameters = erpRequestCatcher.getValue().getParameters();
         Assert.assertTrue(parameters.contains(new Parameter("name", "Dressing of Wound")));
         Assert.assertTrue(parameters.contains(new Parameter("uuid", "e48dd85b-fb13-4f3a-ae01-e6fd57eea6fe")));
-        //Assert.assertTrue(parameters.contains(new Parameter("is_active", "0", "boolean")));
+        Assert.assertTrue(parameters.contains(new Parameter("is_active", "0", "boolean")));
     }
 
 }

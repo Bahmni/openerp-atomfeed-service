@@ -80,6 +80,9 @@ public class OpenERPSellableResourceWorker implements EventWorker {
     }
 
     private Boolean isSellableActive(OpenMRSResource resource) {
+        String sellableValueString = resource.getProperties().get("sellable");
+        if (!Boolean.valueOf(sellableValueString))
+            return false;
         return resource.isActive();
     }
 }
