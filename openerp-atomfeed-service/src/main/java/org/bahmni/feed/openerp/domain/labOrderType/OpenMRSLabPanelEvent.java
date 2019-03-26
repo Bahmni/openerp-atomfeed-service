@@ -10,13 +10,14 @@ import java.util.List;
 
 public class OpenMRSLabPanelEvent extends OpenMRSLabOrderTypeEvent<OpenMRSLabPanel> {
     public static final String LAB_PANEL_EVENT_NAME = "panel";
+    public static final String SELLABLE = "sellable";
 
     @Override
     protected List<Parameter> buildParameters(Event event, OpenMRSLabPanel openMRSLabOrderTypeEvent) {
         List<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", openMRSLabOrderTypeEvent.getName()));
         parameters.add(new Parameter("uuid", openMRSLabOrderTypeEvent.getUuid()));
-        parameters.add(new Parameter("is_active", openMRSLabOrderTypeEvent.getActive(), "boolean"));
+        parameters.add(new Parameter("is_active", getActive(openMRSLabOrderTypeEvent), "boolean"));
         parameters.add(new Parameter("category", "create.lab.panel"));
         return parameters;
     }
@@ -24,5 +25,12 @@ public class OpenMRSLabPanelEvent extends OpenMRSLabOrderTypeEvent<OpenMRSLabPan
     @Override
     protected OpenMRSLabPanel readLabOrderTypeEvent(String openMRSLabOrderTypeEventJson) throws IOException {
         return ObjectMapperRepository.objectMapper.readValue(openMRSLabOrderTypeEventJson, OpenMRSLabPanel.class);
+    }
+
+    private String getActive(OpenMRSLabPanel resource) {
+        String sellableValueString = resource.getProperties().get(SELLABLE);
+        if (sellableValueString != null && !Boolean.valueOf(sellableValueString))
+            return "0";
+        return resource.getActive();
     }
 }

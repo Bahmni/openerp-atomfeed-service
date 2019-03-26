@@ -2,11 +2,15 @@ package org.bahmni.feed.openerp.domain.labOrderType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Map;
+
 public abstract class OpenMRSLabOrderType {
 
     private String uuid;
     private String name;
     private boolean active;
+
+    private Map<String, String> properties;
 
     @JsonProperty("uuid")
     public String getUuid() {
@@ -33,5 +37,13 @@ public abstract class OpenMRSLabOrderType {
     @JsonProperty("isActive")
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Map<String, String> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<String, String> properties) {
+        this.properties = properties;
     }
 }

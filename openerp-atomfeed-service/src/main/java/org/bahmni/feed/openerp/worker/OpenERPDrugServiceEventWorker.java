@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.domain.OpenMRSDrug;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
+import org.bahmni.feed.openerp.domain.OpenMRSResource;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
@@ -23,6 +24,8 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
     private String feedUrl;
     private OpenMRSWebClient webClient;
     private String urlPrefix;
+
+    public static final String SELLABLE = "sellable";
 
 
     public OpenERPDrugServiceEventWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
@@ -69,11 +72,21 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
             parameters.add(new Parameter("is_failed_event","1","boolean"));
         }
 
+        Boolean sellableActive = isSellableActive(drug);
+        parameters.add(new Parameter("is_active", (sellableActive ? "1" : "0"), "boolean"));
+
         return parameters;
     }
 
     @Override
     public void cleanUp(Event event) {
 
+    }
+
+    private Boolean isSellableActive(OpenMRSDrug resource) {
+        String sellableValueString = resource.getProperties().get(SELLABLE);
+        if (sellableValueString != null && !Boolean.valueOf(sellableValueString))
+            return false;
+        return resource.isActive();
     }
 }

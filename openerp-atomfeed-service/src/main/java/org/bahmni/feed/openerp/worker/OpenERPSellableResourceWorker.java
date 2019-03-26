@@ -18,6 +18,7 @@ import java.util.List;
 public class OpenERPSellableResourceWorker implements EventWorker {
 
     public static final String ERP_EVENT_CATEGORY = "create.radiology.test";
+    public static final String SELLABLE = "sellable";
     private OpenERPClient openERPClient;
     private String feedUrl;
     private OpenMRSWebClient openMRSWebClient;
@@ -80,7 +81,7 @@ public class OpenERPSellableResourceWorker implements EventWorker {
     }
 
     private Boolean isSellableActive(OpenMRSResource resource) {
-        String sellableValueString = resource.getProperties().get("sellable");
+        String sellableValueString = resource.getProperties().get(SELLABLE);
         if (!Boolean.valueOf(sellableValueString))
             return false;
         return resource.isActive();

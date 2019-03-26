@@ -1,5 +1,6 @@
 package org.bahmni.feed.openerp.domain.labOrderType;
 
+import org.bahmni.feed.openerp.domain.OpenMRSResource;
 import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabOrderType;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
