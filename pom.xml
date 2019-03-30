@@ -23,7 +23,7 @@
         <atomfeed.version>1.9.4</atomfeed.version>
         <!--<db.server>10.4.33.112</db.server>-->
         <db.server>localhost</db.server>
-        <db.name>openerp</db.name>
+        <db.name>odoo</db.name>
         <db.port>5432</db.port>
         <db.user>postgres</db.user>
         <db.password>postgres</db.password>
