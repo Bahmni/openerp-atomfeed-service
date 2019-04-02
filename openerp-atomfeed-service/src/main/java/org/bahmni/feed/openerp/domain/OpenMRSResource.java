@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -60,6 +61,9 @@ public class OpenMRSResource {
     }
 
     public Map<String, String> getProperties() {
+        if (properties == null) {
+            return new HashMap<>();
+        }
         return properties;
     }
 

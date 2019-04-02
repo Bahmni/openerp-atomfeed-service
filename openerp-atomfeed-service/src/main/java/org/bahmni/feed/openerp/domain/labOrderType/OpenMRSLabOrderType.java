@@ -2,6 +2,7 @@ package org.bahmni.feed.openerp.domain.labOrderType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class OpenMRSLabOrderType {
@@ -40,6 +41,9 @@ public abstract class OpenMRSLabOrderType {
     }
 
     public Map<String, String> getProperties() {
+        if (properties == null) {
+            return new HashMap<>();
+        }
         return properties;
     }
 
