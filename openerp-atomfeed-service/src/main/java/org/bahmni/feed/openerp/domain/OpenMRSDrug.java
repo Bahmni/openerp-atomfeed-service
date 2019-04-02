@@ -2,8 +2,6 @@ package org.bahmni.feed.openerp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.Map;
-
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSDrug {
@@ -17,9 +15,6 @@ public class OpenMRSDrug {
     private String dosageForm;
     private String maximumDose;
     private String minimumDose;
-    private boolean isActive;
-
-    private Map<String, String> properties;
 
     public String getShortName() {
         return shortName;
@@ -93,19 +88,4 @@ public class OpenMRSDrug {
         this.name = name;
     }
 
-    public Map<String, String> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Map<String, String> properties) {
-        this.properties = properties;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 }
