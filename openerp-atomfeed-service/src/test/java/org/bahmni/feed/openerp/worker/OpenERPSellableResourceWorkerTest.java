@@ -44,7 +44,10 @@ public class OpenERPSellableResourceWorkerTest {
                       "  \"lastUpdated\": \"2015-09-07T14:18:15.000+0530\",\n" +
                       "  \"name\": \"Dressing of Wound\",\n" +
                       "  \"id\": \"e48dd85b-fb13-4f3a-ae01-e6fd57eea6fe\",\n" +
-                      "  \"properties\": { \"sellable\": \"false\" } " +
+                      "  \"properties\": { " +
+                                "\"sellable\": \"false\"," +
+                                "\"category\": \"create.radiology.test\" " +
+                            "} " +
                       "}";
     String sampleProcedureJson
             = "{\n" +
@@ -53,7 +56,10 @@ public class OpenERPSellableResourceWorkerTest {
                       "  \"lastUpdated\": \"2015-09-07T14:18:15.000+0530\",\n" +
                       "  \"name\": \"Dressing of Wound\",\n" +
                       "  \"id\": \"e48dd85b-fb13-4f3a-ae01-e6fd57eea6fe\",\n" +
-                      "  \"properties\": { \"sellable\": \"true\" } " +
+                      "  \"properties\": { " +
+                                "\"sellable\": \"true\"," +
+                                "\"category\": \"create.radiology.test\" " +
+                            "} " +
                       "}";
 
     @Before
@@ -75,7 +81,7 @@ public class OpenERPSellableResourceWorkerTest {
 
         Assert.assertTrue(parameters.contains(new Parameter("last_read_entry_id", "1")));
         //TODO: need to change this when we update the ERP module
-        Assert.assertTrue(parameters.contains(new Parameter("category", ERP_EVENT_CATEGORY)));
+        Assert.assertTrue(parameters.contains(new Parameter("category", "create.radiology.test")));
         Assert.assertTrue(parameters.contains(new Parameter("feed_uri_for_last_read_entry", feedUri)));
         Assert.assertFalse(parameters.contains(new Parameter("is_failed_event", "1", "boolean")));
         Assert.assertTrue(parameters.contains(new Parameter("name", "Dressing of Wound")));
