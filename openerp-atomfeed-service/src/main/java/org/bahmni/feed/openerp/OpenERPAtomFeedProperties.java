@@ -38,7 +38,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     private String customFeedUri;
 
 
-    @Value("${openelis.saleorder.feed.generator.uri}")
+    @Value("${openelis.saleorder.feed.generator.uri:}")
     private String elisSaleOrderFeedUri;
 
     @Value("${drug.feed.generator.uri}")
@@ -132,21 +132,21 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         return openmrsAuthUri;
     }
 
-    @Value("${openelis.uri}")
+    @Value("${openelis.uri:}")
     private String openElisUri;
 
     public String getOpenElisURI() {
         return openElisUri;
     }
 
-    @Value("${openelis.user}")
+    @Value("${openelis.user:}")
     private String openElisUser;
 
     public String getOpenElisUser() {
         return openElisUser;
     }
 
-    @Value("${openelis.password}")
+    @Value("${openelis.password:}")
     private String openElisPwd;
 
     public String getOpenElisPassword() {
