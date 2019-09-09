@@ -49,15 +49,19 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
 
 
     @Value("${saleorder.feed.generator.uri}")
-    private String saleOrderFeed;
+    private String saleOrderFeedUri;
+
+    @Value("${sellable.feed.generator.uri}")
+    private String sellableFeedUri;
 
     public String getFeedUriForJob(Jobs feedJob) {
         switch (feedJob){
             case CUSTOMER_FEED: return customFeedUri;
-            case SALEORDER_FEED: return saleOrderFeed;
+            case SALEORDER_FEED: return saleOrderFeedUri;
             case OPENELIS_SALEORDER_FEED: return elisSaleOrderFeedUri;
             case DRUG_FEED: return drugFeedUri;
             case LAB_FEED: return labFeedUri;
+            case SELLABLE_FEED: return sellableFeedUri;
         }
         throw new RuntimeException("Can not identify feed URI for requested Job.");
     }
@@ -196,7 +200,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         values.put("openelis.saleorder.feed.generator.uri",elisSaleOrderFeedUri );
         values.put("drug.feed.generator.uri",drugFeedUri );
         values.put("lab.feed.generator.uri",labFeedUri );
-        values.put("saleorder.feed.generator.uri",saleOrderFeed );
+        values.put("saleorder.feed.generator.uri", saleOrderFeedUri);
         values.put("openerp.host",openErpHost );
         values.put("openerp.port",openErpPort );
         values.put("openerp.database",openErpDatabase );
@@ -209,6 +213,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         values.put("openelis.user",openElisUser );
         values.put("openmrs.user",openmrsUser );
         values.put("referencedata.endpoint",refDataEndPt);
+        values.put("sellable.feed.generator.uri", sellableFeedUri);
         return values;
     }
 

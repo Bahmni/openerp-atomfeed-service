@@ -9,23 +9,16 @@ import java.util.Collection;
 
 public class JobFilterFactory extends ArrayList {
 
-	public JobFilterFactory(Collection allBeans) {
-		super(allBeans);
+	public JobFilterFactory(Collection triggers) {
+		super(triggers);
 	}
 
-	public static JobFilterFactory create(Collection<Object> availableBeans) throws IOException, ParseException {
-		JobFilter jobFilter = null;
+	public static JobFilterFactory create(JobFilter jobFilter, Collection<Object> availableBeans) throws IOException, ParseException {
 		Collection<CronTriggerImpl> cronTriggers = new ArrayList<>();
 
 		for (Object availableBean : availableBeans) {
-			if (availableBean instanceof JobFilter) {
-				jobFilter = (JobFilter) availableBean;
-			} else {
-				cronTriggers.add((CronTriggerImpl) availableBean);
-			}
+			cronTriggers.add((CronTriggerImpl) availableBean);
 		}
-		availableBeans.remove(jobFilter);
-
 		return new JobFilterFactory(jobFilter.filterBeans(cronTriggers));
 	}
 
