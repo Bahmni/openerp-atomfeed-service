@@ -24,6 +24,25 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="BAHMNI-ERP-CONNECT:201907031814" context="0.92" author="Angshu">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="event_records"/></not>
+        </preConditions>
+        <createTable tableName="event_records" schemaName="public">
+            <column name="id" type="serial">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="uuid" type="varchar(40)"/>
+            <column name="title" type="varchar(255)"/>
+            <column name="timestamp" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP"/>
+            <column name="uri" type="varchar(255)"/>
+            <column name="object" type="varchar(1000)"/>
+            <column name="category" type="varchar(255)"/>
+            <column name="date_created" type="TIMESTAMP" defaultValueDate="CURRENT_TIMESTAMP"/>
+            <column name="tags" type="varchar(255)"></column>
+        </createTable>
+    </changeSet>
+
     <changeSet context="setup" author="ict4h" id="100">
         <preConditions onFail="MARK_RAN">
             <not><tableExists tableName="failed_events"/></not>
