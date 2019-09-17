@@ -17,7 +17,9 @@ import java.util.List;
 
 public class OpenERPSellableResourceWorker implements EventWorker {
 
-    public static final String ERP_EVENT_CATEGORY = "create.radiology.test";
+    public static final String ERP_EVENT_CATEGORY = "create.service.sellable";
+    public static final String SELLABLE = "sellable";
+    public static final String PRODUCT_CATEGORY = "product_category";
     private OpenERPClient openERPClient;
     private String feedUrl;
     private OpenMRSWebClient openMRSWebClient;
@@ -36,11 +38,23 @@ public class OpenERPSellableResourceWorker implements EventWorker {
     public void process(Event event) {
         logger.debug(String.format("Process event [%s] with content: %s", event.getId(), event.getContent()));
         try {
-            openERPClient.execute(mapToOpenERPRequest(event));
+            OpenMRSResource resource = getOpenMRSResource(event);
+            if (!isSellableResource(resource)) {
+                logger.info(String.format("Resource is not a sellable resource. Ignoring. Event [%s]",event.getId()));
+                return;
+            }
+            openERPClient.execute(mapToOpenERPRequest(event, resource));
         } catch (Exception e) {
             logger.error(String.format("Error occurred while trying to process Sellable Event [%s]", event.getId()), e);
             throw new RuntimeException(String.format("Error occurred while trying to process Sellable Event [%s]", event.getId()), e);
         }
+    }
+
+    private boolean isSellableResource(OpenMRSResource resource) {
+        if (resource.getProperties() != null) {
+            return resource.getProperties().containsKey(SELLABLE);
+        }
+        return false;
     }
 
     @Override
@@ -48,10 +62,8 @@ public class OpenERPSellableResourceWorker implements EventWorker {
 
     }
 
-    private OpenERPRequest mapToOpenERPRequest(Event event) throws IOException {
-        OpenMRSResource resource = getOpenMRSResource(event);
+    private OpenERPRequest mapToOpenERPRequest(Event event, OpenMRSResource resource) throws IOException {
         List<Parameter> parameters = buildParameters(event, resource);
-
         return new OpenERPRequest("atom.event.worker", "process_event", parameters);
     }
 
@@ -76,10 +88,34 @@ public class OpenERPSellableResourceWorker implements EventWorker {
         if (event.getFeedUri() == null) {
             parameters.add(new Parameter("is_failed_event","1","boolean"));
         }
+
+        Parameter categoryParam = getProductCategoryParameter(resource);
+        if (categoryParam != null) {
+            parameters.add(categoryParam);
+        }
         return parameters;
     }
 
     private Boolean isSellableActive(OpenMRSResource resource) {
-        return resource.isActive();
+        if (!resource.isActive()) {
+            return false;
+        }
+        if (resource.getProperties() != null) {
+            String sellable = resource.getProperties().get(SELLABLE);
+            if ((sellable != null) && !"".equals(sellable)) {
+                return Boolean.valueOf(sellable);
+            }
+        }
+        return true;
+    }
+
+    private Parameter getProductCategoryParameter(OpenMRSResource resource) {
+        if (resource.getProperties() != null) {
+            String product_category = resource.getProperties().get(PRODUCT_CATEGORY);
+            if ((product_category != null) && !"".equals(product_category)) {
+                return new Parameter(PRODUCT_CATEGORY, product_category);
+            }
+        }
+        return null;
     }
 }
