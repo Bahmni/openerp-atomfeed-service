@@ -17,11 +17,11 @@ import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
-import static org.bahmni.feed.openerp.worker.OpenERPSellableResourceWorker.ERP_EVENT_CATEGORY;
+import static org.bahmni.feed.openerp.worker.OpenERPSaleableResourceWorker.ERP_EVENT_CATEGORY;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class OpenERPSellableResourceWorkerTest {
+public class OpenERPSaleableResourceWorkerTest {
 
     @Mock
     private OpenERPAtomFeedProperties atomFeedProperties;
@@ -30,21 +30,21 @@ public class OpenERPSellableResourceWorkerTest {
     @Mock
     private OpenMRSWebClient webClient;
 
-    private OpenERPSellableResourceWorker worker;
+    private OpenERPSaleableResourceWorker worker;
 
     private String eventContent = "openmrs/ws/rest/v1/reference-data/resources/e48dd85b-fb13-4f3a-ae01-e6fd57eea6fe";
     private String eventUrl = "https://mybahmni/" + eventContent;
-    private String feedUri = "https://mybahmni/openmrs/ws/atomfeed/sellable/recent";
+    private String feedUri = "https://mybahmni/openmrs/ws/atomfeed/saleable/recent";
 
 
-    String sampleProcedureJsonWithSellableAsFalse
+    String sampleProcedureJsonWithSaleableAsFalse
             = "{\n" +
                       "  \"isActive\": true,\n" +
                       "  \"dateCreated\": \"2015-09-07T12:14:24.000+0530\",\n" +
                       "  \"lastUpdated\": \"2015-09-07T14:18:15.000+0530\",\n" +
                       "  \"name\": \"Dressing of Wound\",\n" +
                       "  \"id\": \"e48dd85b-fb13-4f3a-ae01-e6fd57eea6fe\",\n" +
-                      "  \"properties\": { \"sellable\": \"false\" } " +
+                      "  \"properties\": { \"saleable\": \"false\" } " +
                       "}";
     String sampleProcedureJson
             = "{\n" +
@@ -53,18 +53,18 @@ public class OpenERPSellableResourceWorkerTest {
                       "  \"lastUpdated\": \"2015-09-07T14:18:15.000+0530\",\n" +
                       "  \"name\": \"Dressing of Wound\",\n" +
                       "  \"id\": \"e48dd85b-fb13-4f3a-ae01-e6fd57eea6fe\",\n" +
-                      "  \"properties\": { \"sellable\": \"true\" } " +
+                      "  \"properties\": { \"saleable\": \"true\" } " +
                       "}";
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPSellableResourceWorker(feedUri, openERPClient, webClient, "https://mybahmni/");
+        worker = new OpenERPSaleableResourceWorker(feedUri, openERPClient, webClient, "https://mybahmni/");
         when(webClient.get(URI.create(eventUrl))).thenReturn(sampleProcedureJson);
     }
 
     @Test
-    public void shouldProcessSellableTypeEvent() throws Exception {
+    public void shouldProcessSaleableTypeEvent() throws Exception {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
@@ -85,8 +85,8 @@ public class OpenERPSellableResourceWorkerTest {
 
 
     @Test
-    public void shouldUpdateAsInactiveWhenNotSellableEvenWhenMRSResourceIsActive() throws Exception {
-        when(webClient.get(URI.create(eventUrl))).thenReturn(sampleProcedureJsonWithSellableAsFalse);
+    public void shouldUpdateAsInactiveWhenNotSaleableEvenWhenMRSResourceIsActive() throws Exception {
+        when(webClient.get(URI.create(eventUrl))).thenReturn(sampleProcedureJsonWithSaleableAsFalse);
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);

@@ -15,19 +15,19 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OpenERPSellableResourceWorker implements EventWorker {
+public class OpenERPSaleableResourceWorker implements EventWorker {
 
-    public static final String ERP_EVENT_CATEGORY = "create.service.sellable";
-    public static final String SELLABLE = "sellable";
+    public static final String ERP_EVENT_CATEGORY = "create.service.saleable";
+    public static final String SALEABLE_PROPERTY_NAME = "saleable";
     public static final String PRODUCT_CATEGORY = "product_category";
     private OpenERPClient openERPClient;
     private String feedUrl;
     private OpenMRSWebClient openMRSWebClient;
     private String urlPrefix;
 
-    private static Logger logger = Logger.getLogger(OpenERPSellableResourceWorker.class);
+    private static Logger logger = Logger.getLogger(OpenERPSaleableResourceWorker.class);
 
-    public OpenERPSellableResourceWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPSaleableResourceWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPClient = openERPClient;
         this.feedUrl = feedUrl;
         this.openMRSWebClient = openMRSWebClient;
@@ -39,20 +39,20 @@ public class OpenERPSellableResourceWorker implements EventWorker {
         logger.debug(String.format("Process event [%s] with content: %s", event.getId(), event.getContent()));
         try {
             OpenMRSResource resource = getOpenMRSResource(event);
-            if (!isSellableResource(resource)) {
-                logger.info(String.format("Resource is not a sellable resource. Ignoring. Event [%s]",event.getId()));
+            if (!isSaleableResource(resource)) {
+                logger.info(String.format("Resource is not a saleable resource. Ignoring. Event [%s]",event.getId()));
                 return;
             }
             openERPClient.execute(mapToOpenERPRequest(event, resource));
         } catch (Exception e) {
-            logger.error(String.format("Error occurred while trying to process Sellable Event [%s]", event.getId()), e);
-            throw new RuntimeException(String.format("Error occurred while trying to process Sellable Event [%s]", event.getId()), e);
+            logger.error(String.format("Error occurred while trying to process Saleable Event [%s]", event.getId()), e);
+            throw new RuntimeException(String.format("Error occurred while trying to process Saleable Event [%s]", event.getId()), e);
         }
     }
 
-    private boolean isSellableResource(OpenMRSResource resource) {
+    private boolean isSaleableResource(OpenMRSResource resource) {
         if (resource.getProperties() != null) {
-            return resource.getProperties().containsKey(SELLABLE);
+            return resource.getProperties().containsKey(SALEABLE_PROPERTY_NAME);
         }
         return false;
     }
@@ -76,8 +76,8 @@ public class OpenERPSellableResourceWorker implements EventWorker {
         List<Parameter> parameters = new ArrayList<>();
         parameters.add(new Parameter("name", resource.getName()));
         parameters.add(new Parameter("uuid", resource.getUuid()));
-        Boolean sellableActive = isSellableActive(resource);
-        parameters.add(new Parameter("is_active", (sellableActive ? "1" : "0"), "boolean"));
+        Boolean saleActiveStatus = isSaleableActive(resource);
+        parameters.add(new Parameter("is_active", (saleActiveStatus ? "1" : "0"), "boolean"));
 
         parameters.add(new Parameter("category", ERP_EVENT_CATEGORY));
 
@@ -96,14 +96,14 @@ public class OpenERPSellableResourceWorker implements EventWorker {
         return parameters;
     }
 
-    private Boolean isSellableActive(OpenMRSResource resource) {
+    private Boolean isSaleableActive(OpenMRSResource resource) {
         if (!resource.isActive()) {
             return false;
         }
         if (resource.getProperties() != null) {
-            String sellable = resource.getProperties().get(SELLABLE);
-            if ((sellable != null) && !"".equals(sellable)) {
-                return Boolean.valueOf(sellable);
+            String saleable = resource.getProperties().get(SALEABLE_PROPERTY_NAME);
+            if ((saleable != null) && !"".equals(saleable)) {
+                return Boolean.valueOf(saleable);
             }
         }
         return true;
