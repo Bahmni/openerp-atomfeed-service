@@ -6,12 +6,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.bahmni.feed.openerp.job.Jobs.SELLABLE_FEED;
+import static org.bahmni.feed.openerp.job.Jobs.SALEABLE_FEED;
 import static org.mockito.Mockito.verify;
 
-public class OpenERPSellableFeedJobTest {
+public class OpenERPSaleableFeedJobTest {
 
-    OpenERPSellableFeedJob sellableFeedJob;
+    OpenERPSaleableFeedJob saleableFeedJob;
 
     @Mock
     SimpleFeedJob openMRSFeedJob;
@@ -23,15 +23,15 @@ public class OpenERPSellableFeedJobTest {
 
     @Test
     public void testProcessFeed() throws FeedException {
-        sellableFeedJob = new OpenERPSellableFeedJob(openMRSFeedJob);
-        sellableFeedJob.processFeed();
-        verify(openMRSFeedJob).processFeed(SELLABLE_FEED);
+        saleableFeedJob = new OpenERPSaleableFeedJob(openMRSFeedJob);
+        saleableFeedJob.processFeed();
+        verify(openMRSFeedJob).processFeed(SALEABLE_FEED);
     }
 
     @Test
     public void testProcessFailedEvents() throws FeedException {
-        sellableFeedJob = new OpenERPSellableFeedJob(openMRSFeedJob);
-        sellableFeedJob.processFailedEvents();
-        verify(openMRSFeedJob).processFailedEvents(SELLABLE_FEED);
+        saleableFeedJob = new OpenERPSaleableFeedJob(openMRSFeedJob);
+        saleableFeedJob.processFailedEvents();
+        verify(openMRSFeedJob).processFailedEvents(SALEABLE_FEED);
     }
 }
