@@ -29,7 +29,7 @@
         <db.password>postgres</db.password>
         <db.schema>public</db.schema>
 
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <mockito-core.version>1.10.19</mockito-core.version>
         <jackson.version>2.8.1</jackson.version>
         <httpcore.version>4.4.5</httpcore.version>
