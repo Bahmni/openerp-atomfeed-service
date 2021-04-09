@@ -1,11 +1,13 @@
 package org.bahmni.feed.openerp.domain.encounter;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSObservation {
     private String orderUuid;
     private String conceptNameToDisplay;
+    @JsonProperty("valueAsString")
     private String value;
 
     public String getOrderUuid() {
