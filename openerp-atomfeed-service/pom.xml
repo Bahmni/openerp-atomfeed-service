@@ -191,15 +191,13 @@
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-1.2-api</artifactId>
-            <version>2.7</version>
-            <scope>test</scope>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <version>2.14.1</version>
         </dependency>
-
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-1.2-api</artifactId>
+            <version>2.14.1</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
