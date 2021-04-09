@@ -1,6 +1,7 @@
 package org.bahmni.openerp.web.client;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -17,7 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class OpenERPResponseErrorValidator {
-    private static final Logger logger = Logger.getLogger(OpenERPResponseErrorValidator.class);
+    private static final Logger logger = LogManager.getLogger(OpenERPResponseErrorValidator.class);
     private static final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
     public void checkForError(String response) {
