@@ -1,6 +1,7 @@
 package org.bahmni.openerp.web.service;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.client.OpenERPClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.Vector;
 @Service
 public class CustomerAccountService {
     OpenERPClient openERPClient;
-    private static Logger logger = Logger.getLogger(CustomerAccountService.class);
+    private static Logger logger = LogManager.getLogger(CustomerAccountService.class);
 
 
     @Autowired
