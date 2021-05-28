@@ -1,0 +1,223 @@
+{
+  "bahmniDiagnoses": [],
+  "observations": [
+    {
+      "encounterDateTime": 1622045594000,
+      "visitStartDateTime": null,
+      "targetObsRelation": null,
+      "groupMembers": [
+
+      ],
+      "providers": [
+        {
+          "uuid": "1a49a177-bb11-11eb-9598-0242ac160002",
+          "name": "Super Man",
+          "encounterRoleUuid": "a0b03050-c99b-11e0-9572-0800200c9a66"
+        }
+      ],
+      "isAbnormal": null,
+      "duration": null,
+      "type": "Coded",
+      "encounterUuid": "778496f1-e427-4a9a-9d4f-2135faefcc08",
+      "obsGroupUuid": null,
+      "creatorName": "Super Man",
+      "conceptSortWeight": 1,
+      "parentConceptUuid": null,
+      "hiNormal": null,
+      "lowNormal": null,
+      "formNamespace": "Bahmni",
+      "formFieldPath": "Consultation prénatale.1/38-0",
+      "interpretation": null,
+      "status": "FINAL",
+      "complexData": null,
+      "observationDateTime": "2021-05-26T16:13:14.000+0000",
+      "orderUuid": null,
+      "unknown": false,
+      "abnormal": null,
+      "conceptNameToDisplay": "Temperature",
+      "concept": {
+        "uuid": "c4b48a7a-7c13-4e7d-89ad-1df68c5c6802",
+        "name": "Temperature",
+        "dataType": "Numeric",
+        "shortName": "Temp",
+        "conceptClass": "Misc",
+        "hiNormal": null,
+        "lowNormal": null,
+        "set": false,
+        "mappings": [
+
+        ]
+      },
+      "valueAsString": "99.4",
+      "conceptUuid": "c4b48a7a-7c13-4e7d-89ad-1df68c5c6802",
+      "voided": false,
+      "voidReason": null,
+      "uuid": "a2eb442d-ffff-46e0-960f-a1f7e833d870",
+      "comment": null,
+      "value": 99.4
+    }
+  ],
+  "accessionNotes": [
+
+  ],
+  "encounterType": "Consultation",
+  "visitType": null,
+  "patientId": "H04-0017328",
+  "reason": null,
+  "patientProgramUuid": null,
+  "visitUuid": "58ac2551-28fa-466a-b056-d6f0a85d126f",
+  "encounterDateTime": "2021-05-26T16:13:14.000+0000",
+  "locationUuid": "e0321c99-05e6-452f-aa5f-1bf1697a4d47",
+  "patientUuid": "17d37b79-d3b7-3167-a2bd-f0c4acaa3dc5",
+  "encounterUuid": "778496f1-e427-4a9a-9d4f-2135faefcc08",
+  "drugOrders": [
+
+  ],
+  "associatedToPatientProgram": false,
+  "visitTypeUuid": "b9ba7b27-e64b-44d1-b4c5-2ced77f477d0",
+  "encounterTypeUuid": "dd528487-82a5-4082-9c72-ed246bd49591",
+  "disposition": null,
+  "locationName": "H4",
+  "providers": [
+    {
+      "uuid": "1a49a177-bb11-11eb-9598-0242ac160002",
+      "name": "Super Man",
+      "encounterRoleUuid": "a0b03050-c99b-11e0-9572-0800200c9a66"
+    }
+  ],
+  "orders": [
+    {
+      "concept": {
+        "uuid": "e1a77dc7-c7d6-41d2-9c4e-93acc1093bcf",
+        "name": "Hemogramme complet",
+        "dataType": "N/A",
+        "shortName": "Complete Blood Count",
+        "conceptClass": "LabSet",
+        "hiNormal": null,
+        "lowNormal": null,
+        "set": true,
+        "mappings": [
+          {
+            "code": "1019",
+            "name": "",
+            "source": "CIEL"
+          }
+        ]
+      },
+      "instructions": null,
+      "uuid": "f1eab784-05e4-426c-af9e-c93ba41ffc00",
+      "orderType": "Lab Order",
+      "orderGroup": null,
+      "dateCreated": "2021-05-26T16:20:52.000+0000",
+      "dateChanged": null,
+      "dateStopped": null,
+      "orderNumber": "ORD-3",
+      "careSetting": null,
+      "action": "NEW",
+      "commentToFulfiller": null,
+      "autoExpireDate": null,
+      "urgency": "ROUTINE",
+      "previousOrderUuid": null
+    },
+    {
+      "concept": {
+        "uuid": "00ce9624-11e3-4015-b695-d7ff7cb3930e",
+        "name": "Groupe sanguin",
+        "dataType": "Coded",
+        "shortName": "Blood Group",
+        "conceptClass": "LabTest",
+        "hiNormal": null,
+        "lowNormal": null,
+        "set": false,
+        "mappings": [
+          {
+            "code": "300",
+            "name": "",
+            "source": "CIEL"
+          }
+        ]
+      },
+      "instructions": null,
+      "uuid": "143ab17a-23e2-4da3-84e9-2d95e58c65ec",
+      "orderType": "Lab Order",
+      "orderGroup": null,
+      "dateCreated": "2021-05-26T16:19:54.000+0000",
+      "dateChanged": null,
+      "dateStopped": null,
+      "orderNumber": "ORD-1",
+      "careSetting": null,
+      "action": "NEW",
+      "commentToFulfiller": null,
+      "autoExpireDate": null,
+      "urgency": "ROUTINE",
+      "previousOrderUuid": null
+    },
+    {
+      "concept": {
+        "uuid": "92f1d76a-4091-4b99-83d4-633b5fbd096e",
+        "name": "H. Pylori",
+        "dataType": "Coded",
+        "shortName": "H. Pylori",
+        "conceptClass": "LabTest",
+        "hiNormal": null,
+        "lowNormal": null,
+        "set": false,
+        "mappings": [
+
+        ]
+      },
+      "instructions": null,
+      "uuid": "278f4c21-8ff0-4e86-8c1b-a9b8fbfb89c9",
+      "orderType": "Lab Order",
+      "orderGroup": null,
+      "dateCreated": "2021-05-26T16:19:54.000+0000",
+      "dateChanged": null,
+      "dateStopped": null,
+      "orderNumber": "ORD-2",
+      "careSetting": null,
+      "action": "NEW",
+      "commentToFulfiller": null,
+      "autoExpireDate": null,
+      "urgency": "ROUTINE",
+      "previousOrderUuid": null
+    },
+    {
+      "concept": {
+        "uuid": "91d1dba5-bd31-4f0f-857a-1fae38165a6d",
+        "name": "Glycemie",
+        "dataType": "Numeric",
+        "shortName": "Blood Sugar",
+        "units": "mg/dL",
+        "conceptClass": "LabTest",
+        "hiNormal": 180,
+        "lowNormal": 70,
+        "set": false,
+        "mappings": [
+
+        ]
+      },
+      "instructions": null,
+      "uuid": "7ac4792f-4f0d-44da-93ef-2ecc5cb76510",
+      "orderType": "Lab Order",
+      "orderGroup": null,
+      "dateCreated": "2021-05-26T16:22:35.000+0000",
+      "dateChanged": null,
+      "dateStopped": null,
+      "orderNumber": "ORD-4",
+      "careSetting": null,
+      "action": "NEW",
+      "commentToFulfiller": null,
+      "autoExpireDate": null,
+      "urgency": "ROUTINE",
+      "previousOrderUuid": null
+    }
+  ],
+  "context": {
+
+  },
+  "extensions": {
+    "mdrtbSpecimen": [
+
+    ]
+  }
+}

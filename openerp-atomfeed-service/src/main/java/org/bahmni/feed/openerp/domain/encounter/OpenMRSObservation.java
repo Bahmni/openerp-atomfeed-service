@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class OpenMRSObservation {
     private String orderUuid;
     private String conceptNameToDisplay;
-    private String value;
+    private Object value;
+    private OpenMRSConcept concept;
 
     public String getOrderUuid() {
         return orderUuid;
@@ -24,11 +25,19 @@ public class OpenMRSObservation {
         this.conceptNameToDisplay = conceptNameToDisplay;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
+    }
+
+    public OpenMRSConcept getConcept() {
+        return concept;
+    }
+
+    public void setConcept(OpenMRSConcept concept) {
+        this.concept = concept;
     }
 }

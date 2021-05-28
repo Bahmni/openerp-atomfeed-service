@@ -50,13 +50,15 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             openERPOrder.setVisitId(openMRSEncounter.getVisitUuid());
             openERPOrder.setOrderId(drugOrder.getUuid());
             openERPOrder.setDispensed("false");
-            if(observations.size() != 0){
-                for (OpenMRSObservation observation : observations) {
-                    if(openERPOrder.getOrderId().equals(observation.getOrderUuid())){
-                        openERPOrder.setDispensed(observation.getValue());
-                    }
-                }
-            }
+            observations.stream().filter(o -> o.getOrderUuid() != null && o.getOrderUuid().equals(openERPOrder.getOrderId()))
+                    .forEach(o -> {
+                        if ((o.getConcept()  != null)
+                                && o.getConcept().getName().equalsIgnoreCase("Dispensed")) {
+                            if (Boolean.parseBoolean(o.getValue().toString())) {
+                                openERPOrder.setDispensed("true");
+                            }
+                        }
+                    });
             openERPOrder.setPreviousOrderId(drugOrder.getPreviousOrderUuid());
             openERPOrder.setEncounterId(openMRSEncounter.getEncounterUuid());
             openERPOrder.setProductId(drugOrder.getDrugUuid());
