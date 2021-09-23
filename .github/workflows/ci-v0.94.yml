@@ -45,3 +45,7 @@ jobs:
         with:
           name: openerp-atomfeed-war
           path: bahmni-erp-connect/resources
+      - name: Build Docker Image
+        run: ./bahmni-docker/build_scripts/bahmni-erp-connect/docker_build.sh
+      - name: List Docker Images
+        run: docker images
