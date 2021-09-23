@@ -25,3 +25,21 @@ jobs:
         with:
           name: openerp-atomfeed-war
           path: openerp-atomfeed-service/target/openerp-atomfeed-service.war
+  docker-build-publish:
+    name: Build & Publish Docker Image
+    needs: build-package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '8'
+      - name: Checkout bahmni-package
+        uses: actions/checkout@v2
+        with:
+          repository: Bahmni/bahmni-package
+          ref: odoo-connect-docker
+      - uses: actions/download-artifact@v2
+        with:
+          name: openerp-atomfeed-war
+          path: bahmni-erp-connect/resources
