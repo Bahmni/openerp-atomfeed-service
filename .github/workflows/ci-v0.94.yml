@@ -45,7 +45,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: openerp-atomfeed-war
-          path: bahmni-erp-connect/resources
+          path: bahmni-package/bahmni-erp-connect/resources
       - name: Build Docker Image
         run: ./bahmni-package/bahmni-docker/build_scripts/bahmni-erp-connect/docker_build.sh
       - name: List Docker Images
