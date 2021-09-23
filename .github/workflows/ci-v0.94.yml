@@ -41,11 +41,12 @@ jobs:
         with:
           repository: Bahmni/bahmni-package
           ref: odoo-connect-docker
+          path: bahmni-package
       - uses: actions/download-artifact@v2
         with:
           name: openerp-atomfeed-war
           path: bahmni-erp-connect/resources
       - name: Build Docker Image
-        run: ./bahmni-docker/build_scripts/bahmni-erp-connect/docker_build.sh
+        run: ./bahmni-package/bahmni-docker/build_scripts/bahmni-erp-connect/docker_build.sh
       - name: List Docker Images
         run: docker images
