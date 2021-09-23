@@ -4,6 +4,8 @@ on:
     branches:
       - master
   workflow_dispatch:
+env:
+  BAHMNI_VERSION: 0.94
 jobs:
   build-package:
     name: Test and Package
