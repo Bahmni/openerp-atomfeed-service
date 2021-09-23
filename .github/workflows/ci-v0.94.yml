@@ -20,3 +20,8 @@ jobs:
         run: mvn --no-transfer-progress clean test
       - name: Package
         run: mvn --no-transfer-progress clean package -DskipTests
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: openerp-atomfeed-war
+          path: openerp-atomfeed-service/target/openerp-atomfeed-service.war
