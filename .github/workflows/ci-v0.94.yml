@@ -19,4 +19,6 @@ jobs:
         with:
           path: openerp-atomfeed-service
       - name: Run Unit Tests
-        run: mvn --no-transfer-progress clean test
+        run: |
+        cd openerp-atomfeed-service
+        mvn --no-transfer-progress clean test
