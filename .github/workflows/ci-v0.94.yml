@@ -16,9 +16,5 @@ jobs:
           java-version: '8'
       - name: Checkout OpenERP Atomfeed Service Repo
         uses: actions/checkout@v2
-        with:
-          path: openerp-atomfeed-service
       - name: Run Unit Tests
-        run: |
-        cd openerp-atomfeed-service
-        mvn --no-transfer-progress clean test
+        run: mvn --no-transfer-progress clean test
