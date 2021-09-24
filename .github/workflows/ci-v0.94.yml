@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+  repository_dispatch:
+    types: ["bahmni-package-0.94-trigger"]
   workflow_dispatch:
 env:
   BAHMNI_VERSION: 0.94
