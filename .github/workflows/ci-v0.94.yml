@@ -52,3 +52,8 @@ jobs:
         run: ./bahmni-package/bahmni-docker/build_scripts/bahmni-erp-connect/docker_build.sh
       - name: List Docker Images
         run: docker images
+      - name: Push Docker Images
+        run: ./bahmni-package/bahmni-docker/build_scripts/bahmni-erp-connect/docker_publish.sh
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN}}
