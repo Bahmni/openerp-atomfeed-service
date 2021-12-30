@@ -1,6 +1,7 @@
 package org.bahmni.feed.openerp.worker;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.domain.OpenMRSDrug;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class OpenERPDrugServiceEventWorker implements EventWorker {
 
-    private static Logger logger = Logger.getLogger(OpenERPDrugServiceEventWorker.class);
+    private static Logger logger = LogManager.getLogger(OpenERPDrugServiceEventWorker.class);
 
     private OpenERPClient openERPClient;
     private String feedUrl;

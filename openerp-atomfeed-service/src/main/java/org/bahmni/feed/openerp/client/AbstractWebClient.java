@@ -1,6 +1,6 @@
 package org.bahmni.feed.openerp.client;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.webclients.ClientCookies;
 import org.bahmni.webclients.ConnectionDetails;

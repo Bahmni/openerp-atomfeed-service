@@ -1,6 +1,7 @@
 package org.bahmni.feed.openerp.worker;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabOrderTypeEvent;
 import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabPanelEvent;
@@ -18,7 +19,7 @@ import java.util.Map;
 
 public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
 
-    private static Logger logger = Logger.getLogger(OpenERPLabOrderTypeServiceEventWorker.class);
+    private static Logger logger = LogManager.getLogger(OpenERPLabOrderTypeServiceEventWorker.class);
 
     private OpenERPClient openERPClient;
     private String feedUrl;
