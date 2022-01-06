@@ -41,7 +41,7 @@ public class CustomerAccountService {
             openERPClient.updateCustomerReceivables("account.receivables", params);
             return true ;
         } catch (Exception exception) {
-            logger.error(String.format("[%s] : Account Receivable update failed for amount of %s", patientId, amount) + exception);
+            logger.error(String.format("[%s] : Account Receivable update failed for amount of %s", patientId, amount), exception);
             return false;
         }
 

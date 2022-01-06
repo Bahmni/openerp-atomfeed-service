@@ -41,7 +41,7 @@ public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
 
     @Override
     public void process(Event event) {
-        logger.debug("Processing the event [" + event.getContent() + "]");
+        logger.debug("Processing the event [{}]", event.getContent());
         try {
             OpenMRSLabOrderTypeEvent openMRSLabOrderTypeEvent = labOrderTypeEventMap.get(event.getTitle());
             if(openMRSLabOrderTypeEvent == null) return ;

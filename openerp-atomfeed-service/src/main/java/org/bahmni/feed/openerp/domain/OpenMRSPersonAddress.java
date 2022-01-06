@@ -94,7 +94,7 @@ public class OpenMRSPersonAddress implements Jsonify {
             return ObjectMapperRepository.objectMapper.writeValueAsString(this) ;
         } catch (IOException e) {
             Logger logger = LogManager.getLogger(OpenElisSaleOrderEventWorker.class);
-            logger.error("Unable to convert personAddress hash to json string. " + e.getMessage());
+            logger.error("Unable to convert personAddress hash to json string. {}", e.getMessage());
         }
         return null;
     }

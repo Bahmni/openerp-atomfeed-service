@@ -17,7 +17,7 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <release.version>${version}</release.version>
+        <release.version>${project.version}</release.version>
     </properties>
 
     <dependencies>

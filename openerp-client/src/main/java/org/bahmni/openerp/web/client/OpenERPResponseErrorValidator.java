@@ -39,7 +39,7 @@ public class OpenERPResponseErrorValidator {
             }
             throw new RuntimeException(errorMessage.toString());
         } catch (XPathExpressionException | SAXException | IOException e) {
-            logger.error("Error while parsing OpenERP response : " + response);
+            logger.error("Error while parsing OpenERP response : {}", response);
             logger.error(e);
             throw new RuntimeException(e);
         }

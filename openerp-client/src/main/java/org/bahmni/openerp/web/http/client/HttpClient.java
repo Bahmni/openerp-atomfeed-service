@@ -25,15 +25,15 @@ public class HttpClient {
 
     public String post(String url, String formPostData) {
         try {
-            logger.debug("Post Data: " + formPostData);
+            logger.debug("Post Data: {}", formPostData);
             HttpEntity<String> stringHttpEntity = new HttpEntity<String>(formPostData, getHttpHeaders());
             ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, stringHttpEntity, String.class);
             String response = responseEntity != null ? responseEntity.getBody() : "";
-            logger.debug("Post Data output: " + response);
+            logger.debug("Post Data output: {}", response);
             return response;
         } catch (Exception e) {
-            logger.error("Could not post  to " + url, e);
-            logger.error("Post data: " + formPostData);
+            logger.error("Could not post  to {}", url, e);
+            logger.error("Post data: {}", formPostData);
             throw new RuntimeException("Could not post message", e);
         }
     }

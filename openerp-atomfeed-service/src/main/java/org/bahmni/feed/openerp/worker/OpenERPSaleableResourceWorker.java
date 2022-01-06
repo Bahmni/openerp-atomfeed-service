@@ -41,7 +41,7 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
         try {
             OpenMRSResource resource = getOpenMRSResource(event);
             if (!isSaleableResource(resource)) {
-                logger.info(String.format("Resource is not a saleable resource. Ignoring. Event [%s]",event.getId()));
+                logger.info(String.format("Resource is not a saleable resource. Ignoring. Event [%s]", event.getId()));
                 return;
             }
             openERPClient.execute(mapToOpenERPRequest(event, resource));

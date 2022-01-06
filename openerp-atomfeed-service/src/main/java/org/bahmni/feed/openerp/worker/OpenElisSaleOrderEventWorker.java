@@ -42,7 +42,7 @@ public class OpenElisSaleOrderEventWorker implements EventWorker {
 
             openERPClient.execute(openERPRequest);
         } catch (Exception e) {
-            logger.error("Error processing openelis sale order event : " + event.toString(), e);
+            logger.error("Error processing openelis sale order event : {}", event.toString(), e);
             throw new RuntimeException(e);
         }
     }

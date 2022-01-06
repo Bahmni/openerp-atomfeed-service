@@ -35,7 +35,7 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
 
     @Override
     public void process(Event event) {
-        logger.debug("Processing the event [" + event.getContent() + "]");
+        logger.debug("Processing the event [{}]", event.getContent());
         try {
             openERPClient.execute(mapRequest(event));
         } catch (Exception e) {

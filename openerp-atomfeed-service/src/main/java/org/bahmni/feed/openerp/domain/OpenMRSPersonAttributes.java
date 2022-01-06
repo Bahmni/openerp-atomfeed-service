@@ -55,7 +55,7 @@ public class OpenMRSPersonAttributes extends ArrayList<OpenMRSPersonAttribute> i
             }
              catch (ClassCastException e){
                  Logger logger = LogManager.getLogger(OpenElisSaleOrderEventWorker.class);
-                 logger.error("Unable to convert personAttributes"+ openMRSPersonAttribute.getValue().getClass() + "to json string. " + e.getMessage());
+                 logger.error("Unable to convert personAttributes {} to json string. {}", openMRSPersonAttribute.getValue().getClass(), e.getMessage());
              }
 
             personAttributes.put(attrName, attrValue);
@@ -66,7 +66,7 @@ public class OpenMRSPersonAttributes extends ArrayList<OpenMRSPersonAttribute> i
             personAttributesJson = ObjectMapperRepository.objectMapper.writeValueAsString(personAttributes);
         } catch (IOException e) {
             Logger logger = LogManager.getLogger(OpenElisSaleOrderEventWorker.class);
-            logger.error("Unable to convert personAttributes hash to json string. " + e.getMessage());
+            logger.error("Unable to convert personAttributes hash to json string. {}", e.getMessage());
         }
 
         return personAttributesJson;
