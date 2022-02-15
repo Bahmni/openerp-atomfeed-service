@@ -20,7 +20,7 @@
         <spring.version>4.1.4.RELEASE</spring.version>
         <cglib.version>2.2.2</cglib.version>
         <quartz.version>2.3.2</quartz.version>
-        <atomfeed.version>1.9.4</atomfeed.version>
+        <atomfeed.version>1.10.0-SNAPSHOT</atomfeed.version>
         <spring-core.version>4.3.30.RELEASE</spring-core.version>
         <!--<db.server>10.4.33.112</db.server>-->
         <db.server>localhost</db.server>
@@ -163,13 +163,11 @@
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
                 <version>${log4j.version}</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-core</artifactId>
                 <version>${log4j.version}</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
