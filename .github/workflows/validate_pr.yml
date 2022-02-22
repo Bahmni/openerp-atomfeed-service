@@ -17,3 +17,5 @@ jobs:
         uses: actions/checkout@v2
       - name: Run Unit Tests
         run: mvn --no-transfer-progress clean test
+      - name: Package
+        run: mvn --no-transfer-progress clean package -DskipTests
