@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: Bahmni/bahmni-package
-          path: ../bahmni-package
+          path: bahmni-package
       - name: Build Docker Image
         run: ./package/docker/scripts/docker_build.sh
       - name: List Docker Images
