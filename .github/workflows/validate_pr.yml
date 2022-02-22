@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   unit-tests:
-    name: Unit Tests
+    name: Unit Tests & Package
     runs-on: ubuntu-latest
     steps:
       - name: Setup Java 8
