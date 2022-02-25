@@ -39,8 +39,6 @@ jobs:
           unzip -q -o bahmni-embedded-tomcat.zip 
       - name: Build Docker Image
         run: ./package/docker/scripts/docker_build.sh
-      - name: List Docker Images
-        run: docker images
       - name: Push Docker Images
         run: ./package/docker/scripts/docker_publish.sh
         env:
