@@ -1,9 +1,7 @@
 #!/bin/bash
 set -xe
-#Building bahmni core which has embedded Tomcat Server
-cd bahmni-package && ./gradlew -PbahmniRelease=${BAHMNI_VERSION} :core:clean :core:build
-cp core/build/libs/core-1.0-SNAPSHOT.jar ../package/docker/bahmni-core.jar
-cd ..
+
+cp core-1.0-SNAPSHOT.jar package/docker/bahmni-core.jar
 
 cd package
 #Building Docker images
