@@ -4,8 +4,8 @@ on:
     branches:
       - master
 jobs:
-  unit-tests:
-    name: Unit Tests
+  tests-package:
+    name: Tests & Package
     runs-on: ubuntu-latest
     steps:
       - name: Setup Java 8
@@ -15,5 +15,7 @@ jobs:
           java-version: '8'
       - name: Checkout OpenERP Atomfeed Service Repo
         uses: actions/checkout@v2
-      - name: Run Unit Tests
+      - name: Run Tests
         run: mvn --no-transfer-progress clean test
+      - name: Package
+        run: mvn --no-transfer-progress clean package -DskipTests

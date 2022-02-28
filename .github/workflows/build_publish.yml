@@ -1,0 +1,45 @@
+name: Build and Publish
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**.md"
+  repository_dispatch:
+    types: ["bahmni-embedded-tomcat-trigger"]
+
+env:
+  BAHMNI_VERSION: 0.94
+
+jobs:
+  docker-build-publish:
+    name: Docker Build & Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Java 8
+        uses: actions/setup-java@v2
+        with:
+          distribution: "zulu"
+          java-version: "8"
+      - name: Checkout OpenERP Atomfeed Service Repo
+        uses: actions/checkout@v2
+      - name: Run Unit Tests
+        run: mvn --no-transfer-progress clean test
+      - name: Package
+        run: mvn --no-transfer-progress clean package -DskipTests
+      - name: Copy package to docker resource
+        run: cp openerp-atomfeed-service/target/openerp-atomfeed-service.war package/resources
+      - name: Download bahmni-embedded-tomcat.zip
+        run: |
+          curl -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/Bahmni/bahmni-package/actions/artifacts | \
+          jq -r '.artifacts[0].archive_download_url' | \
+          xargs curl -L -o bahmni-embedded-tomcat.zip -H "Authorization: token ${{secrets.BAHMNI_PAT}}" &&\
+          unzip -q -o bahmni-embedded-tomcat.zip 
+      - name: Build Docker Image
+        run: ./package/docker/scripts/docker_build.sh
+      - name: Push Docker Images
+        run: ./package/docker/scripts/docker_publish.sh bahmni/odoo-connect
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN}}
