@@ -1,6 +1,7 @@
 package org.bahmni.feed.openerp.worker;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.client.OpenElisWebClient;
 import org.bahmni.feed.openerp.domain.openelis.OpenElisLabOrder;
@@ -22,7 +23,7 @@ public class OpenElisSaleOrderEventWorker implements EventWorker {
     private ProductService productService;
 
 
-    private static Logger logger = Logger.getLogger(OpenElisSaleOrderEventWorker.class);
+    private static Logger logger = LogManager.getLogger(OpenElisSaleOrderEventWorker.class);
 
     public OpenElisSaleOrderEventWorker(String feedUrl, OpenERPClient openERPClient, OpenElisWebClient webClient, String urlPrefix) {
         this.feedUrl = feedUrl;
@@ -41,7 +42,7 @@ public class OpenElisSaleOrderEventWorker implements EventWorker {
 
             openERPClient.execute(openERPRequest);
         } catch (Exception e) {
-            logger.error("Error processing openelis sale order event : " + event.toString(), e);
+            logger.error("Error processing openelis sale order event : {}", event.toString(), e);
             throw new RuntimeException(e);
         }
     }

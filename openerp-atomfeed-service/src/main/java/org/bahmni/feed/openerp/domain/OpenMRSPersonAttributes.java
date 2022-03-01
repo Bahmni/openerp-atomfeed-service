@@ -1,6 +1,7 @@
 package org.bahmni.feed.openerp.domain;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.worker.Jsonify;
 import org.bahmni.feed.openerp.worker.OpenElisSaleOrderEventWorker;
@@ -53,8 +54,8 @@ public class OpenMRSPersonAttributes extends ArrayList<OpenMRSPersonAttribute> i
                 }
             }
              catch (ClassCastException e){
-                 Logger logger = Logger.getLogger(OpenElisSaleOrderEventWorker.class);
-                 logger.error("Unable to convert personAttributes"+ openMRSPersonAttribute.getValue().getClass() + "to json string. " + e.getMessage());
+                 Logger logger = LogManager.getLogger(OpenElisSaleOrderEventWorker.class);
+                 logger.error("Unable to convert personAttributes {} to json string. {}", openMRSPersonAttribute.getValue().getClass(), e.getMessage());
              }
 
             personAttributes.put(attrName, attrValue);
@@ -64,8 +65,8 @@ public class OpenMRSPersonAttributes extends ArrayList<OpenMRSPersonAttribute> i
         try {
             personAttributesJson = ObjectMapperRepository.objectMapper.writeValueAsString(personAttributes);
         } catch (IOException e) {
-            Logger logger = Logger.getLogger(OpenElisSaleOrderEventWorker.class);
-            logger.error("Unable to convert personAttributes hash to json string. " + e.getMessage());
+            Logger logger = LogManager.getLogger(OpenElisSaleOrderEventWorker.class);
+            logger.error("Unable to convert personAttributes hash to json string. {}", e.getMessage());
         }
 
         return personAttributesJson;
