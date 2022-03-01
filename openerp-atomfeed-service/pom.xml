@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.bahmni.module</groupId>
             <artifactId>web-clients</artifactId>
-            <version>0.94.1</version>
+            <version>${web-clients.version}</version>
         </dependency>
         <dependency>
             <groupId>org.ict4h</groupId>
@@ -231,7 +231,7 @@
         <dependency>
             <groupId>org.bahmni.module</groupId>
             <artifactId>mail-appender</artifactId>
-            <version>0.92-SNAPSHOT</version>
+            <version>${web-clients.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
