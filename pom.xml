@@ -19,8 +19,9 @@
         <java.version>1.8</java.version>
         <spring.version>4.1.4.RELEASE</spring.version>
         <cglib.version>2.2.2</cglib.version>
-        <quartz.version>2.1.7</quartz.version>
-        <atomfeed.version>1.9.4</atomfeed.version>
+        <quartz.version>2.3.2</quartz.version>
+        <atomfeed.version>1.10.1</atomfeed.version>
+        <spring-core.version>4.3.30.RELEASE</spring-core.version>
         <!--<db.server>10.4.33.112</db.server>-->
         <db.server>localhost</db.server>
         <db.name>odoo</db.name>
@@ -31,10 +32,12 @@
 
         <junit.version>4.12</junit.version>
         <mockito-core.version>1.10.19</mockito-core.version>
-        <jackson.version>2.8.1</jackson.version>
+        <jackson.version>2.13.1</jackson.version>
         <httpcore.version>4.4.5</httpcore.version>
         <httpClient.version>4.5.2</httpClient.version>
         <servlet-api.version>3.0.1</servlet-api.version>
+        <log4j.version>2.17.1</log4j.version>
+        <web-clients.version>0.94.2-SNAPSHOT</web-clients.version>
     </properties>
 
     <dependencyManagement>
@@ -70,7 +73,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
-                <version>${spring.version}</version>
+                <version>${spring-core.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-logging</groupId>
@@ -158,9 +161,14 @@
                 <version>${httpClient.version}</version>
             </dependency>
             <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.16</version>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>

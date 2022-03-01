@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="https://logging.apache.org/log4j/2.x/">
+    <Appenders>
+        <RollingFile name="file" fileName="${catalina.base}/logs/openerp-feed-service.log">
+            <PatternLayout>
+                <Pattern>%d %-5p [openerp-atomfeed-service][%c] %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5000KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %-5p [openerp-atomfeed-service] [%c] %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.springframework" level ="WARN"/>
+        <AppenderRef ref="fileAppender"/>
+        <AppenderRef ref="console"/>
+    </Loggers>
+
+    <Root level="info">
+        <AppenderRef ref="fileAppender"/>
+        <AppenderRef ref="console"/>
+    </Root>
+</Configuration>

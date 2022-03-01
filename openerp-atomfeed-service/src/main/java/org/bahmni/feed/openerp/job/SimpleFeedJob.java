@@ -1,14 +1,14 @@
 package org.bahmni.feed.openerp.job;
 
-
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.client.AtomFeedClientHelper;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
 
 public class SimpleFeedJob {
-    private static Logger logger = Logger.getLogger(SimpleFeedJob.class);
+    private static Logger logger = LogManager.getLogger(SimpleFeedJob.class);
 
     private AtomFeedClientHelper atomFeedClientHelper;
     private AtomFeedClient atomFeedClient;
@@ -21,11 +21,11 @@ public class SimpleFeedJob {
 
     public void processFeed(Jobs jobName) {
         try {
-            logger.info(String.format("Processing Feed [%s] Job [%s]",jobName.getFeedUriRef() , jobName));
+            logger.info(String.format("Processing Feed [%s] Job [%s]", jobName.getFeedUriRef(), jobName));
             initAtomFeedClient(jobName);
             atomFeedClient.processEvents();
         } catch (Exception e) {
-            logger.error(String.format("Failed Feed [%s] execution. Job [%s]",jobName.getFeedUriRef() , jobName), e);
+            logger.error(String.format("Failed Feed [%s] execution. Job [%s]", jobName.getFeedUriRef(), jobName), e);
             handleAuthorizationException(e, jobName);
         }
     }
@@ -38,13 +38,13 @@ public class SimpleFeedJob {
 
     public void processFailedEvents(Jobs jobName) {
         try {
-            logger.info(String.format("Processing failed events for Feed [%s]",jobName.getFeedUriRef()));
+            logger.info(String.format("Processing failed events for Feed [%s]", jobName.getFeedUriRef()));
             initAtomFeedClient(jobName);
             if(atomFeedClient != null){
                 atomFeedClient.processFailedEvents();
             }
         } catch (Exception e) {
-            logger.error(String.format("Failed Feed [%s] execution. Job [%s]",jobName.getFeedUriRef() , jobName), e);
+            logger.error(String.format("Failed Feed [%s] execution. Job [%s]", jobName.getFeedUriRef(), jobName), e);
             handleAuthorizationException(e, jobName);
         }
     }
