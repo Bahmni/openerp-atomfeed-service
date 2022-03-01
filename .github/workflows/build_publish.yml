@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - gha-refactor
     paths-ignore:
       - "**.md"
   repository_dispatch:
