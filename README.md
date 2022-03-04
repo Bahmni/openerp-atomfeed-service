@@ -16,3 +16,10 @@ Docker images for [odoo-connect](https://hub.docker.com/r/bahmni/odoo-connect/ta
 
 Resources to build the [bahmni/odoo-connect](https://hub.docker.com/r/bahmni/odoo-connect/tags) images can be found in the [package](/package) directory.
 
+*To Build and Package, run:*
+
+```
+./mvnw clean package
+```
+
+

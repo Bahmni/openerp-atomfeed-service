@@ -6,3 +6,4 @@ logs
 *.ipr
 *.iws
 .DS_Store
+.mvn/wrapper/*.jar

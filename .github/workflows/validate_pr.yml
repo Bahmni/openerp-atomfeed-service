@@ -16,6 +16,6 @@ jobs:
       - name: Checkout OpenERP Atomfeed Service Repo
         uses: actions/checkout@v2
       - name: Run Tests
-        run: mvn --no-transfer-progress clean test
+        run: ./mvnw --no-transfer-progress clean test
       - name: Package
-        run: mvn --no-transfer-progress clean package -DskipTests
+        run: ./mvnw --no-transfer-progress clean package -DskipTests
