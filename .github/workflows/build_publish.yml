@@ -23,9 +23,9 @@ jobs:
           distribution: "zulu"
           java-version: "8"
       - name: Run Unit Tests
-        run: mvn --no-transfer-progress clean test
+        run: ./mvnw --no-transfer-progress clean test
       - name: Package
-        run: mvn --no-transfer-progress clean package -DskipTests
+        run: ./mvnw --no-transfer-progress clean package -DskipTests
       - name: Download bahmni-embedded-tomcat.zip
         run: sh .github/download_artifact.sh bahmni-package bahmni-embedded-tomcat ${{secrets.BAHMNI_PAT}}
       - name: Login to DockerHub
