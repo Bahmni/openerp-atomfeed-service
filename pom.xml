@@ -21,7 +21,7 @@
         <cglib.version>2.2.2</cglib.version>
         <quartz.version>2.3.2</quartz.version>
         <atomfeed.version>1.10.1</atomfeed.version>
-        <spring-core.version>4.3.30.RELEASE</spring-core.version>
+        <spring-core.version>5.3.19</spring-core.version>
         <!--<db.server>10.4.33.112</db.server>-->
         <db.server>localhost</db.server>
         <db.name>odoo</db.name>
