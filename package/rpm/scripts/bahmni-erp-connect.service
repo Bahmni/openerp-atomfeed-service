@@ -1,0 +1,20 @@
+[Unit]
+Description=Bahmni ERP Connect Service
+After=network-online.target
+After=network.service
+
+[Service]
+Type=forking
+KillMode=none
+GuessMainPID=no
+RuntimeDirectory=bahmni-erp-connect
+LogsDirectory=bahmni-erp-connect
+User=bahmni
+Group=bahmni
+PIDFile=/var/run/bahmni-erp-connect/bahmni-erp-connect.pid
+ExecStart=/opt/bahmni-erp-connect/bin/bahmni-erp-connect start
+ExecStop=/opt/bahmni-erp-connect/bin/bahmni-erp-connect stop
+ExecReload=/opt/bahmni-erp-connect/bin/bahmni-erp-connect restart
+
+[Install]
+WantedBy=multi-user.target
