@@ -78,7 +78,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: openerp-atomfeed-service.war
-          path: package/rpm/resources/
+          path: package/resources/
       - name: Setup Java 8 for Gradle
         uses: actions/setup-java@v3
         with:

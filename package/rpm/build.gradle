@@ -21,7 +21,7 @@ apply plugin: 'java'
 
 //The openerp-atomfeed-service.war will be copied by the CI server after the artifacts are built.
 task extractWar(type: Copy) {
-    from zipTree(file("${projectDir}/resources/openerp-atomfeed-service.war"))
+    from zipTree(file("${projectDir}/../resources/openerp-atomfeed-service.war"))
     into file("${buildDir}/bahmni-erp-connect")
 }
 
