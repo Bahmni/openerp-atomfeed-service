@@ -60,7 +60,7 @@ jobs:
           context: .
           file: package/docker/Dockerfile
           push: true
-          tags: bahmni/odoo-connect:${{env.ARTIFACT_VERSION}}-${{github.run_number}},bahmni/odoo-connect:latest
+          tags: bahmni/odoo-connect:${{env.ARTIFACT_VERSION}},bahmni/odoo-connect:latest
 
   rpm-build-publish:
     name: RPM Build and Publish
