@@ -10,7 +10,6 @@ ENV DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,address=8002,server=y,suspend
 # Used by envsubst command for replacing environment values at runtime
 RUN apk add gettext
 
-# bahmni-embedded-tomcat-8.0.42.jar contains embedded tomcat server and is built from bahmni-package/bahmni-embedded-tomcat directory
 ADD https://repo.mybahmni.org/packages/build/bahmni-embedded-tomcat-8.0.42.jar /opt/bahmni-erp-connect/lib/bahmni-erp-connect.jar
 COPY openerp-atomfeed-service/target/openerp-atomfeed-service.war /etc/bahmni-erp-connect/openerp-atomfeed-service.war
 
