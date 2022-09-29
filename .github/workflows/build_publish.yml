@@ -20,7 +20,7 @@ jobs:
         with:
           distribution: "zulu"
           java-version: "8"
-      - name: Set artifact version
+      - name: Set env.ARTIFACT_VERSION
         run: |
           wget -q https://raw.githubusercontent.com/Bahmni/bahmni-infra-utils/main/setArtifactVersion.sh && chmod +x setArtifactVersion.sh
           ./setArtifactVersion.sh
