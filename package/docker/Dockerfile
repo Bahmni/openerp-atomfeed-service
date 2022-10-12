@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine
+FROM amazoncorretto:8
 
 ENV SERVER_PORT=8053
 ENV BASE_DIR=/var/run/bahmni-erp-connect
@@ -8,7 +8,7 @@ ENV SERVER_OPTS="-Xms512m -Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m"
 ENV DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,address=8002,server=y,suspend=n"
 
 # Used by envsubst command for replacing environment values at runtime
-RUN apk add gettext
+RUN yum install -y gettext
 
 ADD https://repo.mybahmni.org/packages/build/bahmni-embedded-tomcat-8.0.42.jar /opt/bahmni-erp-connect/lib/bahmni-erp-connect.jar
 COPY openerp-atomfeed-service/target/openerp-atomfeed-service.war /etc/bahmni-erp-connect/openerp-atomfeed-service.war
