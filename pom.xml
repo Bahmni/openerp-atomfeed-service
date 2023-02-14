@@ -37,7 +37,7 @@
         <httpClient.version>4.5.2</httpClient.version>
         <servlet-api.version>3.0.1</servlet-api.version>
         <log4j.version>2.17.1</log4j.version>
-        <web-clients.version>0.94.2</web-clients.version>
+        <web-clients.version>0.94.3</web-clients.version>
     </properties>
 
     <dependencyManagement>
@@ -216,6 +216,11 @@
             <name>Repository for dependencies</name>
         </repository>
         <repository>
+            <id>Spring Milestones</id>
+            <url>https://repo.spring.io/milestone/</url>
+            <name>Repository for Spring Dependencies</name>
+        </repository>
+        <repository>
             <id>sonatype-nexus-releases</id>
             <name>Sonatype Nexus Snapshots</name>
             <url>https://oss.sonatype.org/content/repositories/releases</url>
@@ -230,21 +235,6 @@
             <id>com.springsource.repository.bundles.release</id>
             <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
             <url>https://repository.springsource.com/maven/bundles/release</url>
-        </repository>
-        <repository>
-            <id>com.springsource.repository.bundles.external</id>
-            <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-            <url>https://repo.springsource.com/maven/bundles/external</url>
-        </repository>
-        <repository>
-            <id>spring-maven-release</id>
-            <name>Spring Maven Release Repository</name>
-            <url>https://maven.springframework.org/release</url>
-        </repository>
-        <repository>
-            <id>spring-lib-milestone</id>
-            <name>Spring Maven libs milestone repository</name>
-            <url>https://repo.springsource.org/libs-milestone</url>
         </repository>
         <repository>
             <id>repo.mybahmni.org</id>
