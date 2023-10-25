@@ -7,24 +7,16 @@ import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
 import java.io.StringWriter;
 import java.util.List;
 
 @Service
 public class RequestBuilder {
-    private VelocityConfigurer configurer;
-
-    @Autowired
-    public RequestBuilder(VelocityConfigurer configurer) {
-        this.configurer = configurer;
-    }
-
-
     public String buildNewRequest(OpenERPRequest openERPRequest, Object id, String database, String password) {
         try {
-            VelocityEngine velocityEngine = configurer.getVelocityEngine();
+            VelocityEngine velocityEngine = new VelocityEngine();
+            velocityEngine.init();
             Template template = velocityEngine.getTemplate("/request/template/new_customer.vm");
             VelocityContext context = new VelocityContext();
             context.put("parametersList", openERPRequest.getParameters());
