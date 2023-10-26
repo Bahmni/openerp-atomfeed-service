@@ -8,37 +8,27 @@
         <version>0.94-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>org.bahmni.openerp</groupId>
     <artifactId>openerp-atomfeed-service</artifactId>
     <version>0.94-SNAPSHOT</version>
     <packaging>war</packaging>
-
     <name>openerp-atomfeed-service</name>
     <url>http://maven.apache.org</url>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
             <version>${httpcore.version}</version>
         </dependency>
-        
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
-        <!-- Spring core & mvc -->
         <dependency>
             <groupId>org.ict4h</groupId>
             <artifactId>atomfeed-client</artifactId>
             <version>${atomfeed.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bahmni.module</groupId>
-            <artifactId>web-clients</artifactId>
-            <version>${web-clients.version}</version>
         </dependency>
         <dependency>
             <groupId>org.ict4h</groupId>
@@ -57,7 +47,6 @@
             <artifactId>atomfeed-server</artifactId>
             <version>${atomfeed.version}</version>
             <type>test-jar</type>
-
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -68,15 +57,6 @@
             <artifactId>aspectjweaver</artifactId>
             <version>1.7.1</version>
         </dependency>
-        <!--
-        Make all spring dependencies provided
-        -->
-        
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-            <version>${quartz.version}</version>
-        </dependency>
         <!-- CGLib for @Configuration -->
         <dependency>
             <groupId>cglib</groupId>
@@ -84,8 +64,6 @@
             <version>${cglib.version}</version>
             <scope>runtime</scope>
         </dependency>
-
-
         <!-- Servlet Spec -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -126,6 +104,21 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>${javax.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bahmni.module</groupId>
+            <artifactId>web-clients</artifactId>
+            <version>${web-clients.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.bahmni.module</groupId>
             <artifactId>mail-appender</artifactId>
             <version>${web-clients.version}</version>
@@ -137,23 +130,7 @@
             <version>0.94-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>${javax.version}</version>
-        </dependency>
-        <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-quartz</artifactId>
-			<version>3.1.5</version>
-		</dependency>
     </dependencies>
-
     <build>
         <finalName>openerp-atomfeed-service</finalName>
         <plugins>
@@ -192,8 +169,6 @@
             </plugin>
         </plugins>
     </build>
-
-
     <profiles>
         <profile>
             <id>Windows</id>
