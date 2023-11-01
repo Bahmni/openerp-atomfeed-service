@@ -1,10 +1,10 @@
-FROM amazoncorretto:8
+FROM amazoncorretto:17
 
 ENV SERVER_PORT=8053
 ENV BASE_DIR=/var/run/bahmni-erp-connect
 ENV CONTEXT_PATH=/bahmni-erp-connect
 ENV WAR_DIRECTORY=/var/run/bahmni-erp-connect/bahmni-erp-connect
-ENV SERVER_OPTS="-Xms512m -Xmx1024m -XX:PermSize=256m -XX:MaxPermSize=512m"
+ENV SERVER_OPTS="-Xms512m -Xmx1024m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=512m"
 ENV DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,address=8002,server=y,suspend=n"
 
 # Used by envsubst command for replacing environment values at runtime
