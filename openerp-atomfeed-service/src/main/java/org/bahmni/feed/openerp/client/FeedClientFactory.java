@@ -1,5 +1,6 @@
 package org.bahmni.feed.openerp.client;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bahmni.feed.openerp.FeedException;
@@ -33,7 +34,7 @@ public class FeedClientFactory {
     public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager,
                                         OpenERPClient openERPClient, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName)  {
         String feedUri = openERPAtomFeedProperties.getFeedUriForJob(jobName);
-        if (org.apache.commons.lang.StringUtils.isBlank(feedUri)) {
+        if (StringUtils.isBlank(feedUri)) {
             String message = String.format("No feed-uri defined for Job [%s][%s]", jobName, jobName.getFeedUriRef());
             logger.warn(message);
             throw new FeedException(message);

@@ -2,55 +2,67 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    <name>openerp-service</name>
     <groupId>org.bahmni.openerp</groupId>
     <artifactId>openerp-service</artifactId>
     <version>0.94-SNAPSHOT</version>
     <modules>
-        <module>openerp-atomfeed-service</module>
         <module>openerp-client</module>
+        <module>openerp-atomfeed-service</module>
     </modules>
     <packaging>pom</packaging>
-
-    <name>openerp-service</name>
     <url>http://maven.apache.org</url>
-
     <properties>
         <java.version>1.8</java.version>
-        <spring.version>4.3.0.RELEASE</spring.version>
+        <spring.version>5.0.0.RELEASE</spring.version>
         <cglib.version>2.2.2</cglib.version>
         <quartz.version>2.3.2</quartz.version>
         <atomfeed.version>1.10.1</atomfeed.version>
-        <spring-core.version>4.3.30.RELEASE</spring-core.version>
         <!--<db.server>10.4.33.112</db.server>-->
         <db.server>localhost</db.server>
         <db.name>odoo</db.name>
         <db.port>5432</db.port>
-        <db.user>postgres</db.user>
-        <db.password>postgres</db.password>
+        <db.user>odoo</db.user>
+        <db.password>odoo</db.password>
         <db.schema>public</db.schema>
-
-        <junit.version>4.12</junit.version>
-        <mockito-core.version>1.10.19</mockito-core.version>
-        <jackson.version>2.13.1</jackson.version>
+        <junit.version>4.13</junit.version>
+        <mockito-core.version>2.13.0</mockito-core.version>
+        <jackson.version>2.9.6</jackson.version>
         <httpcore.version>4.4.5</httpcore.version>
         <httpClient.version>4.5.2</httpClient.version>
         <servlet-api.version>3.0.1</servlet-api.version>
         <log4j.version>2.17.1</log4j.version>
         <web-clients.version>0.94.3</web-clients.version>
+        <skipTests>false</skipTests>
     </properties>
-
     <dependencyManagement>
         <dependencies>
+             <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.6</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
                 <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context-support</artifactId>
                 <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.aspectj</groupId>
@@ -64,16 +76,28 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
                 <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
                 <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
-                <version>${spring-core.version}</version>
+                <version>${spring.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-logging</groupId>
@@ -85,6 +109,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aop</artifactId>
                 <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -123,26 +153,60 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-orm</artifactId>
                 <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-expression</artifactId>
                 <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
                 <version>${quartz.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>ch.qos.reload4j</groupId>
+                        <artifactId>reload4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
                 <version>${spring.version}</version>
                 <type>jar</type>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test-mvc</artifactId>
@@ -151,18 +215,24 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.velocity</groupId>
-                <artifactId>velocity</artifactId>
-                <version>1.6.2</version>
+                <artifactId>velocity-engine-core</artifactId>
+                <version>2.0</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpClient.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api</artifactId>
+                <artifactId>log4j-1.2-api</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
             <dependency>
@@ -171,16 +241,31 @@
                 <version>${log4j.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-web</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-jcl</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet-api.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
             <!--test libraries-->
             <dependency>
                 <groupId>junit</groupId>
@@ -194,10 +279,8 @@
                 <version>${mockito-core.version}</version>
                 <scope>test</scope>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
-
     <repositories>
         <repository>
             <id>sonatype-nexus-snapshots</id>
@@ -245,7 +328,6 @@
             </snapshots>
         </repository>
     </repositories>
-
     <distributionManagement>
         <snapshotRepository>
             <id>repo.mybahmni.org</id>
@@ -253,8 +335,6 @@
             <url>s3://repo.mybahmni.org/artifactory/snapshot</url>
         </snapshotRepository>
     </distributionManagement>
-
-
     <build>
         <finalName>openerp-atomfeed-service</finalName>
         <plugins>
@@ -273,7 +353,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
-                    <argLine>-Xmx512m -XX:MaxPermSize=512m</argLine>
+                    <argLine>-Xmx512m -XX:MaxMetaspaceSize=512m</argLine>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
@@ -284,13 +364,12 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
-                    <argLine>-Xmx512m -XX:MaxPermSize=512m</argLine>
+                    <argLine>-Xmx512m -XX:MaxMetaspaceSize=512m</argLine>
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>
                 </configuration>
             </plugin>
-
         </plugins>
         <extensions>
             <extension>
@@ -299,7 +378,5 @@
                 <version>1.2.1</version>
             </extension>
         </extensions>
-
-
     </build>
 </project>

@@ -10,39 +10,31 @@
                            http://www.springframework.org/schema/aop
                            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-
     <tx:annotation-driven transaction-manager="transactionManager" />
 
     <bean id="atomFeedTrasactionSupport" class="org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport">
         <constructor-arg ref="transactionManager"/>
         <constructor-arg ref="dataSource"/>
     </bean>
-
-
     <bean id="allEventRecords" class="org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl">
         <constructor-arg ref="atomFeedTrasactionSupport"/>
     </bean>
-
     <bean id="allEventRecordsQueue" class="org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsQueueJdbcImpl">
         <constructor-arg ref="atomFeedTrasactionSupport"/>
     </bean>
-
     <bean id="eventRecordsOffsetMarkers" class="org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsOffsetMarkersJdbcImpl">
         <constructor-arg ref="atomFeedTrasactionSupport"/>
     </bean>
-
     <bean id="allChunkingEntries" class="org.ict4h.atomfeed.server.repository.jdbc.ChunkingEntriesJdbcImpl">
         <constructor-arg ref="atomFeedTrasactionSupport"/>
     </bean>
-
 
     <tx:advice id="defaultTxAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <!--We throw a runtime exception if creation on event records fail. RuntimeExceptions result in a rollback.-->
             <tx:method name="notify"/>
         </tx:attributes>
-    </tx:advice>
-    
+    </tx:advice> 
     <tx:advice id="noTxAdvice">
         <tx:attributes>
           <tx:method name="*" propagation="REQUIRED"/>
@@ -56,7 +48,7 @@
         <aop:advisor advice-ref="noTxAdvice" pointcut-ref="eventFeeds"/>
     </aop:config>
 
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" >
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" >
         <property name="messageConverters">
             <list>
                 <bean class = "org.springframework.http.converter.StringHttpMessageConverter">
@@ -65,24 +57,18 @@
             </list>
         </property>
     </bean>
-
-
     <bean id="generatorFactory" class="org.ict4h.atomfeed.server.service.feedgenerator.FeedGeneratorFactory" />
     <bean id="resourceHelper" class="org.ict4h.atomfeed.server.service.helper.ResourceHelper"/>
-
     <bean id="feedGenerator" factory-bean="generatorFactory" factory-method="getFeedGenerator">
         <constructor-arg ref="allEventRecords"/>
         <constructor-arg ref="allChunkingEntries"/>
         <constructor-arg ref="eventRecordsOffsetMarkers"/>
         <constructor-arg ref="resourceHelper"/>
     </bean>
-    
     <bean id="eventFeedService" class="org.ict4h.atomfeed.server.service.EventFeedServiceImpl">
         <constructor-arg ref="feedGenerator"/>
     </bean>
-    
     <bean id="eventService" class="org.ict4h.atomfeed.server.service.EventServiceImpl">
         <constructor-arg ref="allEventRecordsQueue"/>
     </bean>
-    
 </beans>
