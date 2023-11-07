@@ -1,43 +1,34 @@
 package org.bahmni.openerp.web.request.builder;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath*:applicationContext-Test.xml")
 public class RequestBuilderTest {
-
-    @Autowired
-    RequestBuilder requestBuilder;
-    private final OpenERPRequestTestHelper openERPRequestTestHelper = new OpenERPRequestTestHelper();
 
     @Test
     public void shouldCreateNewCustomerRequestWithPatientDataPopulated() throws Exception {
 
+        int id = 1;
         String patientName = "Ramu";
         String patientId = "13466";
         String village = "Ganiyari";
-
-        List<Parameter> parameters = openERPRequestTestHelper.createCustomerRequest(patientName, patientId, village);
-
-        int id = 1;
         String database = "openerp";
         String password = "password";
 
+        Parameter name = new Parameter("name", patientName, "string");
+        Parameter ref = new Parameter("ref", patientId, "string");
+        Parameter villageParam = new Parameter("village", village, "string");
+        List<Parameter> parameters = new ArrayList<Parameter>();
+        parameters.add(name);
+        parameters.add(ref);
+        parameters.add(villageParam);
         OpenERPRequest request = new OpenERPRequest("res.partner", "execute", parameters);
-
-        String requestXml = requestBuilder.buildNewRequest(request, id, database, password);
+        String requestXml = RequestBuilder.buildNewRequest(request, id, database, password);
         //String requestXmlForComparison = requestXml.replace("", " ");
 
         String expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
@@ -95,7 +86,7 @@ public class RequestBuilderTest {
 
         OpenERPRequest request = new OpenERPRequest("res.partner", "execute", parameters);
 
-        String requestXml = requestBuilder.buildNewRequest(request, id, database, password);
+        String requestXml = RequestBuilder.buildNewRequest(request, id, database, password);
 
         String expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
                 "<methodCall>" +
@@ -144,7 +135,7 @@ public class RequestBuilderTest {
 
         OpenERPRequest request = new OpenERPRequest("res.partner", "execute", parameters);
 
-        String requestXml = requestBuilder.buildNewRequest(request, id, database, password);
+        String requestXml = RequestBuilder.buildNewRequest(request, id, database, password);
 
         String expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
                 "<methodCall>" +

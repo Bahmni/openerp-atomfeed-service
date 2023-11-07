@@ -32,14 +32,12 @@ public class OpenERPClient {
     private String password;
 
     private Object id;
-    private RequestBuilder requestBuilder;
 
     private XmlRpcClient xmlRpcClient;
     private HttpClient httpClient;
 
     @Autowired
-    public OpenERPClient(RequestBuilder requestBuilder, HttpClient httpClient, OpenERPProperties openERPProperties) {
-        this.requestBuilder = requestBuilder;
+    public OpenERPClient(HttpClient httpClient, OpenERPProperties openERPProperties) {
         this.httpClient = httpClient;
         host = openERPProperties.getHost();
         port = openERPProperties.getPort();
@@ -68,7 +66,7 @@ public class OpenERPClient {
 
     public String execute(OpenERPRequest openERPRequest) {
         login();
-        String request = requestBuilder.buildNewRequest(openERPRequest, id, database, password);
+        String request = RequestBuilder.buildNewRequest(openERPRequest, id, database, password);
         String response = httpClient().post("http://" + host + ":" + port + XML_RPC_OBJECT_ENDPOINT, request);
         new OpenERPResponseErrorValidator().checkForError(response);
         return response;
