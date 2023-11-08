@@ -14,7 +14,7 @@
     <url>http://maven.apache.org</url>
     <properties>
         <java.version>1.8</java.version>
-        <spring.version>5.3.0</spring.version>
+        <spring.version>5.3.30</spring.version>
         <cglib.version>2.2.2</cglib.version>
         <quartz.version>2.3.2</quartz.version>
         <atomfeed.version>1.10.1</atomfeed.version>
@@ -26,7 +26,7 @@
         <db.password>odoo</db.password>
         <db.schema>public</db.schema>
         <junit.version>4.13</junit.version>
-        <mockito-core.version>2.13.0</mockito-core.version>
+        <mockito-core.version>4.9.0</mockito-core.version>
         <jackson.version>2.9.6</jackson.version>
         <httpcore.version>4.4.5</httpcore.version>
         <httpClient.version>4.5.2</httpClient.version>
@@ -341,7 +341,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
+                <version>3.11.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -351,7 +351,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.5</version>
+                <version>3.0.0</version>
                 <configuration>
                     <argLine>-Xmx512m -XX:MaxMetaspaceSize=512m</argLine>
                     <includes>
@@ -362,7 +362,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.9</version>
+                <version>3.1.2</version>
                 <configuration>
                     <argLine>-Xmx512m -XX:MaxMetaspaceSize=512m</argLine>
                     <includes>
