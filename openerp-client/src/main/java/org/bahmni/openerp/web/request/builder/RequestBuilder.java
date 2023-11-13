@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class RequestBuilder {
 
-    public static String buildNewRequest(OpenERPRequest openERPRequest, Object id, String database, String password) {
+    public static String buildNewRequest(OpenERPRequest openERPRequest, Object id) {
         try {
             VelocityEngine velocityEngine = new VelocityEngine();
             velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
@@ -25,11 +25,7 @@ public class RequestBuilder {
             Template template = velocityEngine.getTemplate("request/template/new_customer.vm");
             VelocityContext context = new VelocityContext();
             context.put("parametersList", openERPRequest.getParameters());
-            context.put("id", id);
-            context.put("database", database);
-            context.put("password", password);
-            context.put("resource", openERPRequest.getResource());
-            context.put("operation", openERPRequest.getOperation());
+            context.put("id", 1);
 
             StringWriter writer = new StringWriter();
             template.merge(context, writer);

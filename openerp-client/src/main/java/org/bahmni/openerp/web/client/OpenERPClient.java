@@ -11,10 +11,15 @@ import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.RequestBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.bahmni.openerp.web.request.builder.Parameter;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Vector;
 
 @Service
@@ -36,6 +41,8 @@ public class OpenERPClient {
     private XmlRpcClient xmlRpcClient;
     private HttpClient httpClient;
 
+    private RestTemplate restTemplate = new RestTemplate();
+
     @Autowired
     public OpenERPClient(HttpClient httpClient, OpenERPProperties openERPProperties) {
         this.httpClient = httpClient;
@@ -46,6 +53,11 @@ public class OpenERPClient {
         password = openERPProperties.getPassword();
         connectionTimeoutInMilliseconds = openERPProperties.getConnectionTimeoutInMilliseconds();
         replyTimeoutInMilliseconds = openERPProperties.getReplyTimeoutInMilliseconds();
+    }
+
+    private HttpHeaders getHttpHeaders() {
+        HttpHeaders requestHeaders = new HttpHeaders();
+        return requestHeaders;
     }
 
     private Object executeRPC(XmlRpcClient loginRpcClient, Vector params, String methodName) {
@@ -65,26 +77,54 @@ public class OpenERPClient {
     }
 
     public String execute(OpenERPRequest openERPRequest) {
+        System.out.println("New execute With REST API Calls");
+        WebClient client =  WebClient.builder()
+                .baseUrl("http://localhost" + ":" + port)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
         login();
-        String request = RequestBuilder.buildNewRequest(openERPRequest, id, database, password);
-        String response = httpClient().post("http://" + host + ":" + port + XML_RPC_OBJECT_ENDPOINT, request);
+        String requestBody = RequestBuilder.buildNewRequest(openERPRequest, id);
+        String response = client.post().uri("/api/bahmni_data/").bodyValue(requestBody).retrieve().bodyToMono(String.class).block();
+        if (response == null) {
+            throw new OpenERPException("Login failed");
+        }
         new OpenERPResponseErrorValidator().checkForError(response);
         return response;
     }
 
     private void login() {
+        System.out.println("New Login With REST API Calls");
+
+        HttpHeaders httpHeaders = getHttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         if (id == null) {
-            XmlRpcClient loginRpcClient = xmlRpcClient(XML_RPC_COMMON_ENDPOINT);
+//            XmlRpcClient loginRpcClient = xmlRpcClient(XML_RPC_COMMON_ENDPOINT);
+            System.out.println("Login started");
+            System.out.println("host: " + host);
+            System.out.println("port: " + port);
+            Parameter username = new Parameter("username", user, "String");
+            Parameter pass = new Parameter("password", password, "String");
+            OpenERPRequest openERPRequest = new OpenERPRequest("res.users", "login", Arrays.asList(username, pass));
+            System.out.println("openERPRequest Created");
+            Object requestBody = RequestBuilder.buildNewRequest(openERPRequest, id);
+            System.out.println("requestBody Created");
+            System.out.println(requestBody);
 
-            Vector params = new Vector();
-            params.addElement(database);
-            params.addElement(user);
-            params.addElement(password);
+            try{
+                String url = "http://localhost:8069/api/login";
+                ResponseEntity response = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(requestBody, httpHeaders), String.class);
+            System.out.println("response Created");
+            System.out.println(response);
+            if (response == null) {
+                throw new OpenERPException("Login failed");
+            }
+//            new OpenERPResponseErrorValidator().checkForError(response);
+            }
+            catch (Exception e){
+                System.out.println(e.getMessage());
+                System.out.println(e.toString());
+            }
 
-            Object loginId = executeRPC(loginRpcClient, params, "login");
-            if(loginId == null || loginId.getClass() != Integer.class)
-                throw new OpenERPException(String.format("Failed to login. The login id is : %s", loginId));
-            id = loginId;
         }
     }
 
