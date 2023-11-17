@@ -19,6 +19,7 @@ public class AtomFeedClientHelper {
     private OpenERPAtomFeedProperties atomFeedProperties;
     private AtomFeedSpringTransactionSupport transactionManager;
     private OpenERPClient openERPClient;
+
     private FeedClientFactory feedClientFactory;
     private WebClientProvider webClientProvider;
 

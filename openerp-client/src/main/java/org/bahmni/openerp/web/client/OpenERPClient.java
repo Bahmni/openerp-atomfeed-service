@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.bahmni.openerp.web.request.builder.Parameter;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.MalformedURLException;
@@ -79,7 +78,7 @@ public class OpenERPClient {
         return executeRead(resource, "read", ids, params);
     }
 
-    public String execute(OpenERPRequest openERPRequest) {
+    public String execute(OpenERPRequest openERPRequest, String URI) {
         System.out.println("New execute With REST API Calls");
         WebClient client =  WebClient.builder()
                 .baseUrl("http://"+ host + ":" + port)
@@ -92,7 +91,7 @@ public class OpenERPClient {
         Consumer<HttpHeaders> consumer = httpHeaders -> httpHeaders.addAll(headers);
         String requestBody = RequestBuilder.buildNewRequest(openERPRequest, 1);
         System.out.println("Access Token : "+id);
-        String response = client.post().uri("/api/bahmni_data/").headers(consumer).bodyValue(requestBody).retrieve().bodyToMono(String.class).block();
+        String response = client.post().uri(URI).headers(consumer).bodyValue(requestBody).retrieve().bodyToMono(String.class).block();
         System.out.println(response);
         if (response == null) {
             throw new OpenERPException("Login failed");

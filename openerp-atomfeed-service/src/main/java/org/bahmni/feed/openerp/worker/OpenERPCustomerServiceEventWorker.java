@@ -39,7 +39,8 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
     @Override
     public void process(Event event) {
         try {
-            openERPClient.execute(mapRequest(event));
+
+            openERPClient.execute(mapRequest(event), "/api/bahmni_data/");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
