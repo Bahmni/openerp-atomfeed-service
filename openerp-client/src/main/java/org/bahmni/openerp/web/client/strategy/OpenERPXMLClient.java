@@ -50,15 +50,15 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     }
 
     @Override
-    public Object delete(String resource, Vector params) {
-        return execute(resource, "unlink", params);
+    public void delete(String resource, Vector params) {
+        execute(resource, "unlink", params);
     }
 
     private void login() {
         if (id == null) {
             XmlRpcClient loginRpcClient = xmlRpcClient(XML_RPC_COMMON_ENDPOINT);
 
-            Vector params = new Vector();
+            Vector<String> params = new Vector<String>();
             params.addElement(database);
             params.addElement(user);
             params.addElement(password);
@@ -73,8 +73,9 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     @Override
     public Object execute(OpenERPRequest openERPRequest, String URI){
         login();
-        String request = RequestBuilder.buildNewRequest(openERPRequest, id);
+        String request = RequestBuilder.buildNewXMLRequest(openERPRequest, id, database, password);
         String response = httpClient().post("http://" + host + ":" + port + XML_RPC_OBJECT_ENDPOINT, request);
+
         new OpenERPResponseErrorValidator().checkForError(response);
         return response;
     }
@@ -82,7 +83,7 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     @Override
     public Object execute(String resource, String operation, Vector params) {
         login();
-        Object args[] = {database, (Integer) id, password, resource, operation, params};
+        Object[] args = {database, (Integer) id, password, resource, operation, params};
 
         try {
             return xmlRpcClient(XML_RPC_OBJECT_ENDPOINT).execute("execute", args);
@@ -94,7 +95,7 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     @Override
     public Object executeRead(String resource, String operation,Vector ids, Vector params) {
         login();
-        Object args[] = {database, (Integer) id, password, resource, operation,ids, params};
+        Object[] args = {database, (Integer) id, password, resource, operation,ids, params};
 
         try {
             return xmlRpcClient(XML_RPC_OBJECT_ENDPOINT).execute("execute", args);

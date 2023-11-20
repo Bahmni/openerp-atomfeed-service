@@ -6,7 +6,7 @@ import java.util.Vector;
 
 public interface OpenERPClientStrategy {
 
-    Object delete(String resource, Vector params);
+    void delete(String resource, Vector params);
 
     Object execute(OpenERPRequest openERPRequest, String URI);
 
