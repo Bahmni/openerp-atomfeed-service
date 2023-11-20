@@ -2,7 +2,7 @@ package org.bahmni.feed.openerp.worker;
 
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -29,7 +29,7 @@ public class OpenERPLabOrderTypeServiceEventWorkerTest {
     @Mock
     private OpenERPAtomFeedProperties atomFeedProperties;
     @Mock
-    private OpenERPClient openERPClient;
+    private OpenERPContext openERPContext;
     @Mock
     private OpenMRSWebClient webClient;
 
@@ -84,7 +84,7 @@ public class OpenERPLabOrderTypeServiceEventWorkerTest {
                 "}";
 
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPLabOrderTypeServiceEventWorker(feedUri, openERPClient, webClient, "http://prefix/");
+        worker = new OpenERPLabOrderTypeServiceEventWorker(feedUri, openERPContext, webClient, "http://prefix/");
         when(webClient.get(URI.create("http://prefix/radiology"))).thenReturn(radiologyTestJson);
         when(webClient.get(URI.create("http://prefix/test"))).thenReturn(labTestJson);
         when(webClient.get(URI.create("http://prefix/panel"))).thenReturn(labPanelJson);
@@ -97,7 +97,7 @@ public class OpenERPLabOrderTypeServiceEventWorkerTest {
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPClient).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> parameters = openERPRequest.getParameters();
@@ -117,7 +117,7 @@ public class OpenERPLabOrderTypeServiceEventWorkerTest {
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPClient).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> parameters = openERPRequest.getParameters();
@@ -136,7 +136,7 @@ public class OpenERPLabOrderTypeServiceEventWorkerTest {
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPClient).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> parameters = openERPRequest.getParameters();
@@ -155,7 +155,7 @@ public class OpenERPLabOrderTypeServiceEventWorkerTest {
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPClient).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> actualParameters = openERPRequest.getParameters();
@@ -169,7 +169,7 @@ public class OpenERPLabOrderTypeServiceEventWorkerTest {
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPClient).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> actualParameters = openERPRequest.getParameters();

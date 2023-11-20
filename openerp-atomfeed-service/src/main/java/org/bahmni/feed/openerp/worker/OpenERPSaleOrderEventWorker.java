@@ -7,7 +7,7 @@ import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.encounter.MapERPOrders;
 import org.bahmni.feed.openerp.domain.encounter.OpenMRSEncounter;
 import org.bahmni.feed.openerp.domain.visit.OpenMRSVisit;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.net.URI;
 
 public class OpenERPSaleOrderEventWorker implements EventWorker {
-    OpenERPClient openERPClient;
+    OpenERPContext openERPContext;
     private String feedUrl;
     private OpenMRSWebClient webClient;
     private String urlPrefix;
@@ -25,9 +25,9 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
     private static Logger logger = LogManager.getLogger(OpenERPSaleOrderEventWorker.class);
 
-    public OpenERPSaleOrderEventWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient webClient, String urlPrefix) {
+    public OpenERPSaleOrderEventWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix) {
         this.feedUrl = feedUrl;
-        this.openERPClient = openERPClient;
+        this.openERPContext = openERPContext;
         this.webClient = webClient;
         this.urlPrefix = urlPrefix;
     }
@@ -39,7 +39,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
             if (!openERPRequest.shouldERPConsumeEvent())
                 return;
 
-            openERPClient.execute(openERPRequest);
+            openERPContext.execute(openERPRequest);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

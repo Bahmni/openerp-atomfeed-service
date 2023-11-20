@@ -5,13 +5,14 @@ import com.sun.syndication.feed.atom.Entry;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
+import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob;
 import org.bahmni.feed.openerp.job.SimpleFeedJob;
 import org.bahmni.feed.openerp.worker.OpenERPCustomerServiceEventWorker;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
 import org.ict4h.atomfeed.Configuration;
@@ -73,7 +74,7 @@ public class OpenERPCustomerFeedIT {
     private AllFailedEvents allFailedEvents;
 
     @Mock
-    private OpenERPClient openERPClient;
+    private OpenERPContext openERPContext;
 
     @Mock
     private WorkerFactory workerFactory;
@@ -187,10 +188,10 @@ public class OpenERPCustomerFeedIT {
         OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
         authenticationResponse.setAuthenticated(true);
         authenticationResponse.setSessionId("sessionIdValue");
-//        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
+        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
         when(webClientProvider.getWebClient(any(Jobs.class))).thenReturn(webClient);
-        when(workerFactory.getWorker(Jobs.CUSTOMER_FEED, feedUrl,openERPClient, "http://mrs.auth.uri")).thenReturn(openERPCustomerServiceEventWorker);
+        when(workerFactory.getWorker(Jobs.CUSTOMER_FEED, feedUrl, openERPContext, "http://mrs.auth.uri")).thenReturn(openERPCustomerServiceEventWorker);
 
         AtomFeedClientHelper clientHelper = mock(AtomFeedClientHelper.class);
         AtomFeedClient atomFeedClient = new AtomFeedClient(allFeedsMock, allMarkersJdbc, allFailedEvents, FeedClientFactory.atomFeedProperties(atomFeedProperties),

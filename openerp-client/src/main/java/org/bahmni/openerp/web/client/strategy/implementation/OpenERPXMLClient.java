@@ -1,8 +1,9 @@
-package org.bahmni.openerp.web.client.strategy;
+package org.bahmni.openerp.web.client.strategy.implementation;
 
 import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.OpenERPProperties;
 import org.bahmni.openerp.web.client.OpenERPResponseErrorValidator;
+import org.bahmni.openerp.web.client.strategy.OpenERPClientStrategy;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.http.client.HttpClient;
 import org.apache.xmlrpc.XmlRpcException;
@@ -71,11 +72,10 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     }
 
     @Override
-    public Object execute(OpenERPRequest openERPRequest, String URI){
+    public Object execute(OpenERPRequest openERPRequest){
         login();
         String request = RequestBuilder.buildNewXMLRequest(openERPRequest, id, database, password);
         String response = httpClient().post("http://" + host + ":" + port + XML_RPC_OBJECT_ENDPOINT, request);
-
         new OpenERPResponseErrorValidator().checkForError(response);
         return response;
     }

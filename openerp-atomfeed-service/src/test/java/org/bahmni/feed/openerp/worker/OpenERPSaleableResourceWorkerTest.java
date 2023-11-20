@@ -2,7 +2,7 @@ package org.bahmni.feed.openerp.worker;
 
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -26,7 +26,7 @@ public class OpenERPSaleableResourceWorkerTest {
     @Mock
     private OpenERPAtomFeedProperties atomFeedProperties;
     @Mock
-    private OpenERPClient openERPClient;
+    private OpenERPContext openERPContext;
     @Mock
     private OpenMRSWebClient webClient;
 
@@ -59,7 +59,7 @@ public class OpenERPSaleableResourceWorkerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPSaleableResourceWorker(feedUri, openERPClient, webClient, "https://mybahmni/");
+        worker = new OpenERPSaleableResourceWorker(feedUri, openERPContext, webClient, "https://mybahmni/");
         when(webClient.get(URI.create(eventUrl))).thenReturn(sampleProcedureJson);
     }
 
@@ -68,7 +68,7 @@ public class OpenERPSaleableResourceWorkerTest {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPClient).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> parameters = openERPRequest.getParameters();
@@ -90,12 +90,12 @@ public class OpenERPSaleableResourceWorkerTest {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPClient).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         List<Parameter> parameters = erpRequestCatcher.getValue().getParameters();
         Assert.assertTrue(parameters.contains(new Parameter("name", "Dressing of Wound")));
         Assert.assertTrue(parameters.contains(new Parameter("uuid", "e48dd85b-fb13-4f3a-ae01-e6fd57eea6fe")));
-        //Assert.assertTrue(parameters.contains(new Parameter("is_active", "0", "boolean")));
+        Assert.assertTrue(parameters.contains(new Parameter("is_active", "0", "boolean")));
     }
 
 }

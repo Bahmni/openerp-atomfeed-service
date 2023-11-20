@@ -4,7 +4,7 @@ import com.sun.syndication.feed.atom.Content;
 import com.sun.syndication.feed.atom.Entry;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.worker.OpenERPCustomerServiceEventWorker;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -24,13 +24,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class OpenERPCustomerServiceEventWorkerTest {
-    private OpenERPClient openERPClient;
+    private OpenERPContext openERPContext;
     private OpenMRSWebClient mockWebClient;
     private String MRSURLPrefix;
 
     @Before
     public void setUp() throws Exception {
-        openERPClient = mock(OpenERPClient.class);
+        openERPContext = mock(OpenERPContext.class);
         mockWebClient = mock(OpenMRSWebClient.class);
     }
 
@@ -38,7 +38,7 @@ public class OpenERPCustomerServiceEventWorkerTest {
     public void shouldCallOpenERPClientWithRightParameters() throws FileNotFoundException {
         MRSURLPrefix = "urlPrefixTest";
         OpenERPCustomerServiceEventWorker customerServiceEventWorker =
-                new OpenERPCustomerServiceEventWorker("www.openmrs.com", openERPClient, mockWebClient, MRSURLPrefix);
+                new OpenERPCustomerServiceEventWorker("www.openmrs.com", openERPContext, mockWebClient, MRSURLPrefix);
 
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("patientResource.xml");
         String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
@@ -48,7 +48,7 @@ public class OpenERPCustomerServiceEventWorkerTest {
 
         customerServiceEventWorker.process(event);
 
-        verify(openERPClient).execute(createOpenERPRequest(event));
+        verify(openERPContext).execute(createOpenERPRequest(event));
 
     }
 

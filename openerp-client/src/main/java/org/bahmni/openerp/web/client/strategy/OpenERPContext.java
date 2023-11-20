@@ -21,8 +21,8 @@ public class OpenERPContext {
         strategy.delete(resource, params);
     }
 
-    public Object execute(OpenERPRequest openERPRequest, String URI) {
-        return strategy.execute(openERPRequest, URI);
+    public Object execute(OpenERPRequest openERPRequest) {
+        return strategy.execute(openERPRequest);
     }
 
     public Object execute(String resource, String operation, Vector params) {

@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.client.OpenElisWebClient;
 import org.bahmni.feed.openerp.domain.openelis.OpenElisLabOrder;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.bahmni.openerp.web.service.ProductService;
@@ -16,18 +16,18 @@ import java.io.IOException;
 import java.net.URI;
 
 public class OpenElisSaleOrderEventWorker implements EventWorker {
-    private String feedUrl;
-    private OpenERPClient openERPClient;
-    private OpenElisWebClient webClient;
-    private String urlPrefix;
+    private final String feedUrl;
+    private final OpenERPContext openERPContext;
+    private final OpenElisWebClient webClient;
+    private final String urlPrefix;
     private ProductService productService;
 
 
-    private static Logger logger = LogManager.getLogger(OpenElisSaleOrderEventWorker.class);
+    private static final Logger logger = LogManager.getLogger(OpenElisSaleOrderEventWorker.class);
 
-    public OpenElisSaleOrderEventWorker(String feedUrl, OpenERPClient openERPClient, OpenElisWebClient webClient, String urlPrefix) {
+    public OpenElisSaleOrderEventWorker(String feedUrl, OpenERPContext openERPContext, OpenElisWebClient webClient, String urlPrefix) {
         this.feedUrl = feedUrl;
-        this.openERPClient = openERPClient;
+        this.openERPContext = openERPContext;
         this.webClient = webClient;
         this.urlPrefix = urlPrefix;
     }
@@ -39,8 +39,7 @@ public class OpenElisSaleOrderEventWorker implements EventWorker {
             OpenERPRequest openERPRequest = mapRequest(event);
             if (!openERPRequest.shouldERPConsumeEvent())
                 return;
-
-            openERPClient.execute(openERPRequest);
+            openERPContext.execute(openERPRequest);
         } catch (Exception e) {
             logger.error("Error processing openelis sale order event : {}", event.toString(), e);
             throw new RuntimeException(e);

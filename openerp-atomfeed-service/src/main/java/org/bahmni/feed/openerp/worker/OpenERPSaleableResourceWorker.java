@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.OpenMRSResource;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -21,15 +21,15 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
     public static final String ERP_EVENT_CATEGORY = "create.service.saleable";
     public static final String SALEABLE_PROPERTY_NAME = "saleable";
     public static final String PRODUCT_CATEGORY = "product_category";
-    private OpenERPClient openERPClient;
+    private OpenERPContext openERPContext;
     private String feedUrl;
     private OpenMRSWebClient openMRSWebClient;
     private String urlPrefix;
 
     private static Logger logger = LogManager.getLogger(OpenERPSaleableResourceWorker.class);
 
-    public OpenERPSaleableResourceWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
-        this.openERPClient = openERPClient;
+    public OpenERPSaleableResourceWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+        this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
         this.openMRSWebClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
@@ -44,7 +44,7 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
                 logger.info(String.format("Resource is not a saleable resource. Ignoring. Event [%s]", event.getId()));
                 return;
             }
-            openERPClient.execute(mapToOpenERPRequest(event, resource));
+            openERPContext.execute(mapToOpenERPRequest(event, resource));
         } catch (Exception e) {
             logger.error(String.format("Error occurred while trying to process Saleable Event [%s]", event.getId()), e);
             throw new RuntimeException(String.format("Error occurred while trying to process Saleable Event [%s]", event.getId()), e);

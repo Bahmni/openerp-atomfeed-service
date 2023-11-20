@@ -8,7 +8,7 @@ public interface OpenERPClientStrategy {
 
     void delete(String resource, Vector params);
 
-    Object execute(OpenERPRequest openERPRequest, String URI);
+    Object execute(OpenERPRequest openERPRequest);
 
     Object execute(String resource, String operation, Vector params);
 
