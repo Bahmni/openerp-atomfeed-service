@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.domain.OpenMRSDrug;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -20,14 +20,14 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
 
     private static Logger logger = LogManager.getLogger(OpenERPDrugServiceEventWorker.class);
 
-    private OpenERPClient openERPClient;
+    private OpenERPContext openERPContext;
     private String feedUrl;
     private OpenMRSWebClient webClient;
     private String urlPrefix;
 
 
-    public OpenERPDrugServiceEventWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
-        this.openERPClient = openERPClient;
+    public OpenERPDrugServiceEventWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+        this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
         this.webClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
@@ -37,7 +37,7 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
     public void process(Event event) {
         logger.debug("Processing the event [{}]", event.getContent());
         try {
-            openERPClient.execute(mapRequest(event));
+            openERPContext.execute(mapRequest(event));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

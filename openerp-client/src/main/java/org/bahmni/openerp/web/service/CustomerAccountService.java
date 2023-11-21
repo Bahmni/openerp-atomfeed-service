@@ -3,7 +3,7 @@ package org.bahmni.openerp.web.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bahmni.openerp.web.OpenERPException;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +11,13 @@ import java.util.Vector;
 
 @Service
 public class CustomerAccountService {
-    OpenERPClient openERPClient;
+    OpenERPContext openERPContext;
     private static Logger logger = LogManager.getLogger(CustomerAccountService.class);
 
 
     @Autowired
-    public CustomerAccountService(OpenERPClient client) {
-        this.openERPClient = client;
+    public CustomerAccountService(OpenERPContext openERPContext) {
+        this.openERPContext = openERPContext;
     }
 
     public void updateCustomerReceivables(String patientId, double amount) {
@@ -38,7 +38,7 @@ public class CustomerAccountService {
         params.addElement(args2);
 
         try {
-            openERPClient.updateCustomerReceivables("account.receivables", params);
+            openERPContext.updateCustomerReceivables("account.receivables", params);
             return true ;
         } catch (Exception exception) {
             logger.error(String.format("[%s] : Account Receivable update failed for amount of %s", patientId, amount), exception);
