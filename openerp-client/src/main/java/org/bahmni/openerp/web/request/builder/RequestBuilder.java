@@ -7,22 +7,20 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.request.OpenERPRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.StringWriter;
-import java.util.List;
 
 @Service
 public class RequestBuilder {
 
-    public static String buildNewRequest(OpenERPRequest openERPRequest, Object id, String database, String password) {
+    public static String buildNewXMLRequest(OpenERPRequest openERPRequest, Object id, String database, String password) {
         try {
             VelocityEngine velocityEngine = new VelocityEngine();
             velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
             velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
             velocityEngine.init();
-            Template template = velocityEngine.getTemplate("request/template/new_customer.vm");
+            Template template = velocityEngine.getTemplate("request/template/xml_template.vm");
             VelocityContext context = new VelocityContext();
             context.put("parametersList", openERPRequest.getParameters());
             context.put("id", id);
