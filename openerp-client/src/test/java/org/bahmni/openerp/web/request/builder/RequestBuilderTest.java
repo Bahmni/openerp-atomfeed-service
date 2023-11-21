@@ -28,8 +28,8 @@ public class RequestBuilderTest {
         parameters.add(ref);
         parameters.add(villageParam);
         OpenERPRequest request = new OpenERPRequest("res.partner", "execute", parameters);
-        String requestXml = RequestBuilder.buildNewRequest(request, id, database, password);
-        //String requestXmlForComparison = requestXml.replace("", " ");
+        String requestXml = RequestBuilder.buildNewXMLRequest(request, id, database, password);
+        String requestXmlForComparison = requestXml.replace("", " ");
 
         String expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
                 "<methodCall>" +
@@ -86,7 +86,7 @@ public class RequestBuilderTest {
 
         OpenERPRequest request = new OpenERPRequest("res.partner", "execute", parameters);
 
-        String requestXml = RequestBuilder.buildNewRequest(request, id, database, password);
+        String requestXml = RequestBuilder.buildNewXMLRequest(request, id, database, password);
 
         String expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
                 "<methodCall>" +
@@ -135,7 +135,7 @@ public class RequestBuilderTest {
 
         OpenERPRequest request = new OpenERPRequest("res.partner", "execute", parameters);
 
-        String requestXml = RequestBuilder.buildNewRequest(request, id, database, password);
+        String requestXml = RequestBuilder.buildNewXMLRequest(request, id, database, password);
 
         String expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
                 "<methodCall>" +
