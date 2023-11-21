@@ -3,7 +3,7 @@ package org.bahmni.feed.openerp.worker;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticationResponse;
 import org.bahmni.webclients.openmrs.OpenMRSAuthenticator;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -36,7 +36,7 @@ public class OpenERPSaleOrderEventWorkerIT {
     @Mock
     private OpenERPAtomFeedProperties atomFeedProperties;
     @Mock
-    private OpenERPClient openERPClient;
+    private OpenERPContext openERPContext;
     @Mock
     private OpenMRSAuthenticator openMRSAuthenticator;
     @Mock
@@ -79,15 +79,15 @@ public class OpenERPSaleOrderEventWorkerIT {
         OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
         authenticationResponse.setAuthenticated(true);
         authenticationResponse.setSessionId("sessionIdValue");
-//        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
+        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
         HashMap fieldMap = new HashMap();
         fieldMap.put("uuid","12345");
-        when(openERPClient.search(any(String.class), any(Vector.class))).thenReturn(new Object[]{12345});
-        when(openERPClient.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
+        when(openERPContext.search(any(String.class), any(Vector.class))).thenReturn(new Object[]{12345});
+        when(openERPContext.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
 
         String feedUrl = "http://xxxx/encounter/feed/2";
-        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,openERPClient,webClient,"http://mrs.auth.uri");
+        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,openERPContext,webClient,"http://mrs.auth.uri");
         Event event = new Event("Test",feedUrl);
         eventWorker.process(event);
     }
@@ -108,17 +108,17 @@ public class OpenERPSaleOrderEventWorkerIT {
         OpenMRSAuthenticationResponse authenticationResponse = new OpenMRSAuthenticationResponse();
         authenticationResponse.setAuthenticated(true);
         authenticationResponse.setSessionId("sessionIdValue");
-//        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
+        when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
 
         HashMap fieldMap = new HashMap();
         fieldMap.put("uuid","12345");
-        when(openERPClient.search(any(String.class), any(Vector.class))).thenReturn(new Object[]{12345});
-        when(openERPClient.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
+        when(openERPContext.search(any(String.class), any(Vector.class))).thenReturn(new Object[]{12345});
+        when(openERPContext.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
 
         String feedUrl = "http://xxxx/encounter/feed/2";
         Event event = new Event("Test", feedUrl);
 
-        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl, openERPClient, webClient,"http://mrs.auth.uri");
+        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl, openERPContext, webClient,"http://mrs.auth.uri");
         eventWorker.process(event);
 
     }

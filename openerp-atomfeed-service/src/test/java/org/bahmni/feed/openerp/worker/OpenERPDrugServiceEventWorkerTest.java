@@ -2,7 +2,7 @@ package org.bahmni.feed.openerp.worker;
 
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -27,7 +27,7 @@ public class OpenERPDrugServiceEventWorkerTest {
     @Mock
     private OpenERPAtomFeedProperties atomFeedProperties;
     @Mock
-    private OpenERPClient openERPClient;
+    private OpenERPContext openERPContext;
     @Mock
     private OpenMRSWebClient webClient;
 
@@ -49,7 +49,7 @@ public class OpenERPDrugServiceEventWorkerTest {
                 "    \"name\": \"Paracetamol 250mg\"\n" +
                 "}";
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPDrugServiceEventWorker(feedUri,openERPClient,webClient,"http://prefix/");
+        worker = new OpenERPDrugServiceEventWorker(feedUri,openERPContext,webClient,"http://prefix/");
 
     }
 
@@ -60,7 +60,7 @@ public class OpenERPDrugServiceEventWorkerTest {
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPClient).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> actualParameters = openERPRequest.getParameters();
@@ -87,7 +87,7 @@ public class OpenERPDrugServiceEventWorkerTest {
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPClient).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> actualParameters = openERPRequest.getParameters();

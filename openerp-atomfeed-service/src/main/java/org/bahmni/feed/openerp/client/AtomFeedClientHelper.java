@@ -4,7 +4,8 @@ import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
+import org.bahmni.openerp.web.client.strategy.implementation.OpenERPXMLClient;
 import org.bahmni.webclients.ClientCookies;
 import org.ict4h.atomfeed.client.AtomFeedProperties;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
@@ -16,16 +17,16 @@ import org.ict4h.atomfeed.client.service.FeedClient;
 import org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport;
 
 public class AtomFeedClientHelper {
-    private OpenERPAtomFeedProperties atomFeedProperties;
-    private AtomFeedSpringTransactionSupport transactionManager;
-    private OpenERPClient openERPClient;
+    private final OpenERPAtomFeedProperties atomFeedProperties;
+    private final AtomFeedSpringTransactionSupport transactionManager;
+    private final OpenERPXMLClient openERPXMLClient;
     private FeedClientFactory feedClientFactory;
-    private WebClientProvider webClientProvider;
+    private final WebClientProvider webClientProvider;
 
-    public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPClient openERPClient) {
+    public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPXMLClient openERPXMLClient) {
         this.atomFeedProperties = atomFeedProperties;
         this.transactionManager = transactionManager;
-        this.openERPClient = openERPClient;
+        this.openERPXMLClient = openERPXMLClient;
         this.webClientProvider = new WebClientProvider(atomFeedProperties);
     }
     
@@ -42,7 +43,9 @@ public class AtomFeedClientHelper {
         AllFeeds allFeeds = getAllFeeds(atomFeedProperties, cookies);
         AllMarkers allMarkers = new AllMarkersJdbcImpl(transactionManager);
         AllFailedEvents allFailedEvents = new AllFailedEventsJdbcImpl(transactionManager);
-        return feedClientFactory.getFeedClient(atomFeedProperties, transactionManager, openERPClient, allFeeds, allMarkers, allFailedEvents, jobName);
+        //TODO: Create a toggle between rest and xml client
+        OpenERPContext openERPContext = new OpenERPContext(openERPXMLClient);
+        return feedClientFactory.getFeedClient(atomFeedProperties, transactionManager, openERPContext, allFeeds, allMarkers, allFailedEvents, jobName);
     }
 
     static AllFeeds getAllFeeds(OpenERPAtomFeedProperties atomFeedProperties, ClientCookies cookies) {

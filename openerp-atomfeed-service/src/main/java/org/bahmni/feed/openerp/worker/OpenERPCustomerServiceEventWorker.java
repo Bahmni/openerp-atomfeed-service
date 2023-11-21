@@ -10,7 +10,7 @@ import org.bahmni.feed.openerp.domain.OpenMRSPatient;
 import org.bahmni.feed.openerp.domain.OpenMRSPatientIdentifier;
 import org.bahmni.feed.openerp.domain.OpenMRSPerson;
 import org.bahmni.feed.openerp.domain.OpenMRSPersonAddress;
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -22,16 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OpenERPCustomerServiceEventWorker implements EventWorker {
-    OpenERPClient openERPClient;
+    OpenERPContext openERPContext;
     private String feedUrl;
     private OpenMRSWebClient webClient;
     private String urlPrefix;
 
     private static Logger logger = LogManager.getLogger(OpenERPCustomerServiceEventWorker.class);
 
-    public OpenERPCustomerServiceEventWorker(String feedUrl, OpenERPClient openERPClient, OpenMRSWebClient webClient, String urlPrefix) {
+    public OpenERPCustomerServiceEventWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix) {
         this.feedUrl = feedUrl;
-        this.openERPClient = openERPClient;
+        this.openERPContext = openERPContext;
         this.webClient = webClient;
         this.urlPrefix = urlPrefix;
     }
@@ -39,7 +39,7 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
     @Override
     public void process(Event event) {
         try {
-            openERPClient.execute(mapRequest(event));
+            openERPContext.execute(mapRequest(event));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

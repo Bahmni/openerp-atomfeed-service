@@ -1,6 +1,6 @@
 package org.bahmni.openerp.web.service;
 
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.OpenERPRequestTestHelper;
 import org.bahmni.openerp.web.request.builder.Parameter;
@@ -23,7 +23,7 @@ public class CustomerServiceTest {
     private CustomerService customerService;
 
     @Mock
-    private OpenERPClient openERPClient;
+    private OpenERPContext openERPContext;
 
     @Mock
     private OpenERPCustomerParameterMapper parameterMapper;
@@ -32,7 +32,7 @@ public class CustomerServiceTest {
     @Before
     public void setup() {
         initMocks(this);
-        customerService = new CustomerService(openERPClient, parameterMapper);
+        customerService = new CustomerService(openERPContext, parameterMapper);
         openERPRequestTestHelper = new OpenERPRequestTestHelper();
     }
 
@@ -45,7 +45,7 @@ public class CustomerServiceTest {
         Vector searchparams = new Vector();
         searchparams.addElement(new Object[]{"ref", "=", "12345"});
         Object[] results = new Object[]{};
-        when(openERPClient.search((String) any(), (Vector) any())).thenReturn(results);
+        when(openERPContext.search((String) any(), (Vector) any())).thenReturn(results);
 
         List<Parameter> parameters = openERPRequestTestHelper.createCustomerRequest(name,patientId,village);
         OpenERPRequest request = new OpenERPRequest("res_partner", "execute", parameters);
@@ -54,7 +54,7 @@ public class CustomerServiceTest {
 
         customerService.create(customer);
 
-        verify(openERPClient).execute(request);
+        verify(openERPContext).execute(request);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class CustomerServiceTest {
         Vector searchparams = new Vector();
         searchparams.addElement(new Object[]{"ref", "=", "12345"});
         Object[] results = new Object[]{new Object()};
-        when(openERPClient.search((String) any(), (Vector) any())).thenReturn(results);
+        when(openERPContext.search((String) any(), (Vector) any())).thenReturn(results);
 
         try {
             customerService.create(customer);

@@ -1,6 +1,6 @@
 package org.bahmni.openerp.web.service;
 
-import org.bahmni.openerp.web.client.OpenERPClient;
+import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,18 +9,18 @@ import java.util.Vector;
 
 @Service
 public class ProductService {
-    private OpenERPClient openERPClient;
+    private OpenERPContext openERPContext;
 
     @Autowired
-    public ProductService(OpenERPClient openERPClient) {
-        this.openERPClient = openERPClient;
+    public ProductService(OpenERPContext openERPContext) {
+        this.openERPContext = openERPContext;
     }
 
     public String findProductByName(String name) {
         Object args[] = {"name", "=", name};
         Vector params = new Vector();
         params.addElement(args);
-        Object[] productIds = (Object[])openERPClient.search("product.product", params);
+        Object[] productIds = (Object[])openERPContext.search("product.product", params);
         Object[] productUUIDs = null;
         if(productIds.length > 0)   {
             Integer prodId = (Integer) productIds[0];
@@ -28,7 +28,7 @@ public class ProductService {
             ids.add(prodId);
             Vector paramFields = new Vector();
             paramFields.add("uuid");
-            productUUIDs = (Object[])openERPClient.read("product.product",ids, paramFields);
+            productUUIDs = (Object[])openERPContext.read("product.product",ids, paramFields);
             if(productUUIDs.length > 0){
                 Map productUUID = (Map) productUUIDs[0];
                 return (String) productUUID.get("uuid");
