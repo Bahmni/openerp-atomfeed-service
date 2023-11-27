@@ -36,4 +36,22 @@ public class RequestBuilder {
             throw new OpenERPException(e);
         }
     }
+
+    public static String buildNewRestRequest(OpenERPRequest openERPRequest, Object id) {
+        try {
+            VelocityEngine velocityEngine = new VelocityEngine();
+            velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+            velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+            velocityEngine.init();
+            Template template = velocityEngine.getTemplate("request/template/rest_template.vm");
+            VelocityContext context = new VelocityContext();
+            context.put("parametersList", openERPRequest.getParameters());
+            context.put("id", id);
+            StringWriter writer = new StringWriter();
+            template.merge(context, writer);
+            return writer.toString();
+        } catch (Exception e) {
+            throw new OpenERPException(e);
+        }
+    }
 }

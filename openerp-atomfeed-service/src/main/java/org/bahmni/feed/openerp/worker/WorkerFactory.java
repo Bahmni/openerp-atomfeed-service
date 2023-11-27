@@ -19,10 +19,13 @@ public class WorkerFactory {
             case CUSTOMER_FEED: return new OpenERPCustomerServiceEventWorker(feedUrl, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
             case SALEORDER_FEED: return new OpenERPSaleOrderEventWorker(feedUrl, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
             case OPENELIS_SALEORDER_FEED: return  new OpenElisSaleOrderEventWorker(feedUrl, openERPContext, webClientProvider.openElisWebClient(), urlPrefix);
+            // Test in OpenElis
             case DRUG_FEED: return new OpenERPDrugServiceEventWorker(feedUrl, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
+            // Drug is created in OpenMRS
             case LAB_FEED: return new OpenERPLabOrderTypeServiceEventWorker(feedUrl, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
+            // Lab test is created in OpenMRS
             case SALEABLE_FEED: return new OpenERPSaleableResourceWorker(feedUrl, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
-        }
+            // Saleable resource is created in OpenMRS
         throw new RuntimeException(String.format("No worker for %s", jobName));
     }
 }
