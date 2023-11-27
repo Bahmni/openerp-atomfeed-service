@@ -23,14 +23,17 @@ public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
 
     private OpenERPContext openERPContext;
     private String feedUrl;
+
+    private String endpointURI;
     private OpenMRSWebClient webClient;
     private String urlPrefix;
     private Map<String, OpenMRSLabOrderTypeEvent> labOrderTypeEventMap = new HashMap<>();
 
 
-    public OpenERPLabOrderTypeServiceEventWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPLabOrderTypeServiceEventWorker(String feedUrl, String endpointURI, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
+        this.endpointURI = endpointURI;
         this.webClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
         labOrderTypeEventMap.put(OpenMRSRadiologyTestEvent.RADIOLOGY_TEST_EVENT_NAME, new OpenMRSRadiologyTestEvent());
@@ -44,7 +47,7 @@ public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
         try {
             OpenMRSLabOrderTypeEvent openMRSLabOrderTypeEvent = labOrderTypeEventMap.get(event.getTitle());
             if(openMRSLabOrderTypeEvent == null) return ;
-            openERPContext.execute(mapRequest(event, openMRSLabOrderTypeEvent));
+            openERPContext.execute(mapRequest(event, openMRSLabOrderTypeEvent), endpointURI);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

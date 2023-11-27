@@ -22,13 +22,17 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
 
     private OpenERPContext openERPContext;
     private String feedUrl;
+
+    private String endpointURI;
+
     private OpenMRSWebClient webClient;
     private String urlPrefix;
 
 
-    public OpenERPDrugServiceEventWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPDrugServiceEventWorker(String feedUrl, String endpointURI, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
+        this.endpointURI = endpointURI;
         this.webClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
     }
@@ -37,7 +41,7 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
     public void process(Event event) {
         logger.debug("Processing the event [{}]", event.getContent());
         try {
-            openERPContext.execute(mapRequest(event));
+            openERPContext.execute(mapRequest(event), endpointURI);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -28,6 +28,8 @@ public class OpenERPCustomerServiceEventWorkerTest {
     private OpenMRSWebClient mockWebClient;
     private String MRSURLPrefix;
 
+    private String endpointURI = "https://client/openmrs/ws/atomfeed/customer/recent";
+
     @Before
     public void setUp() throws Exception {
         openERPContext = mock(OpenERPContext.class);
@@ -38,7 +40,7 @@ public class OpenERPCustomerServiceEventWorkerTest {
     public void shouldCallOpenERPClientWithRightParameters() throws FileNotFoundException {
         MRSURLPrefix = "urlPrefixTest";
         OpenERPCustomerServiceEventWorker customerServiceEventWorker =
-                new OpenERPCustomerServiceEventWorker("www.openmrs.com", openERPContext, mockWebClient, MRSURLPrefix);
+                new OpenERPCustomerServiceEventWorker("www.openmrs.com", endpointURI, openERPContext, mockWebClient, MRSURLPrefix);
 
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("patientResource.xml");
         String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
@@ -48,7 +50,7 @@ public class OpenERPCustomerServiceEventWorkerTest {
 
         customerServiceEventWorker.process(event);
 
-        verify(openERPContext).execute(createOpenERPRequest(event));
+        verify(openERPContext).execute(createOpenERPRequest(event),endpointURI);
 
     }
 

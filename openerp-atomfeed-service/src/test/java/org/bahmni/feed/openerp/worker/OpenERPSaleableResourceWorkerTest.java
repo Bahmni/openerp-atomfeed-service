@@ -36,6 +36,8 @@ public class OpenERPSaleableResourceWorkerTest {
     private String eventUrl = "https://mybahmni/" + eventContent;
     private String feedUri = "https://mybahmni/openmrs/ws/atomfeed/saleable/recent";
 
+    private String endpointUri = "https://client/openmrs/ws/atomfeed/saleable/recent";
+
 
     String sampleProcedureJsonWithSaleableAsFalse
             = "{\n" +
@@ -59,7 +61,7 @@ public class OpenERPSaleableResourceWorkerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPSaleableResourceWorker(feedUri, openERPContext, webClient, "https://mybahmni/");
+        worker = new OpenERPSaleableResourceWorker(feedUri,endpointUri, openERPContext, webClient, "https://mybahmni/");
         when(webClient.get(URI.create(eventUrl))).thenReturn(sampleProcedureJson);
     }
 
@@ -68,7 +70,7 @@ public class OpenERPSaleableResourceWorkerTest {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPContext).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture(), endpointUri);
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> parameters = openERPRequest.getParameters();
@@ -90,7 +92,7 @@ public class OpenERPSaleableResourceWorkerTest {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPContext).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture(), endpointUri);
 
         List<Parameter> parameters = erpRequestCatcher.getValue().getParameters();
         Assert.assertTrue(parameters.contains(new Parameter("name", "Dressing of Wound")));

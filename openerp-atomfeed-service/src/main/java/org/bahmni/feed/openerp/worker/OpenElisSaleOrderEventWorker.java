@@ -20,10 +20,13 @@ public class OpenElisSaleOrderEventWorker implements EventWorker {
     private final OpenElisWebClient webClient;
     private final String urlPrefix;
 
+    private String endpointURI;
+
     private static final Logger logger = LogManager.getLogger(OpenElisSaleOrderEventWorker.class);
 
-    public OpenElisSaleOrderEventWorker(String feedUrl, OpenERPContext openERPContext, OpenElisWebClient webClient, String urlPrefix) {
+    public OpenElisSaleOrderEventWorker(String feedUrl, String endpointURI, OpenERPContext openERPContext, OpenElisWebClient webClient, String urlPrefix) {
         this.feedUrl = feedUrl;
+        this.endpointURI = endpointURI;
         this.openERPContext = openERPContext;
         this.webClient = webClient;
         this.urlPrefix = urlPrefix;
@@ -36,7 +39,7 @@ public class OpenElisSaleOrderEventWorker implements EventWorker {
             OpenERPRequest openERPRequest = mapRequest(event);
             if (!openERPRequest.shouldERPConsumeEvent())
                 return;
-            openERPContext.execute(openERPRequest);
+            openERPContext.execute(openERPRequest, endpointURI);
         } catch (Exception e) {
             logger.error("Error processing openelis sale order event : {}", event.toString(), e);
             throw new RuntimeException(e);

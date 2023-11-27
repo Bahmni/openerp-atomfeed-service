@@ -5,6 +5,7 @@ import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
 import org.bahmni.openerp.web.client.strategy.OpenERPContext;
+import org.bahmni.openerp.web.client.strategy.implementation.OpenERPRESTClient;
 import org.bahmni.openerp.web.client.strategy.implementation.OpenERPXMLClient;
 import org.bahmni.webclients.ClientCookies;
 import org.ict4h.atomfeed.client.AtomFeedProperties;
@@ -20,14 +21,17 @@ public class AtomFeedClientHelper {
     private final OpenERPAtomFeedProperties atomFeedProperties;
     private final AtomFeedSpringTransactionSupport transactionManager;
     private final OpenERPXMLClient openERPXMLClient;
+
+    private final OpenERPRESTClient openERPRESTClient;
     private FeedClientFactory feedClientFactory;
     private final WebClientProvider webClientProvider;
 
-    public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPXMLClient openERPXMLClient) {
+    public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPXMLClient openERPXMLClient, OpenERPRESTClient openERPRESTClient) {
         this.atomFeedProperties = atomFeedProperties;
         this.transactionManager = transactionManager;
         this.openERPXMLClient = openERPXMLClient;
         this.webClientProvider = new WebClientProvider(atomFeedProperties);
+        this.openERPRESTClient = openERPRESTClient;
     }
     
     public FeedClient getAtomFeedClient(Jobs jobName) throws FeedException {
@@ -44,7 +48,8 @@ public class AtomFeedClientHelper {
         AllMarkers allMarkers = new AllMarkersJdbcImpl(transactionManager);
         AllFailedEvents allFailedEvents = new AllFailedEventsJdbcImpl(transactionManager);
         //TODO: Create a toggle between rest and xml client
-        OpenERPContext openERPContext = new OpenERPContext(openERPXMLClient);
+        System.out.println("Odoo16 in USE");
+        OpenERPContext openERPContext = new OpenERPContext(openERPRESTClient);
         return feedClientFactory.getFeedClient(atomFeedProperties, transactionManager, openERPContext, allFeeds, allMarkers, allFailedEvents, jobName);
     }
 
