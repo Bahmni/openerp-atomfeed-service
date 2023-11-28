@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp.controller;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.bahmni.feed.openerp.TasksMonitoringResponse;
 import org.bahmni.openerp.web.service.OpenERPService;
 import org.quartz.JobKey;
@@ -26,7 +26,7 @@ public class TaskMonitorController {
     private OpenERPService openERPService;
     private SchedulerFactoryBean schedulerFactoryBean;
 
-    private static Logger logger = LogManager.getLogger(TaskMonitorController.class);
+    private static Logger logger = LoggerFactory.getLogger(TaskMonitorController.class);
 
     @Autowired
     public TaskMonitorController(SchedulerFactoryBean schedulerFactoryBean, OpenERPService openERPService) {
@@ -49,7 +49,7 @@ public class TaskMonitorController {
                 }
             }
         } catch (SchedulerException e) {
-            logger.error(e);
+            logger.error(String.valueOf(e));
         }
         return monitoringResponses;
     }
