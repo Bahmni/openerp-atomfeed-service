@@ -251,6 +251,7 @@
             <constructor-arg ref="atomFeedTrasactionSupport" />
             <constructor-arg ref="openERPXMLClient" />
             <constructor-arg ref="openERPRESTClient" />
+            <constructor-arg ref="environment" />
         </bean>
 
         <bean id="openerpEventsOptimizerJob" class="org.bahmni.feed.openerp.job.OpenERPEventsOptimizerJob" scope="prototype">

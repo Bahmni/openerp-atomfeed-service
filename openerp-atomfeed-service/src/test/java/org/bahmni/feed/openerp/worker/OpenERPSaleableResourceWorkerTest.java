@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.bahmni.feed.openerp.worker.OpenERPSaleableResourceWorker.ERP_EVENT_CATEGORY;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -70,7 +71,7 @@ public class OpenERPSaleableResourceWorkerTest {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPContext).execute(erpRequestCatcher.capture(), endpointUri);
+        verify(openERPContext).execute(erpRequestCatcher.capture(), eq(endpointUri));
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> parameters = openERPRequest.getParameters();
@@ -92,7 +93,7 @@ public class OpenERPSaleableResourceWorkerTest {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPContext).execute(erpRequestCatcher.capture(), endpointUri);
+        verify(openERPContext).execute(erpRequestCatcher.capture(), eq(endpointUri));
 
         List<Parameter> parameters = erpRequestCatcher.getValue().getParameters();
         Assert.assertTrue(parameters.contains(new Parameter("name", "Dressing of Wound")));

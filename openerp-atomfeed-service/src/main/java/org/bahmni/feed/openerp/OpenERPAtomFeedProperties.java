@@ -68,6 +68,23 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         throw new RuntimeException("Can not identify feed URI for requested Job.");
     }
 
+    public String getEndpointURIForJob(Jobs feedJob, boolean isRestEnabled) {
+        if (isRestEnabled) {
+            switch (feedJob) {
+                case CUSTOMER_FEED:
+                case SALEORDER_FEED:
+                case LAB_FEED:
+                case SALEABLE_FEED: return "";
+                case DRUG_FEED: return "/api/bahmni-drug";
+                default:
+                    throw new RuntimeException("Can not identify endpoint URI for requested Job.");
+            }
+        }
+        else {
+            return "xmlrpc/object";
+        }
+    }
+
     @Value("${openerp.host}")
     private String openErpHost;
 
@@ -192,29 +209,6 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         logger.debug("**************** DEBUG OpenERPAtomFeedProperties ************************ ");
     }
 
-
-    public String getEndpointURIForJob(Jobs feedJob, boolean isOdoo16) {
-        if (isOdoo16) {
-            switch (feedJob) {
-                case CUSTOMER_FEED:
-                    return "/api/bahmni-customer";
-                case SALEORDER_FEED:
-                    return "/api/bahmni-saleorder";
-                case DRUG_FEED:
-                    return "/api/bahmni-drug";
-                case LAB_FEED:
-                    return "/api/bahmni-lab-test";
-                case SALEABLE_FEED:
-                    return "/api/bahmni-service-sale";
-                default:
-                    throw new RuntimeException("Can not identify endpoint URI for requested Job.");
-            }
-        }
-        else {
-            return "xmlrpc/object";
-        }
-    }
-
     private HashMap<String, String> getInfo() {
         HashMap<String, String> values = new HashMap<>();
         values.put("chunking.strategy",chunkingStrategy );
@@ -237,13 +231,6 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         values.put("openmrs.user",openmrsUser );
         values.put("referencedata.endpoint",refDataEndPt);
         values.put("saleable.feed.generator.uri", saleableFeedUri);
-//        values.put("customer.endpoint", odoo16CustomerEndpoint);
-//        values.put("drug.endpoint", odoo16DrugEndpoint);
-//        values.put("lab.endpoint", odoo16LabEndpoint);
-//        values.put("radiology.endpoint", odoo16RadiologyEndpoint);
-//        values.put("labpanel.endpoint", odoo16LabpanelEndpoint);
-//        values.put("saleable.endpoint", odoo16SaleableEndpoint);
-//        values.put("saleorder.endpoint", odoo16SaleorderEndpoint);
         return values;
     }
 

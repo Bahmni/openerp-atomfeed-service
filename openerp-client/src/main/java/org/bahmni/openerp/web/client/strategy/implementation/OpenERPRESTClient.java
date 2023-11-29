@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.Vector;
 
 @Service
@@ -25,9 +26,7 @@ public class OpenERPRESTClient implements OpenERPClientStrategy {
     private String user;
     private String password;
 
-    private String id;
-
-    private RestClient restClient;
+    private final RestClient restClient;
 
 
     @Autowired
@@ -36,14 +35,14 @@ public class OpenERPRESTClient implements OpenERPClientStrategy {
         port = openERPProperties.getPort();
         user = openERPProperties.getUser();
         password = openERPProperties.getPassword();
-        restClient = new RestClient("http://" + host + ":" + port, user, password);
         connectionTimeoutInMilliseconds = openERPProperties.getConnectionTimeoutInMilliseconds();
         replyTimeoutInMilliseconds = openERPProperties.getReplyTimeoutInMilliseconds();
+        restClient = new RestClient("http://" + host + ":" + port, user, password, connectionTimeoutInMilliseconds);
     }
 
     @Override
     public Object execute(OpenERPRequest openERPRequest, String URI) {
-        String requestBody = RequestBuilder.buildNewRestRequest(openERPRequest, id);
+        String requestBody = RequestBuilder.buildNewRestRequest(openERPRequest, UUID.randomUUID().toString());
         return restClient.post(URI, requestBody);
     }
 }

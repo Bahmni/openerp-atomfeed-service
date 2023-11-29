@@ -37,7 +37,7 @@ public class RequestBuilder {
         }
     }
 
-    public static String buildNewRestRequest(OpenERPRequest openERPRequest, Object id) {
+    public static String buildNewRestRequest(OpenERPRequest openERPRequest, String id) {
         try {
             VelocityEngine velocityEngine = new VelocityEngine();
             velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
