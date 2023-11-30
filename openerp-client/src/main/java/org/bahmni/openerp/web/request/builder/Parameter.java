@@ -1,8 +1,5 @@
 package org.bahmni.openerp.web.request.builder;
 
-
-import org.apache.commons.lang3.StringEscapeUtils;
-
 public class Parameter {
 
     private String name;
@@ -11,7 +8,7 @@ public class Parameter {
 
     public Parameter(String name, String value, String type) {
         this.name = name;
-        this.value = StringEscapeUtils.escapeXml(value);
+        this.value = value;
         this.type = type;
     }
 

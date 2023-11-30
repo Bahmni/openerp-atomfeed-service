@@ -60,7 +60,7 @@ public class OpenElisLabOrder {
     }
 
     private boolean hasOrders() {
-        return testDetails.size() > 0;
+        return !testDetails.isEmpty();
     }
 
     private void addNewOrder(OpenERPOrders orders, OpenElisTestDetail testDetail) {

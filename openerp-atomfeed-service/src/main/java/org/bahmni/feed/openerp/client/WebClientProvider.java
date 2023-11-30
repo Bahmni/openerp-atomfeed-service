@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp.client;
 
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
-import org.bahmni.feed.openerp.job.Jobs;
+import org.bahmni.feed.openerp.job.FeedURI;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class WebClientProvider {
         return referenceDataWebClient;
     }
 
-    public AbstractWebClient getWebClient(Jobs jobName){
+    public AbstractWebClient getWebClient(FeedURI jobName){
         switch (jobName){
             case CUSTOMER_FEED: return getOpenMRSWebClient() ;
             case DRUG_FEED: return getOpenMRSWebClient() ;

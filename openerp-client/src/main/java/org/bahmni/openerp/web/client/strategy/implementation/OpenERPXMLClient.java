@@ -5,7 +5,7 @@ import org.bahmni.openerp.web.OpenERPProperties;
 import org.bahmni.openerp.web.client.OpenERPResponseErrorValidator;
 import org.bahmni.openerp.web.client.strategy.OpenERPClientStrategy;
 import org.bahmni.openerp.web.request.OpenERPRequest;
-import org.bahmni.openerp.web.http.client.HttpClient;
+import org.bahmni.openerp.web.http.client.XMLClient;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -36,11 +36,11 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     private Object id;
 
     private XmlRpcClient xmlRpcClient;
-    private final HttpClient httpClient;
+    private final XMLClient xmlClient;
 
     @Autowired
-    public OpenERPXMLClient(HttpClient httpClient, OpenERPProperties openERPProperties) {
-        this.httpClient = httpClient;
+    public OpenERPXMLClient(XMLClient xmlClient, OpenERPProperties openERPProperties) {
+        this.xmlClient = xmlClient;
         host = openERPProperties.getHost();
         port = openERPProperties.getPort();
         database = openERPProperties.getDatabase();
@@ -67,7 +67,7 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     }
 
     @Override
-    public Object execute(OpenERPRequest openERPRequest){
+    public Object execute(OpenERPRequest openERPRequest, String URI) {
         login();
         String request = RequestBuilder.buildNewXMLRequest(openERPRequest, id, database, password);
         String response = httpClient().post("http://" + host + ":" + port + XML_RPC_OBJECT_ENDPOINT, request);
@@ -84,9 +84,9 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
         }
     }
 
-    private HttpClient httpClient() {
-        httpClient.setTimeout(replyTimeoutInMilliseconds);
-        return httpClient;
+    private XMLClient httpClient() {
+        xmlClient.setTimeout(replyTimeoutInMilliseconds);
+        return xmlClient;
     }
 
     private XmlRpcClient xmlRpcClient(String endpoint) {
@@ -108,7 +108,6 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
         clientConfiguration.setEnabledForExceptions(true);
         clientConfiguration.setConnectionTimeout(connectionTimeoutInMilliseconds);
         clientConfiguration.setReplyTimeout(replyTimeoutInMilliseconds);
-
         XmlRpcClient rpcClient = new XmlRpcClient();
         rpcClient.setTransportFactory(new XmlRpcSun15HttpTransportFactory(rpcClient));
         rpcClient.setConfig(clientConfiguration);

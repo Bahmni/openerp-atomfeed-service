@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -32,6 +33,7 @@ public class OpenERPDrugServiceEventWorkerTest {
     private OpenMRSWebClient webClient;
 
     private String feedUri = "http://feeduri";
+    private String odooURL = "http://client/prefix/";
     private String drugOrderJson;
     private OpenERPDrugServiceEventWorker worker;
 
@@ -49,7 +51,7 @@ public class OpenERPDrugServiceEventWorkerTest {
                 "    \"name\": \"Paracetamol 250mg\"\n" +
                 "}";
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPDrugServiceEventWorker(feedUri,openERPContext,webClient,"http://prefix/");
+        worker = new OpenERPDrugServiceEventWorker(feedUri,odooURL,openERPContext,webClient,"http://prefix/");
 
     }
 
@@ -60,7 +62,7 @@ public class OpenERPDrugServiceEventWorkerTest {
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPContext).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture(),eq(odooURL));
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> actualParameters = openERPRequest.getParameters();
@@ -87,7 +89,7 @@ public class OpenERPDrugServiceEventWorkerTest {
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPContext).execute(erpRequestCatcher.capture());
+        verify(openERPContext).execute(erpRequestCatcher.capture(),eq(odooURL));
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> actualParameters = openERPRequest.getParameters();

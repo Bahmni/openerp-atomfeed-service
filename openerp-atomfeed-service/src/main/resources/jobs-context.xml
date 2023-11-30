@@ -250,6 +250,8 @@
             <constructor-arg ref="openERPAtomFeedProperties"/>
             <constructor-arg ref="atomFeedTrasactionSupport" />
             <constructor-arg ref="openERPXMLClient" />
+            <constructor-arg ref="odooRESTClient" />
+            <constructor-arg ref="environment" />
         </bean>
 
         <bean id="openerpEventsOptimizerJob" class="org.bahmni.feed.openerp.job.OpenERPEventsOptimizerJob" scope="prototype">

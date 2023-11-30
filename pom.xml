@@ -29,7 +29,7 @@
         <mockito-core.version>4.9.0</mockito-core.version>
         <jackson.version>2.13.5</jackson.version>
         <httpcore.version>4.4.5</httpcore.version>
-        <httpClient.version>4.5.13</httpClient.version>
+        <XMLClient.version>4.5.13</XMLClient.version>
         <servlet-api.version>3.0.1</servlet-api.version>
         <log4j.version>2.17.1</log4j.version>
         <web-clients.version>0.94.3</web-clients.version>
@@ -37,6 +37,11 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>3.0.0</version>
+            </dependency>
              <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
@@ -222,7 +227,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>${httpClient.version}</version>
+                <version>${XMLClient.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-logging</groupId>

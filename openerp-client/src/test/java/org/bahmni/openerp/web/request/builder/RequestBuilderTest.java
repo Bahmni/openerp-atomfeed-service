@@ -31,7 +31,7 @@ public class RequestBuilderTest {
         String requestXml = RequestBuilder.buildNewXMLRequest(request, id, database, password);
         String requestXmlForComparison = requestXml.replace("", " ");
 
-        String expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
+        String expected = "<?xml version='1.0' encoding='utf-8'?>" +
                 "<methodCall>" +
                 "    <methodName>execute</methodName>" +
                 "    <params>" +
@@ -66,7 +66,7 @@ public class RequestBuilderTest {
                 "            </member>" +
                 "        </struct></value>" +
                 "        </param>" +
-                "    </params>\n" +
+                "    </params>" +
                 "</methodCall>";
 
         comparingStringWithoutSpaces(requestXml, expected);
@@ -88,7 +88,7 @@ public class RequestBuilderTest {
 
         String requestXml = RequestBuilder.buildNewXMLRequest(request, id, database, password);
 
-        String expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
+        String expected = "<?xml version='1.0' encoding='utf-8'?>" +
                 "<methodCall>" +
                 "    <methodName>execute</methodName>" +
                 "    <params>" +
@@ -115,7 +115,7 @@ public class RequestBuilderTest {
                 "            </member>" +
                 "        </struct></value>" +
                 "        </param>" +
-                "    </params>\n" +
+                "    </params>" +
                 "</methodCall>";
 
         comparingStringWithoutSpaces(requestXml, expected);
@@ -137,7 +137,7 @@ public class RequestBuilderTest {
 
         String requestXml = RequestBuilder.buildNewXMLRequest(request, id, database, password);
 
-        String expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
+        String expected = "<?xml version='1.0' encoding='utf-8'?>" +
                 "<methodCall>" +
                 "    <methodName>execute</methodName>" +
                 "    <params>" +
@@ -164,9 +164,8 @@ public class RequestBuilderTest {
                 "            </member>" +
                 "        </struct></value>" +
                 "        </param>" +
-                "    </params>\n" +
+                "    </params>" +
                 "</methodCall>";
-
         comparingStringWithoutSpaces(requestXml, expected);
     }
 

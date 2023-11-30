@@ -2,7 +2,7 @@ package org.bahmni.feed.openerp.job;
 
 import com.sun.syndication.io.FeedException;
 
-import static org.bahmni.feed.openerp.job.Jobs.SALEABLE_FEED;
+import static org.bahmni.feed.openerp.job.FeedURI.SALEABLE_FEED;
 
 public class OpenERPSaleableFeedJob {
     private SimpleFeedJob feedJob;

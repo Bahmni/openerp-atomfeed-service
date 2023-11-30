@@ -19,7 +19,7 @@ public class SimpleFeedJob {
         this.atomFeedClientHelper = atomFeedClientHelper;
     }
 
-    public void processFeed(Jobs jobName) {
+    public void processFeed(FeedURI jobName) {
         try {
             logger.info(String.format("Processing Feed [%s] Job [%s]", jobName.getFeedUriRef(), jobName));
             initAtomFeedClient(jobName);
@@ -30,13 +30,13 @@ public class SimpleFeedJob {
         }
     }
 
-    private void initAtomFeedClient(Jobs jobName) {
+    private void initAtomFeedClient(FeedURI jobName) {
         if(atomFeedClient == null){
             atomFeedClient = (AtomFeedClient) atomFeedClientHelper.getAtomFeedClient(jobName);
         }
     }
 
-    public void processFailedEvents(Jobs jobName) {
+    public void processFailedEvents(FeedURI jobName) {
         try {
             logger.info(String.format("Processing failed events for Feed [%s]", jobName.getFeedUriRef()));
             initAtomFeedClient(jobName);
@@ -49,7 +49,7 @@ public class SimpleFeedJob {
         }
     }
 
-    protected void handleAuthorizationException(Throwable e, Jobs jobName) throws FeedException {
+    protected void handleAuthorizationException(Throwable e, FeedURI jobName) throws FeedException {
         if (e != null &&
                 (ExceptionUtils.getStackTrace(e).contains("HTTP response code: 401") || ExceptionUtils.getStackTrace(e).contains("Bad response code of 403"))
            ) {
