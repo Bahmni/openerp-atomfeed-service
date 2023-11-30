@@ -83,8 +83,8 @@ public class OpenERPSaleOrderEventWorkerIT {
 
         HashMap fieldMap = new HashMap();
         fieldMap.put("uuid","12345");
-        when(openERPContext.search(any(String.class), any(Vector.class))).thenReturn(new Object[]{12345});
-        when(openERPContext.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
+//        when(openERPContext.search(any(String.class), any(Vector.class))).thenReturn(new Object[]{12345});
+//        when(openERPContext.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
 
         String feedUrl = "http://xxxx/encounter/feed/2";
         OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,openERPContext,webClient,"http://mrs.auth.uri");
@@ -112,8 +112,8 @@ public class OpenERPSaleOrderEventWorkerIT {
 
         HashMap fieldMap = new HashMap();
         fieldMap.put("uuid","12345");
-        when(openERPContext.search(any(String.class), any(Vector.class))).thenReturn(new Object[]{12345});
-        when(openERPContext.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
+//        when(openERPContext.search(any(String.class), any(Vector.class))).thenReturn(new Object[]{12345});
+//        when(openERPContext.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
 
         String feedUrl = "http://xxxx/encounter/feed/2";
         Event event = new Event("Test", feedUrl);
