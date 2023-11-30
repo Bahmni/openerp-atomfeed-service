@@ -25,15 +25,15 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
     OpenERPContext openERPContext;
     private String feedUrl;
 
-    private String endpointURI;
+    private String odooURL;
     private OpenMRSWebClient webClient;
     private String urlPrefix;
 
     private static Logger logger = LogManager.getLogger(OpenERPCustomerServiceEventWorker.class);
 
-    public OpenERPCustomerServiceEventWorker(String feedUrl, String endpointURI, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix) {
+    public OpenERPCustomerServiceEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix) {
         this.feedUrl = feedUrl;
-        this.endpointURI = endpointURI;
+        this.odooURL = odooURL;
         this.openERPContext = openERPContext;
         this.webClient = webClient;
         this.urlPrefix = urlPrefix;
@@ -42,7 +42,7 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
     @Override
     public void process(Event event) {
         try {
-            openERPContext.execute(mapRequest(event), endpointURI);
+            openERPContext.execute(mapRequest(event), odooURL);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

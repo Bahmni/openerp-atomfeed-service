@@ -26,14 +26,14 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
     private OpenMRSWebClient openMRSWebClient;
     private String urlPrefix;
 
-    private String endpointURI;
+    private String odooURL;
 
     private static Logger logger = LogManager.getLogger(OpenERPSaleableResourceWorker.class);
 
-    public OpenERPSaleableResourceWorker(String feedUrl, String endpointURI, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPSaleableResourceWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
-        this.endpointURI = endpointURI;
+        this.odooURL = odooURL;
         this.openMRSWebClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
     }
@@ -47,7 +47,7 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
                 logger.info(String.format("Resource is not a saleable resource. Ignoring. Event [%s]", event.getId()));
                 return;
             }
-            openERPContext.execute(mapToOpenERPRequest(event, resource), endpointURI);
+            openERPContext.execute(mapToOpenERPRequest(event, resource), odooURL);
         } catch (Exception e) {
             logger.error(String.format("Error occurred while trying to process Saleable Event [%s]", event.getId()), e);
             throw new RuntimeException(String.format("Error occurred while trying to process Saleable Event [%s]", event.getId()), e);

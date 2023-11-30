@@ -87,8 +87,8 @@ public class OpenERPSaleOrderEventWorkerIT {
 //        when(openERPContext.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
 
         String feedUrl = "http://xxxx/encounter/feed/2";
-        String endpointURI = "http://xxxx/encounter/feed/2";
-        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,endpointURI,openERPContext, webClient,"http://mrs.auth.uri");
+        String odooURL = "http://xxxx/encounter/feed/2";
+        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,odooURL,openERPContext, webClient,"http://mrs.auth.uri");
         Event event = new Event("Test",feedUrl);
         eventWorker.process(event);
     }
@@ -119,8 +119,8 @@ public class OpenERPSaleOrderEventWorkerIT {
         String feedUrl = "http://xxxx/encounter/feed/2";
         Event event = new Event("Test", feedUrl);
 
-        String endpointURI = "http://xxxx/encounter/feed/2";
-        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,endpointURI,openERPContext, webClient,"http://mrs.auth.uri");
+        String odooURL = "http://xxxx/encounter/feed/2";
+        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,odooURL,openERPContext, webClient,"http://mrs.auth.uri");
         eventWorker.process(event);
 
     }

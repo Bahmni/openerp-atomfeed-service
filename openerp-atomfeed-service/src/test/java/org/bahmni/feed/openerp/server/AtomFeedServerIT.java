@@ -4,7 +4,6 @@ import org.bahmni.feed.openerp.repository.DbEventRecordCreator;
 import org.bahmni.feed.openerp.utils.MVCTestUtils;
 import org.ict4h.atomfeed.Configuration;
 import org.ict4h.atomfeed.IntegrationTest;
-import org.ict4h.atomfeed.client.service.AtomFeedClient;
 import org.ict4h.atomfeed.jdbc.JdbcConnectionProvider;
 import org.ict4h.atomfeed.jdbc.JdbcUtils;
 import org.ict4h.atomfeed.server.domain.EventRecord;

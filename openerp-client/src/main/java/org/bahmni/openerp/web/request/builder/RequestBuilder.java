@@ -23,7 +23,7 @@ public class RequestBuilder {
             velocityEngine.init();
             Template template = velocityEngine.getTemplate("request/template/xml_template.vm");
             VelocityContext context = new VelocityContext();
-            context.put("esc", new EscapeTool());
+            context.put("esc", new EscapeTool()); //Refer : https://github.com/Bahmni/openerp-atomfeed-service/pull/80#discussion_r1410242808
             context.put("parametersList", openERPRequest.getParameters());
             context.put("id", id);
             context.put("database", database);

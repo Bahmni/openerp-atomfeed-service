@@ -37,7 +37,7 @@ public class OpenERPSaleableResourceWorkerTest {
     private String eventUrl = "https://mybahmni/" + eventContent;
     private String feedUri = "https://mybahmni/openmrs/ws/atomfeed/saleable/recent";
 
-    private String endpointUri = "https://client/openmrs/ws/atomfeed/saleable/recent";
+    private String odooURL = "https://client/openmrs/ws/atomfeed/saleable/recent";
 
 
     String sampleProcedureJsonWithSaleableAsFalse
@@ -62,7 +62,7 @@ public class OpenERPSaleableResourceWorkerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPSaleableResourceWorker(feedUri,endpointUri, openERPContext, webClient, "https://mybahmni/");
+        worker = new OpenERPSaleableResourceWorker(feedUri,odooURL, openERPContext, webClient, "https://mybahmni/");
         when(webClient.get(URI.create(eventUrl))).thenReturn(sampleProcedureJson);
     }
 
@@ -71,7 +71,7 @@ public class OpenERPSaleableResourceWorkerTest {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPContext).execute(erpRequestCatcher.capture(), eq(endpointUri));
+        verify(openERPContext).execute(erpRequestCatcher.capture(), eq(odooURL));
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> parameters = openERPRequest.getParameters();
@@ -93,7 +93,7 @@ public class OpenERPSaleableResourceWorkerTest {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPContext).execute(erpRequestCatcher.capture(), eq(endpointUri));
+        verify(openERPContext).execute(erpRequestCatcher.capture(), eq(odooURL));
 
         List<Parameter> parameters = erpRequestCatcher.getValue().getParameters();
         Assert.assertTrue(parameters.contains(new Parameter("name", "Dressing of Wound")));

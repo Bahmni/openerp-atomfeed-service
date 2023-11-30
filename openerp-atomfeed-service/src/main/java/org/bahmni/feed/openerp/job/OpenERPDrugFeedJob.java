@@ -14,11 +14,11 @@ public class OpenERPDrugFeedJob {
     }
 
     public void processFeed()  {
-        openMRSFeedJob.processFeed(Feed.DRUG_FEED);
+        openMRSFeedJob.processFeed(FeedURI.DRUG_FEED);
     }
 
     public void processFailedEvents()  {
-        openMRSFeedJob.processFailedEvents(Feed.DRUG_FEED);
+        openMRSFeedJob.processFailedEvents(FeedURI.DRUG_FEED);
     }
 
 }

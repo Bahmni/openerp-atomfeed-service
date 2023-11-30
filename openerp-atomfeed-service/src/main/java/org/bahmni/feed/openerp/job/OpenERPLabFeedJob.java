@@ -14,11 +14,11 @@ public class OpenERPLabFeedJob {
     }
 
     public void processFeed()  {
-        openMRSFeedJob.processFeed(Feed.LAB_FEED);
+        openMRSFeedJob.processFeed(FeedURI.LAB_FEED);
     }
 
     public void processFailedEvents()  {
-        openMRSFeedJob.processFailedEvents(Feed.LAB_FEED);
+        openMRSFeedJob.processFailedEvents(FeedURI.LAB_FEED);
     }
 
 }

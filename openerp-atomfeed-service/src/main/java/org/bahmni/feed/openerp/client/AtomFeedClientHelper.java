@@ -1,8 +1,9 @@
 package org.bahmni.feed.openerp.client;
 
+import org.bahmni.feed.openerp.AtomfeedServiceConstants;
 import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
-import org.bahmni.feed.openerp.job.Feed;
+import org.bahmni.feed.openerp.job.FeedURI;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
 import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.client.strategy.implementation.OdooRESTClient;
@@ -36,7 +37,7 @@ public class AtomFeedClientHelper {
         this.environment = environment;
     }
     
-    public FeedClient getAtomFeedClient(Feed jobName) throws FeedException {
+    public FeedClient getAtomFeedClient(FeedURI jobName) throws FeedException {
         if(this.feedClientFactory == null){
             WorkerFactory workerFactory = new WorkerFactory(webClientProvider);
             feedClientFactory = new FeedClientFactory(workerFactory);
@@ -44,12 +45,12 @@ public class AtomFeedClientHelper {
         return getAtomFeedClient(jobName, feedClientFactory);
     }
 
-    FeedClient getAtomFeedClient(Feed jobName, FeedClientFactory feedClientFactory) throws FeedException {
+    FeedClient getAtomFeedClient(FeedURI jobName, FeedClientFactory feedClientFactory) throws FeedException {
         ClientCookies cookies = webClientProvider.getWebClient(jobName).getCookies();
         AllFeeds allFeeds = getAllFeeds(atomFeedProperties, cookies);
         AllMarkers allMarkers = new AllMarkersJdbcImpl(transactionManager);
         AllFailedEvents allFailedEvents = new AllFailedEventsJdbcImpl(transactionManager);
-        String isRestEnabled = environment.getProperty("IS_ODOO_16");
+        String isRestEnabled = environment.getProperty(AtomfeedServiceConstants.IS_REST_ENABLED.getAtomfeedServiceConstants());
         boolean isRestEnabledValue = Boolean.parseBoolean(isRestEnabled);
         OpenERPContext openERPContext = isRestEnabledValue ? new OpenERPContext(odooRESTClient) : new OpenERPContext(openERPXMLClient);
         return feedClientFactory.getFeedClient(atomFeedProperties, transactionManager, openERPContext, allFeeds, allMarkers, allFailedEvents, jobName, isRestEnabledValue);
