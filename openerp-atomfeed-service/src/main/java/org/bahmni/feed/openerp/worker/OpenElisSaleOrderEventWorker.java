@@ -8,7 +8,6 @@ import org.bahmni.feed.openerp.domain.openelis.OpenElisLabOrder;
 import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
-import org.bahmni.openerp.web.service.ProductService;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.service.EventWorker;
 
@@ -20,7 +19,6 @@ public class OpenElisSaleOrderEventWorker implements EventWorker {
     private final OpenERPContext openERPContext;
     private final OpenElisWebClient webClient;
     private final String urlPrefix;
-    private ProductService productService;
 
     private static Logger logger = LoggerFactory.getLogger(OpenElisSaleOrderEventWorker.class);
 
@@ -53,7 +51,7 @@ public class OpenElisSaleOrderEventWorker implements EventWorker {
         String labOrders = webClient.get(URI.create(urlPrefix + event.getContent()));
         OpenElisLabOrder openElisLabOrder = ObjectMapperRepository.objectMapper.readValue(labOrders, OpenElisLabOrder.class);
 
-        OpenERPRequest openERPRequest = new OpenERPRequest("atom.event.worker", "process_event", openElisLabOrder.getParameters(event.getId(),productService, event.getFeedUri(), feedUrl));
+        OpenERPRequest openERPRequest = new OpenERPRequest("atom.event.worker", "process_event", openElisLabOrder.getParameters(event.getId(), event.getFeedUri(), feedUrl));
 
         if (event.getFeedUri() == null)
             openERPRequest.addParameter(createParameter("is_failed_event", "1", "boolean"));

@@ -50,11 +50,6 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
         replyTimeoutInMilliseconds = openERPProperties.getReplyTimeoutInMilliseconds();
     }
 
-    @Override
-    public void delete(String resource, Vector params) {
-        execute(resource, "unlink", params);
-    }
-
     private void login() {
         if (id == null) {
             XmlRpcClient loginRpcClient = xmlRpcClient(XML_RPC_COMMON_ENDPOINT);
@@ -80,44 +75,6 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
         return response;
     }
 
-    @Override
-    public Object execute(String resource, String operation, Vector params) {
-        login();
-        Object[] args = {database, (Integer) id, password, resource, operation, params};
-
-        try {
-            return xmlRpcClient(XML_RPC_OBJECT_ENDPOINT).execute("execute", args);
-        } catch (XmlRpcException e) {
-            throw new OpenERPException(e);
-        }
-    }
-
-    @Override
-    public Object executeRead(String resource, String operation,Vector ids, Vector params) {
-        login();
-        Object[] args = {database, (Integer) id, password, resource, operation,ids, params};
-
-        try {
-            return xmlRpcClient(XML_RPC_OBJECT_ENDPOINT).execute("execute", args);
-        } catch (XmlRpcException e) {
-            throw new OpenERPException(e);
-        }
-    }
-
-    @Override
-    public Object read(String resource,Vector ids, Vector params) {
-        return executeRead(resource, "read", ids, params);
-    }
-
-    @Override
-    public Object search(String resource, Vector params) {
-        return execute(resource, "search", params);
-    }
-
-    @Override
-    public Object updateCustomerReceivables(String resource, Vector params) {
-        return execute(resource, "update_customer_receivables", params);
-    }
 
     private Object executeRPC(XmlRpcClient loginRpcClient, Vector params, String methodName) {
         try {

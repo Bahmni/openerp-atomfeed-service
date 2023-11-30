@@ -5,7 +5,6 @@ import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.domain.encounter.OpenERPOrder;
 import org.bahmni.feed.openerp.domain.encounter.OpenERPOrders;
 import org.bahmni.openerp.web.request.builder.Parameter;
-import org.bahmni.openerp.web.service.ProductService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class OpenElisLabOrder {
     private String patientIdentifier;
     private Set<OpenElisTestDetail> testDetails = new HashSet<>();
 
-    public List<Parameter> getParameters(String eventId, ProductService productService, String feedURIForLastReadEntry, String feedURI) throws IOException {
+    public List<Parameter> getParameters(String eventId, String feedURIForLastReadEntry, String feedURI) throws IOException {
         List<Parameter> parameters = new ArrayList<>();
         String patientId = getPatientIdentifier();
 
@@ -34,11 +33,11 @@ public class OpenElisLabOrder {
         parameters.add(createParameter("feed_uri_for_last_read_entry", feedURIForLastReadEntry, "string"));
 
         OpenERPOrders orders = new OpenERPOrders(getAccessionUuid());
-        mapOrders(parameters, orders, productService);
+        mapOrders(parameters, orders);
         return parameters;
     }
 
-    private void mapOrders(List<Parameter> parameters, OpenERPOrders orders, ProductService productService) throws IOException {
+    private void mapOrders(List<Parameter> parameters, OpenERPOrders orders) throws IOException {
         if (hasOrders()) {
             for (OpenElisTestDetail testDetail : testDetails) {
                 if(testDetail.getPanelUuid() == null || !orderAlreadyPresent(orders, testDetail)) {
