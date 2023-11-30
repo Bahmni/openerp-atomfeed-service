@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.bahmni.feed.openerp.job.Jobs.DRUG_FEED;
+import static org.bahmni.feed.openerp.job.Feed.DRUG_FEED;
 import static org.mockito.Mockito.verify;
 
 public class OpenERPDrugFeedJobTest {

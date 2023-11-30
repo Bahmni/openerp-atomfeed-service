@@ -2,7 +2,7 @@ package org.bahmni.feed.openerp;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bahmni.feed.openerp.job.Jobs;
+import org.bahmni.feed.openerp.job.Feed;
 import org.bahmni.openerp.web.OpenERPProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
 
 
     /**
-     * @deprecated replaced by {@link #getFeedUriForJob(Jobs)} ()}
+     * @deprecated replaced by {@link #getFeedUriForJob(Feed)} ()}
      */
     @Deprecated
     public String getFeedUri(String feedname) {
@@ -56,7 +56,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     private String saleableFeedUri;
 
 
-    public String getFeedUriForJob(Jobs feedJob) {
+    public String getFeedUriForJob(Feed feedJob) {
         switch (feedJob){
             case CUSTOMER_FEED: return customFeedUri;
             case SALEORDER_FEED: return saleOrderFeedUri;
@@ -68,7 +68,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         throw new RuntimeException("Can not identify feed URI for requested Job.");
     }
 
-    public String getEndpointURIForJob(Jobs feedJob, boolean isRestEnabled) {
+    public String getEndpointURIForJob(Feed feedJob, boolean isRestEnabled) {
         if (isRestEnabled) {
             switch (feedJob) {
                 case CUSTOMER_FEED:

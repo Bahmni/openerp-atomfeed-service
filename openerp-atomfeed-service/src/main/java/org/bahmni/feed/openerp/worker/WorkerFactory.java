@@ -1,6 +1,6 @@
 package org.bahmni.feed.openerp.worker;
 
-import org.bahmni.feed.openerp.job.Jobs;
+import org.bahmni.feed.openerp.job.Feed;
 import org.bahmni.feed.openerp.client.WebClientProvider;
 import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.ict4h.atomfeed.client.service.EventWorker;
@@ -14,7 +14,7 @@ public class WorkerFactory {
     }
 
 
-    public EventWorker getWorker(Jobs jobName, String feedUrl, String endpointURI, OpenERPContext openERPContext, String urlPrefix) {
+    public EventWorker getWorker(Feed jobName, String feedUrl, String endpointURI, OpenERPContext openERPContext, String urlPrefix) {
         switch (jobName) {
             case CUSTOMER_FEED: return new OpenERPCustomerServiceEventWorker(feedUrl, endpointURI, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
             case SALEORDER_FEED: return new OpenERPSaleOrderEventWorker(feedUrl, endpointURI, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);

@@ -65,7 +65,7 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
         addToParametersIfNotEmpty(parameters, "maximumDose", drug.getMaximumDose());
         addToParametersIfNotEmpty(parameters, "minimumDose", drug.getMinimumDose());
         addToParametersIfNotEmpty(parameters, "last_read_entry_id", event.getId());
-        addToParametersIfNotEmpty(parameters, "category", "create.drug");
+        addToParametersIfNotEmpty(parameters, "category", Jobs.DRUG_JOB.getJobRef());
         addToParametersIfNotEmpty(parameters, "feed_uri_for_last_read_entry", event.getFeedUri());
         if (event.getFeedUri() == null) {
             parameters.add(new Parameter("is_failed_event", "1", "boolean"));

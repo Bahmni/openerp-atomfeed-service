@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp.job;
 
 
-public enum Jobs {
+public enum Feed {
     CUSTOMER_FEED("customer.feed.generator.uri"),
     SALEORDER_FEED("saleorder.feed.generator.uri"),
     REFERENCE_DATA_FEED("referencedata.feed.generator.uri"),
@@ -12,7 +12,7 @@ public enum Jobs {
 
     private final String feedUriRef;
 
-    Jobs(String feedUriRef) {
+    Feed(String feedUriRef) {
         this.feedUriRef = feedUriRef;
     }
 

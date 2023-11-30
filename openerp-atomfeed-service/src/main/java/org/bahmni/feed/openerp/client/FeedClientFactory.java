@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
-import org.bahmni.feed.openerp.job.Jobs;
+import org.bahmni.feed.openerp.job.Feed;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
 import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.ict4h.atomfeed.client.AtomFeedProperties;
@@ -31,7 +31,7 @@ public class FeedClientFactory {
         this.workerFactory = workerFactory;
     }
 
-    public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPContext openERPContext, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName, boolean isRestEnabled) {
+    public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPContext openERPContext, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Feed jobName, boolean isRestEnabled) {
         String feedUri = openERPAtomFeedProperties.getFeedUriForJob(jobName);
         String endpointURI = openERPAtomFeedProperties.getEndpointURIForJob(jobName,isRestEnabled);
         if (StringUtils.isBlank(feedUri)) {
@@ -53,7 +53,7 @@ public class FeedClientFactory {
         }
     }
 
-    static String getURLPrefix(Jobs jobName, OpenERPAtomFeedProperties atomFeedProperties) {
+    static String getURLPrefix(Feed jobName, OpenERPAtomFeedProperties atomFeedProperties) {
         String endpointURI = getURIForJob(jobName,atomFeedProperties);
         try {
             if(endpointURI != null && !endpointURI.isEmpty()){
@@ -65,7 +65,7 @@ public class FeedClientFactory {
         }
     }
 
-    private static String getURIForJob(Jobs jobName,OpenERPAtomFeedProperties atomFeedProperties){
+    private static String getURIForJob(Feed jobName, OpenERPAtomFeedProperties atomFeedProperties){
         switch (jobName){
             case CUSTOMER_FEED:
             case SALEORDER_FEED:

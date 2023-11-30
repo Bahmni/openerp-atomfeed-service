@@ -13,11 +13,11 @@ public class OpenElisSaleOrderFeedJob {
     }
 
     public void processFeed()  {
-        openElisFeedJob.processFeed(Jobs.OPENELIS_SALEORDER_FEED);
+        openElisFeedJob.processFeed(Feed.OPENELIS_SALEORDER_FEED);
     }
 
     public void processFailedEvents()  {
-        openElisFeedJob.processFailedEvents(Jobs.OPENELIS_SALEORDER_FEED);
+        openElisFeedJob.processFailedEvents(Feed.OPENELIS_SALEORDER_FEED);
     }
 
 }

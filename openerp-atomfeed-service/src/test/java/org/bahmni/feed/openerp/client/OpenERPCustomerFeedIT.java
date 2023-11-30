@@ -2,12 +2,11 @@ package org.bahmni.feed.openerp.client;
 
 import com.sun.syndication.feed.atom.Content;
 import com.sun.syndication.feed.atom.Entry;
-import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
-import org.bahmni.feed.openerp.job.Jobs;
+import org.bahmni.feed.openerp.job.Feed;
 import org.bahmni.feed.openerp.job.OpenERPCustomerFeedJob;
 import org.bahmni.feed.openerp.job.SimpleFeedJob;
 import org.bahmni.feed.openerp.worker.OpenERPCustomerServiceEventWorker;
@@ -90,9 +89,9 @@ public class OpenERPCustomerFeedIT {
     private URI firstFeedUri;
     private URI secondFeedUri;
     private URI recentFeedUri;
-    Feed first;
-    Feed second;
-    Feed last;
+    com.sun.syndication.feed.atom.Feed first;
+    com.sun.syndication.feed.atom.Feed second;
+    com.sun.syndication.feed.atom.Feed last;
     
     OpenERPAllMarkersJdbcImpl allMarkersJdbc;
     
@@ -105,9 +104,9 @@ public class OpenERPCustomerFeedIT {
 
         allMarkersJdbc = new OpenERPAllMarkersJdbcImpl(transactionSupport);
 
-        first = new Feed();
-        second = new Feed();
-        last = new Feed();
+        first = new com.sun.syndication.feed.atom.Feed();
+        second = new com.sun.syndication.feed.atom.Feed();
+        last = new com.sun.syndication.feed.atom.Feed();
 
         first.setEntries(getEntries(1,3));
         second.setEntries(getEntries(4,6));
@@ -190,14 +189,14 @@ public class OpenERPCustomerFeedIT {
         authenticationResponse.setSessionId("sessionIdValue");
 
         when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
-        when(webClientProvider.getWebClient(any(Jobs.class))).thenReturn(webClient);
-        when(workerFactory.getWorker(Jobs.CUSTOMER_FEED, feedUrl,endpointUrl, openERPContext, "http://mrs.auth.uri")).thenReturn(openERPCustomerServiceEventWorker);
+        when(webClientProvider.getWebClient(any(Feed.class))).thenReturn(webClient);
+        when(workerFactory.getWorker(Feed.CUSTOMER_FEED, feedUrl,endpointUrl, openERPContext, "http://mrs.auth.uri")).thenReturn(openERPCustomerServiceEventWorker);
 
         AtomFeedClientHelper clientHelper = mock(AtomFeedClientHelper.class);
         AtomFeedClient atomFeedClient = new AtomFeedClient(allFeedsMock, allMarkersJdbc, allFailedEvents, FeedClientFactory.atomFeedProperties(atomFeedProperties),
                 transactionSupport, new URI(feedUrl), openERPCustomerServiceEventWorker);
         
-        when(clientHelper.getAtomFeedClient(Jobs.CUSTOMER_FEED)).
+        when(clientHelper.getAtomFeedClient(Feed.CUSTOMER_FEED)).
                 thenReturn(atomFeedClient);
         
         SimpleFeedJob openMRSFeedJob = new SimpleFeedJob(clientHelper);

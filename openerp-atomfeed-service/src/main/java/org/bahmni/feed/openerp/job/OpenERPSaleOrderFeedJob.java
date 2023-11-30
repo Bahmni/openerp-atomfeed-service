@@ -13,10 +13,10 @@ public class OpenERPSaleOrderFeedJob {
     }
 
     public void processFeed()  {
-        openMRSFeedJob.processFeed(Jobs.SALEORDER_FEED);
+        openMRSFeedJob.processFeed(Feed.SALEORDER_FEED);
     }
 
     public void processFailedEvents()  {
-        openMRSFeedJob.processFailedEvents(Jobs.SALEORDER_FEED);
+        openMRSFeedJob.processFailedEvents(Feed.SALEORDER_FEED);
     }
 }

@@ -53,7 +53,7 @@ public class RestClient {
                 accessToken = responseNode.get("result").get("data").get("access_token").asText();
             }
             catch (Exception e){
-                logger.error("Failed to login for user {}", username);
+                logger.debug("Failed to login for user {}", username);
                 throw new OpenERPException(String.format("Failed to login. The login user is : %s", username));
             }
         }
