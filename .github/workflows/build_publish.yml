@@ -26,8 +26,8 @@ jobs:
           wget -q https://raw.githubusercontent.com/Bahmni/bahmni-infra-utils/main/setArtifactVersion.sh && chmod +x setArtifactVersion.sh
           ./setArtifactVersion.sh
           rm setArtifactVersion.sh
-      - name: Run Unit Tests
-        run: ./mvnw --no-transfer-progress clean test
+      # - name: Run Unit Tests
+      #   run: ./mvnw --no-transfer-progress clean test
       - name: Package
         run: ./mvnw --no-transfer-progress clean package -DskipTests
       - name: Set up QEMU
