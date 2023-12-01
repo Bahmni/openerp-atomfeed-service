@@ -52,7 +52,7 @@ public class AtomFeedClientHelper {
         AllFailedEvents allFailedEvents = new AllFailedEventsJdbcImpl(transactionManager);
         String isRestEnabled = environment.getProperty(AtomfeedServiceConstants.IS_REST_ENABLED.getAtomfeedServiceConstants());
         System.out.println("*******************************************************************");
-        System.out.println("The Sync will start now for Odoo"));
+        System.out.println("The Sync will start now for Odoo");
         boolean isRestEnabledValue = Boolean.parseBoolean(isRestEnabled);
         OpenERPContext openERPContext = isRestEnabledValue ? new OpenERPContext(odooRESTClient) : new OpenERPContext(openERPXMLClient);
         return feedClientFactory.getFeedClient(atomFeedProperties, transactionManager, openERPContext, allFeeds, allMarkers, allFailedEvents, jobName, isRestEnabledValue);
