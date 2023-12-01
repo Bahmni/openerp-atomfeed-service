@@ -52,26 +52,30 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
 
     private void login() {
         if (id == null) {
+            System.out.println("-------------LOGIN STARTED-----------------");
             XmlRpcClient loginRpcClient = xmlRpcClient(XML_RPC_COMMON_ENDPOINT);
-
             Vector<String> params = new Vector<String>();
             params.addElement(database);
             params.addElement(user);
             params.addElement(password);
-
             Object loginId = executeRPC(loginRpcClient, params, "login");
             if(loginId == null || loginId.getClass() != Integer.class)
                 throw new OpenERPException(String.format("Failed to login. The login id is : %s", loginId));
             id = loginId;
+            System.out.println("-------------LOGIN ENDED-----------------");
         }
     }
 
     @Override
     public Object execute(OpenERPRequest openERPRequest, String URI) {
         login();
+        System.out.println("-------------REQUEST EXECUTION STARTED-----------------");
         String request = RequestBuilder.buildNewXMLRequest(openERPRequest, id, database, password);
+        System.out.println("Request Body : "+request);
         String response = httpClient().post("http://" + host + ":" + port + XML_RPC_OBJECT_ENDPOINT, request);
         new OpenERPResponseErrorValidator().checkForError(response);
+        System.out.println("Response Body : "+response);
+        System.out.println("-------------REQUEST EXECUTION ENDED-----------------");
         return response;
     }
 

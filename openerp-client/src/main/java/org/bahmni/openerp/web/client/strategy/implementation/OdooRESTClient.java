@@ -28,7 +28,10 @@ public class OdooRESTClient implements OpenERPClientStrategy {
 
     @Override
     public Object execute(OpenERPRequest openERPRequest, String URI) {
+        System.out.println("-------------REQUEST EXECUTION STARTED-----------------");
         String requestBody = RequestBuilder.buildNewRestRequest(openERPRequest, UUID.randomUUID().toString());
+        System.out.println("Request Body : "+requestBody);
+        System.out.println("-------------REQUEST EXECUTION ENDED-----------------");
         return restClient.post(URI, requestBody);
     }
 }

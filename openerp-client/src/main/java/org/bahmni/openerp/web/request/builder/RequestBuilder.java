@@ -30,9 +30,18 @@ public class RequestBuilder {
             context.put("password", password);
             context.put("resource", openERPRequest.getResource());
             context.put("operation", openERPRequest.getOperation());
-
+            System.out.println("------------------------------");
+            System.out.println(template.getName());
+            System.out.println("Context Parameters " + context.get("parametersList"));
+            System.out.println("Context id " + context.get("id"));
+            System.out.println("Context database " + context.get("database"));
+            System.out.println("Context password " + context.get("password"));
+            System.out.println("Context resource " + context.get("resource"));
+            System.out.println("Context operation " + context.get("operation"));
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
+            System.out.println("writer.toString() = \n" + writer);
+            System.out.println("------------------------------");
             return writer.toString();
         } catch (Exception e) {
             throw new OpenERPException(e);
@@ -51,6 +60,9 @@ public class RequestBuilder {
             context.put("id", id);
             StringWriter writer = new StringWriter();
             template.merge(context, writer);
+            System.out.println("------------------------------");
+            System.out.println("writer.toString() = \n" + writer);
+            System.out.println("------------------------------");
             return writer.toString();
         } catch (Exception e) {
             throw new OpenERPException(e);
