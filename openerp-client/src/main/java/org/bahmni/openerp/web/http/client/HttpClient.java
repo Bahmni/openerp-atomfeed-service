@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class XMLClient {
-    private static final Logger logger = LogManager.getLogger(XMLClient.class);
+public class HttpClient {
+    private static final Logger logger = LogManager.getLogger(HttpClient.class);
     private RestTemplate restTemplate;
 
     private boolean isTimeoutSet;
 
     @Autowired
-    public XMLClient(RestTemplate restTemplate) {
+    public HttpClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

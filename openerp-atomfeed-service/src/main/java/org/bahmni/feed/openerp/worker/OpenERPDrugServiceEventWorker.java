@@ -18,21 +18,17 @@ import java.util.List;
 
 public class OpenERPDrugServiceEventWorker implements EventWorker {
 
-    private static final Logger logger = LogManager.getLogger(OpenERPDrugServiceEventWorker.class);
+    private static Logger logger = LogManager.getLogger(OpenERPDrugServiceEventWorker.class);
 
-    private final OpenERPContext openERPContext;
+    private OpenERPContext openERPContext;
     private String feedUrl;
-
-    private final String odooURL;
-
-    private final OpenMRSWebClient webClient;
-    private final String urlPrefix;
+    private OpenMRSWebClient webClient;
+    private String urlPrefix;
 
 
-    public OpenERPDrugServiceEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPDrugServiceEventWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
-        this.odooURL = odooURL;
         this.webClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
     }
@@ -41,7 +37,7 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
     public void process(Event event) {
         logger.debug("Processing the event [{}]", event.getContent());
         try {
-            openERPContext.execute(mapRequest(event), odooURL);
+            openERPContext.execute(mapRequest(event));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -50,36 +46,35 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
     private OpenERPRequest mapRequest(Event event) throws IOException {
         String drugJson = webClient.get(URI.create(urlPrefix + event.getContent()));
         OpenMRSDrug drug = ObjectMapperRepository.objectMapper.readValue(drugJson, OpenMRSDrug.class);
+
         return new OpenERPRequest("atom.event.worker", "process_event", buildParameters(event,drug));
     }
 
-    private List<Parameter> buildParameters(Event event, OpenMRSDrug drug) {
+    private List<Parameter> buildParameters(Event event,OpenMRSDrug drug) {
         List<Parameter> parameters = new ArrayList<>();
-        addToParametersIfNotEmpty(parameters, "name", drug.getName());
-        addToParametersIfNotEmpty(parameters, "shortName", drug.getShortName());
-        addToParametersIfNotEmpty(parameters, "uuid", drug.getUuid());
-        addToParametersIfNotEmpty(parameters, "combination", drug.getCombination());
-        addToParametersIfNotEmpty(parameters, "strength", drug.getStrength());
-        addToParametersIfNotEmpty(parameters, "dosageForm", drug.getDosageForm());
-        addToParametersIfNotEmpty(parameters, "genericName", drug.getGenericName());
-        addToParametersIfNotEmpty(parameters, "maximumDose", drug.getMaximumDose());
-        addToParametersIfNotEmpty(parameters, "minimumDose", drug.getMinimumDose());
-        addToParametersIfNotEmpty(parameters, "last_read_entry_id", event.getId());
-        addToParametersIfNotEmpty(parameters, "category", Jobs.DRUG_JOB.getJobRef());
-        addToParametersIfNotEmpty(parameters, "feed_uri_for_last_read_entry", event.getFeedUri());
-        if (event.getFeedUri() == null) {
-            parameters.add(new Parameter("is_failed_event", "1", "boolean"));
-        }
-        return parameters;
-    }
+        parameters.add(new Parameter("name",drug.getName()));
+        parameters.add(new Parameter("shortName",drug.getShortName()));
+        parameters.add(new Parameter("uuid",drug.getUuid()));
+        parameters.add(new Parameter("combination",drug.getCombination()));
+        parameters.add(new Parameter("strength",drug.getStrength()));
+        parameters.add(new Parameter("dosageForm",drug.getDosageForm()));
+        parameters.add(new Parameter("genericName",drug.getGenericName()));
+        parameters.add(new Parameter("maximumDose",drug.getMaximumDose()));
+        parameters.add(new Parameter("minimumDose",drug.getMinimumDose()));
 
-    private void addToParametersIfNotEmpty(List<Parameter> parameters, String name, String value) {
-        if (value != null && !value.isEmpty()) {
-            parameters.add(new Parameter(name, value));
+        parameters.add(new Parameter("last_read_entry_id",event.getId()));
+        parameters.add(new Parameter("category", "create.drug"));
+        parameters.add(new Parameter("feed_uri_for_last_read_entry",event.getFeedUri()));
+
+        if (event.getFeedUri() == null) {
+            parameters.add(new Parameter("is_failed_event","1","boolean"));
         }
+
+        return parameters;
     }
 
     @Override
     public void cleanUp(Event event) {
+
     }
 }

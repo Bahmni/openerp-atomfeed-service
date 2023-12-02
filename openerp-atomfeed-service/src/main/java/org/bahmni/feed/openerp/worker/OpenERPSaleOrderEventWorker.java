@@ -19,17 +19,14 @@ import java.net.URI;
 public class OpenERPSaleOrderEventWorker implements EventWorker {
     OpenERPContext openERPContext;
     private String feedUrl;
-
-    private String odooURL;
     private OpenMRSWebClient webClient;
     private String urlPrefix;
 
 
     private static Logger logger = LogManager.getLogger(OpenERPSaleOrderEventWorker.class);
 
-    public OpenERPSaleOrderEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix) {
+    public OpenERPSaleOrderEventWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix) {
         this.feedUrl = feedUrl;
-        this.odooURL = odooURL;
         this.openERPContext = openERPContext;
         this.webClient = webClient;
         this.urlPrefix = urlPrefix;
@@ -41,7 +38,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
             OpenERPRequest openERPRequest = mapRequest(event);
             if (!openERPRequest.shouldERPConsumeEvent())
                 return;
-            openERPContext.execute(openERPRequest, odooURL);
+            openERPContext.execute(openERPRequest);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

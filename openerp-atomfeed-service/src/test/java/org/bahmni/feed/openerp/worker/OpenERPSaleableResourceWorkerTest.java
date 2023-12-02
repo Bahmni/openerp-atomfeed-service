@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 import static org.bahmni.feed.openerp.worker.OpenERPSaleableResourceWorker.ERP_EVENT_CATEGORY;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,8 +35,6 @@ public class OpenERPSaleableResourceWorkerTest {
     private String eventContent = "openmrs/ws/rest/v1/reference-data/resources/e48dd85b-fb13-4f3a-ae01-e6fd57eea6fe";
     private String eventUrl = "https://mybahmni/" + eventContent;
     private String feedUri = "https://mybahmni/openmrs/ws/atomfeed/saleable/recent";
-
-    private String odooURL = "https://client/openmrs/ws/atomfeed/saleable/recent";
 
 
     String sampleProcedureJsonWithSaleableAsFalse
@@ -62,7 +59,7 @@ public class OpenERPSaleableResourceWorkerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPSaleableResourceWorker(feedUri,odooURL, openERPContext, webClient, "https://mybahmni/");
+        worker = new OpenERPSaleableResourceWorker(feedUri, openERPContext, webClient, "https://mybahmni/");
         when(webClient.get(URI.create(eventUrl))).thenReturn(sampleProcedureJson);
     }
 
@@ -71,7 +68,7 @@ public class OpenERPSaleableResourceWorkerTest {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPContext).execute(erpRequestCatcher.capture(), eq(odooURL));
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         OpenERPRequest openERPRequest = erpRequestCatcher.getValue();
         List<Parameter> parameters = openERPRequest.getParameters();
@@ -93,7 +90,7 @@ public class OpenERPSaleableResourceWorkerTest {
         Event event = new Event("1", eventContent, "Dressing", feedUri, new Date());
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
-        verify(openERPContext).execute(erpRequestCatcher.capture(), eq(odooURL));
+        verify(openERPContext).execute(erpRequestCatcher.capture());
 
         List<Parameter> parameters = erpRequestCatcher.getValue().getParameters();
         Assert.assertTrue(parameters.contains(new Parameter("name", "Dressing of Wound")));

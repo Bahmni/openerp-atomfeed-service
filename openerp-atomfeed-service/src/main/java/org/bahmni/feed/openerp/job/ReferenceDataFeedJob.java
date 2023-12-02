@@ -13,11 +13,11 @@ public class ReferenceDataFeedJob {
     }
 
     public void processFeed()  {
-        simpleFeedJob.processFeed(FeedURI.REFERENCE_DATA_FEED);
+        simpleFeedJob.processFeed(Jobs.REFERENCE_DATA_FEED);
     }
 
     public void processFailedEvents()  {
-        simpleFeedJob.processFailedEvents(FeedURI.REFERENCE_DATA_FEED);
+        simpleFeedJob.processFailedEvents(Jobs.REFERENCE_DATA_FEED);
     }
 
 
