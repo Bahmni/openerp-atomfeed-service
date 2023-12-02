@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<methodCall>
+    <methodName>execute</methodName>
+    <params>
+        <param>
+            <value><string>${database}</string></value>
+        </param>
+        <param>
+            <value><int>${id}</int></value>
+        </param>
+        <param>
+            <value><string>${password}</string></value>
+        </param>
+        <param>
+            <value><string>${resource}</string></value>
+        </param>
+        <param>
+            <value><string>${operation}</string></value>
+        </param>
+        <param>
+            <value><struct>
+                <#list parametersList as param>
+                    <member>
+                        <name>${param.name}</name>
+                        <value><${param.type}>${(param.value?xml)!}</${param.type}></value>
+                    </member>
+                </#list>
+            </struct></value>
+        </param>
+    </params>
+</methodCall>
