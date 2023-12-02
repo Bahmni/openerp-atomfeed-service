@@ -1,36 +1,59 @@
 package org.bahmni.openerp.web.request.builder;
 
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+
+import freemarker.template.Template;
 import org.bahmni.openerp.web.OpenERPException;
+import org.bahmni.openerp.web.config.FreeMarkerConfig;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.springframework.stereotype.Service;
 
 import java.io.StringWriter;
+import java.util.HashMap;
 
 @Service
 public class RequestBuilder {
 
     public static String buildNewXMLRequest(OpenERPRequest openERPRequest, Object id, String database, String password) {
         try {
-            VelocityEngine velocityEngine = new VelocityEngine();
-            velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-            velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-            velocityEngine.init();
-            Template template = velocityEngine.getTemplate("request/template/xml_template.vm");
-            VelocityContext context = new VelocityContext();
-            context.put("parametersList", openERPRequest.getParameters());
-            context.put("id", id);
-            context.put("database", database);
-            context.put("password", password);
-            context.put("resource", openERPRequest.getResource());
-            context.put("operation", openERPRequest.getOperation());
+            HashMap<String, Object> context = getXMLContext(openERPRequest, id, database, password);
+            return buildRequest("xml_template.ftl", context);
+        } catch (Exception e) {
+            throw new OpenERPException(e);
+        }
+    }
 
+    private static HashMap<String, Object> getXMLContext(OpenERPRequest openERPRequest, Object id, String database, String password) {
+        HashMap<String, Object> context = new HashMap<>();
+        context.put("parametersList", openERPRequest.getParameters());
+        context.put("id", id);
+        context.put("database", database);
+        context.put("password", password);
+        context.put("resource", openERPRequest.getResource());
+        context.put("operation", openERPRequest.getOperation());
+        return context;
+    }
+
+    public static String buildNewRestRequest(OpenERPRequest openERPRequest, String id) {
+        try {
+            HashMap<String, Object> context = getRestContext(openERPRequest, id);
+            return buildRequest("rest_template.ftl", context);
+        } catch (Exception e) {
+            throw new OpenERPException(e);
+        }
+    }
+
+    private static HashMap<String, Object> getRestContext(OpenERPRequest openERPRequest, String id) {
+        HashMap<String, Object> context = new HashMap<>();
+        context.put("parametersList", openERPRequest.getParameters());
+        context.put("id", id);
+        return context;
+    }
+
+    private static String buildRequest(String templateName, HashMap<String, Object> context){
+        try {
+            Template template= FreeMarkerConfig.getConfiguration().getTemplate(templateName);
             StringWriter writer = new StringWriter();
-            template.merge(context, writer);
+            template.process(context, writer);
             return writer.toString();
         } catch (Exception e) {
             throw new OpenERPException(e);
