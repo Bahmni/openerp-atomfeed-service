@@ -2,7 +2,7 @@ package org.bahmni.feed.openerp;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bahmni.feed.openerp.job.FeedURI;
+import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.openerp.web.OpenERPProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
 
 
     /**
-     * @deprecated replaced by {@link #getFeedUriForJob(FeedURI)} ()}
+     * @deprecated replaced by {@link #getFeedUriForJob(Jobs)} ()}
      */
     @Deprecated
     public String getFeedUri(String feedname) {
@@ -55,9 +55,8 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     @Value("${saleable.feed.generator.uri}")
     private String saleableFeedUri;
 
-
-    public String getFeedUriForJob(FeedURI feedURIJob) {
-        switch (feedURIJob){
+    public String getFeedUriForJob(Jobs feedJob) {
+        switch (feedJob){
             case CUSTOMER_FEED: return customFeedUri;
             case SALEORDER_FEED: return saleOrderFeedUri;
             case OPENELIS_SALEORDER_FEED: return elisSaleOrderFeedUri;
@@ -66,23 +65,6 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
             case SALEABLE_FEED: return saleableFeedUri;
         }
         throw new RuntimeException("Can not identify feed URI for requested Job.");
-    }
-
-    public String getOdooURLForJob(FeedURI feedURIJob, boolean isRestEnabled) {
-        if (isRestEnabled) {
-            switch (feedURIJob) {
-                case CUSTOMER_FEED:
-                case SALEORDER_FEED:
-                case LAB_FEED:
-                case SALEABLE_FEED: return "";
-                case DRUG_FEED: return "/api/bahmni-drug";
-                default:
-                    throw new RuntimeException("Can not identify Odoo URL for requested Job.");
-            }
-        }
-        else {
-            return "xmlrpc/object";
-        }
     }
 
     @Value("${openerp.host}")
@@ -209,6 +191,8 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         logger.debug("**************** DEBUG OpenERPAtomFeedProperties ************************ ");
     }
 
+
+
     private HashMap<String, String> getInfo() {
         HashMap<String, String> values = new HashMap<>();
         values.put("chunking.strategy",chunkingStrategy );
@@ -233,5 +217,6 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         values.put("saleable.feed.generator.uri", saleableFeedUri);
         return values;
     }
+
 
 }
