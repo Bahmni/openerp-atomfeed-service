@@ -67,8 +67,8 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         throw new RuntimeException("Can not identify feed URI for requested Job.");
     }
 
-    public String getOdooURIForJob(Jobs feedJob, boolean isOdoo16) {
-        if (isOdoo16) {
+    public String getOdooURIForJob(Jobs feedJob, boolean isRestEnabled) {
+        if (isRestEnabled) {
             switch (feedJob) {
                 case CUSTOMER_FEED:
                 case SALEORDER_FEED:
@@ -79,7 +79,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
             }
         }
         else {
-            return "xmlrpc/object";
+            return "/xmlrpc/object";
         }
     }
     @Value("${openerp.host}")
