@@ -1,5 +1,6 @@
 package org.bahmni.feed.openerp.client;
 
+import org.bahmni.feed.openerp.AtomfeedServiceConstants;
 import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.job.Jobs;
@@ -16,6 +17,7 @@ import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
 import org.ict4h.atomfeed.client.service.FeedClient;
 import org.ict4h.atomfeed.server.transaction.AtomFeedSpringTransactionSupport;
+import org.springframework.core.env.Environment;
 
 public class AtomFeedClientHelper {
     private final OpenERPAtomFeedProperties atomFeedProperties;
@@ -24,15 +26,17 @@ public class AtomFeedClientHelper {
     private final OdooRESTClient odooRESTClient;
     private FeedClientFactory feedClientFactory;
     private final WebClientProvider webClientProvider;
+    private final Environment environment;
 
-    public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPXMLClient openERPXMLClient, OdooRESTClient odooRESTClient) {
+    public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, Environment environment, AtomFeedSpringTransactionSupport transactionManager, OpenERPXMLClient openERPXMLClient, OdooRESTClient odooRESTClient) {
         this.atomFeedProperties = atomFeedProperties;
         this.transactionManager = transactionManager;
         this.openERPXMLClient = openERPXMLClient;
-        this.odooRESTClient = odooRESTClient;
         this.webClientProvider = new WebClientProvider(atomFeedProperties);
+        this.odooRESTClient = odooRESTClient;
+        this.environment = environment;
     }
-    
+
     public FeedClient getAtomFeedClient(Jobs jobName) throws FeedException {
         if(this.feedClientFactory == null){
             WorkerFactory workerFactory = new WorkerFactory(webClientProvider);
@@ -46,9 +50,10 @@ public class AtomFeedClientHelper {
         AllFeeds allFeeds = getAllFeeds(atomFeedProperties, cookies);
         AllMarkers allMarkers = new AllMarkersJdbcImpl(transactionManager);
         AllFailedEvents allFailedEvents = new AllFailedEventsJdbcImpl(transactionManager);
-        //TODO: Create a toggle between rest and xml client
-        OpenERPContext openERPContext = new OpenERPContext(openERPXMLClient);
-        return feedClientFactory.getFeedClient(atomFeedProperties, transactionManager, openERPContext, allFeeds, allMarkers, allFailedEvents, jobName);
+        String isRestEnabled = environment.getProperty(AtomfeedServiceConstants.IS_REST_ENABLED.getAtomfeedServiceConstants());
+        boolean isRestEnabledValue = Boolean.parseBoolean(isRestEnabled);
+        OpenERPContext openERPContext = isRestEnabledValue ? new OpenERPContext(odooRESTClient) : new OpenERPContext(openERPXMLClient);
+        return feedClientFactory.getFeedClient(atomFeedProperties, transactionManager, openERPContext, allFeeds, allMarkers, allFailedEvents, jobName, isRestEnabledValue);
     }
 
     static AllFeeds getAllFeeds(OpenERPAtomFeedProperties atomFeedProperties, ClientCookies cookies) {

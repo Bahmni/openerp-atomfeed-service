@@ -31,9 +31,9 @@ public class FeedClientFactory {
         this.workerFactory = workerFactory;
     }
 
-    public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPContext openERPContext, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName) {
+    public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPContext openERPContext, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName, Boolean isRestEnabled) {
         String feedUri = openERPAtomFeedProperties.getFeedUriForJob(jobName);
-        String odooURL = openERPAtomFeedProperties.getOdooURIForJob(jobName,false);
+        String odooURL = openERPAtomFeedProperties.getOdooURIForJob(jobName, isRestEnabled);
         if (StringUtils.isBlank(feedUri)) {
             String message = String.format("No feed-uri defined for Job [%s][%s]", jobName, jobName.getFeedUriRef());
             logger.warn(message);

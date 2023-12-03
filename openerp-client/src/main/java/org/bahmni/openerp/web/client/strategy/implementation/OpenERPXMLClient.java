@@ -4,8 +4,8 @@ import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.OpenERPProperties;
 import org.bahmni.openerp.web.client.OpenERPResponseErrorValidator;
 import org.bahmni.openerp.web.client.strategy.OpenERPClientStrategy;
+import org.bahmni.openerp.web.http.client.XMLClient;
 import org.bahmni.openerp.web.request.OpenERPRequest;
-import org.bahmni.openerp.web.http.client.HttpClient;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -24,7 +24,6 @@ import java.net.URL;
 public class OpenERPXMLClient implements OpenERPClientStrategy {
     public static final String XML_RPC_OBJECT_ENDPOINT = "/xmlrpc/object";
     public static final String XML_RPC_COMMON_ENDPOINT = "/xmlrpc/common";
-
     private final int connectionTimeoutInMilliseconds;
     private final int replyTimeoutInMilliseconds;
     private final String host;
@@ -32,15 +31,13 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     private final String database;
     private final String user;
     private final String password;
-
     private Object id;
-
     private XmlRpcClient xmlRpcClient;
-    private final HttpClient httpClient;
+    private final XMLClient XMLClient;
 
     @Autowired
-    public OpenERPXMLClient(HttpClient httpClient, OpenERPProperties openERPProperties) {
-        this.httpClient = httpClient;
+    public OpenERPXMLClient(XMLClient XMLClient, OpenERPProperties openERPProperties) {
+        this.XMLClient = XMLClient;
         host = openERPProperties.getHost();
         port = openERPProperties.getPort();
         database = openERPProperties.getDatabase();
@@ -53,12 +50,10 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     private void login() {
         if (id == null) {
             XmlRpcClient loginRpcClient = xmlRpcClient(XML_RPC_COMMON_ENDPOINT);
-
             Vector<String> params = new Vector<String>();
             params.addElement(database);
             params.addElement(user);
             params.addElement(password);
-
             Object loginId = executeRPC(loginRpcClient, params, "login");
             if(loginId == null || loginId.getClass() != Integer.class)
                 throw new OpenERPException(String.format("Failed to login. The login id is : %s", loginId));
@@ -67,12 +62,16 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     }
 
     @Override
-    public Object execute(OpenERPRequest openERPRequest, String URI) {
+    public Object execute(OpenERPRequest openERPRequest, String URL) {
         login();
         String request = RequestBuilder.buildNewXMLRequest(openERPRequest, id, database, password);
-        String response = httpClient().post("http://" + host + ":" + port + URI, request);
-        new OpenERPResponseErrorValidator().checkForError(response);
-        return response;
+        try {
+            String response = httpClient().post("http://" + host + ":" + port + XML_RPC_OBJECT_ENDPOINT, request);
+            new OpenERPResponseErrorValidator().checkForError(response);
+            return response;
+        } catch (Exception e) {
+            throw new OpenERPException(e);
+        }
     }
 
 
@@ -84,9 +83,9 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
         }
     }
 
-    private HttpClient httpClient() {
-        httpClient.setTimeout(replyTimeoutInMilliseconds);
-        return httpClient;
+    private XMLClient httpClient() {
+        XMLClient.setTimeout(replyTimeoutInMilliseconds);
+        return XMLClient;
     }
 
     private XmlRpcClient xmlRpcClient(String endpoint) {
@@ -95,7 +94,7 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
         }
         XmlRpcClientConfigImpl clientConfig = (XmlRpcClientConfigImpl) xmlRpcClient.getClientConfig();
         try {
-            clientConfig.setServerURL(new URL("http", host, port, endpoint));
+                clientConfig.setServerURL(new URL("http", host, port, endpoint));
         } catch (MalformedURLException e) {
             throw new OpenERPException(e);
         }
