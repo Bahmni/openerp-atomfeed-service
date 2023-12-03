@@ -23,7 +23,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Vector;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -87,7 +86,8 @@ public class OpenERPSaleOrderEventWorkerIT {
 //        when(openERPContext.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
 
         String feedUrl = "http://xxxx/encounter/feed/2";
-        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,openERPContext,webClient,"http://mrs.auth.uri");
+        String odooURL = "http://odooURL";
+        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,odooURL,openERPContext,webClient,"http://mrs.auth.uri");
         Event event = new Event("Test",feedUrl);
         eventWorker.process(event);
     }
@@ -116,9 +116,10 @@ public class OpenERPSaleOrderEventWorkerIT {
 //        when(openERPContext.read(any(String.class),any(Vector.class), any(Vector.class))).thenReturn(new Object[]{fieldMap});
 
         String feedUrl = "http://xxxx/encounter/feed/2";
+        String odooURL = "http://odooURL";
         Event event = new Event("Test", feedUrl);
 
-        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl, openERPContext, webClient,"http://mrs.auth.uri");
+        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl, odooURL, openERPContext, webClient,"http://mrs.auth.uri");
         eventWorker.process(event);
 
     }

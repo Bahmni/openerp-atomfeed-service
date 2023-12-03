@@ -18,17 +18,18 @@ import java.util.List;
 
 public class OpenERPDrugServiceEventWorker implements EventWorker {
 
-    private static Logger logger = LogManager.getLogger(OpenERPDrugServiceEventWorker.class);
+    private static final Logger logger = LogManager.getLogger(OpenERPDrugServiceEventWorker.class);
+    private final OpenERPContext openERPContext;
+    private final String feedUrl;
+    private final String odooURL;
+    private final OpenMRSWebClient webClient;
+    private final String urlPrefix;
 
-    private OpenERPContext openERPContext;
-    private String feedUrl;
-    private OpenMRSWebClient webClient;
-    private String urlPrefix;
 
-
-    public OpenERPDrugServiceEventWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPDrugServiceEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
+        this.odooURL = odooURL;
         this.webClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
     }
@@ -37,7 +38,7 @@ public class OpenERPDrugServiceEventWorker implements EventWorker {
     public void process(Event event) {
         logger.debug("Processing the event [{}]", event.getContent());
         try {
-            openERPContext.execute(mapRequest(event));
+            openERPContext.execute(mapRequest(event), odooURL);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

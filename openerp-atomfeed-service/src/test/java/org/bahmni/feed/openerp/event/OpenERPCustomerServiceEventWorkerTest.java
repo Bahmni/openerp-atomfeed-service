@@ -37,8 +37,9 @@ public class OpenERPCustomerServiceEventWorkerTest {
     @Test
     public void shouldCallOpenERPClientWithRightParameters() throws FileNotFoundException {
         MRSURLPrefix = "urlPrefixTest";
+        String odooURL = "http://odooURLTest";
         OpenERPCustomerServiceEventWorker customerServiceEventWorker =
-                new OpenERPCustomerServiceEventWorker("www.openmrs.com", openERPContext, mockWebClient, MRSURLPrefix);
+                new OpenERPCustomerServiceEventWorker("www.openmrs.com", odooURL, openERPContext, mockWebClient, MRSURLPrefix);
 
         InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("patientResource.xml");
         String patientResource = new Scanner(resourceAsStream).useDelimiter("\\Z").next();
@@ -48,7 +49,7 @@ public class OpenERPCustomerServiceEventWorkerTest {
 
         customerServiceEventWorker.process(event);
 
-        verify(openERPContext).execute(createOpenERPRequest(event));
+        verify(openERPContext).execute(createOpenERPRequest(event), odooURL);
 
     }
 
