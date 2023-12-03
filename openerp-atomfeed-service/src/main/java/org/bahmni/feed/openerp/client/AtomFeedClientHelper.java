@@ -5,6 +5,7 @@ import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.feed.openerp.worker.WorkerFactory;
 import org.bahmni.openerp.web.client.strategy.OpenERPContext;
+import org.bahmni.openerp.web.client.strategy.implementation.OdooRESTClient;
 import org.bahmni.openerp.web.client.strategy.implementation.OpenERPXMLClient;
 import org.bahmni.webclients.ClientCookies;
 import org.ict4h.atomfeed.client.AtomFeedProperties;
@@ -20,13 +21,15 @@ public class AtomFeedClientHelper {
     private final OpenERPAtomFeedProperties atomFeedProperties;
     private final AtomFeedSpringTransactionSupport transactionManager;
     private final OpenERPXMLClient openERPXMLClient;
+    private final OdooRESTClient odooRESTClient;
     private FeedClientFactory feedClientFactory;
     private final WebClientProvider webClientProvider;
 
-    public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPXMLClient openERPXMLClient) {
+    public AtomFeedClientHelper(OpenERPAtomFeedProperties atomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPXMLClient openERPXMLClient, OdooRESTClient odooRESTClient) {
         this.atomFeedProperties = atomFeedProperties;
         this.transactionManager = transactionManager;
         this.openERPXMLClient = openERPXMLClient;
+        this.odooRESTClient = odooRESTClient;
         this.webClientProvider = new WebClientProvider(atomFeedProperties);
     }
     

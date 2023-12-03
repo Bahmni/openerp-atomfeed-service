@@ -67,6 +67,21 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         throw new RuntimeException("Can not identify feed URI for requested Job.");
     }
 
+    public String getOdooURIForJob(Jobs feedJob, boolean isOdoo16) {
+        if (isOdoo16) {
+            switch (feedJob) {
+                case CUSTOMER_FEED:
+                case SALEORDER_FEED:
+                case LAB_FEED:
+                case SALEABLE_FEED:  return "";
+                case DRUG_FEED: return "/api/bahmni-drug";
+                default: throw new RuntimeException("Can not identify endpoint URI for requested Job.");
+            }
+        }
+        else {
+            return "xmlrpc/object";
+        }
+    }
     @Value("${openerp.host}")
     private String openErpHost;
 

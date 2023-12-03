@@ -67,10 +67,10 @@ public class OpenERPXMLClient implements OpenERPClientStrategy {
     }
 
     @Override
-    public Object execute(OpenERPRequest openERPRequest){
+    public Object execute(OpenERPRequest openERPRequest, String URI) {
         login();
         String request = RequestBuilder.buildNewXMLRequest(openERPRequest, id, database, password);
-        String response = httpClient().post("http://" + host + ":" + port + XML_RPC_OBJECT_ENDPOINT, request);
+        String response = httpClient().post("http://" + host + ":" + port + URI, request);
         new OpenERPResponseErrorValidator().checkForError(response);
         return response;
     }

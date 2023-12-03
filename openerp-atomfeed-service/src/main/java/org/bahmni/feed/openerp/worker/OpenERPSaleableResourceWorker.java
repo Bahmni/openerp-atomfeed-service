@@ -21,16 +21,18 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
     public static final String ERP_EVENT_CATEGORY = "create.service.saleable";
     public static final String SALEABLE_PROPERTY_NAME = "saleable";
     public static final String PRODUCT_CATEGORY = "product_category";
-    private OpenERPContext openERPContext;
-    private String feedUrl;
-    private OpenMRSWebClient openMRSWebClient;
-    private String urlPrefix;
+    private final OpenERPContext openERPContext;
+    private final String feedUrl;
+    private final String odooURL;
+    private final OpenMRSWebClient openMRSWebClient;
+    private final String urlPrefix;
 
-    private static Logger logger = LogManager.getLogger(OpenERPSaleableResourceWorker.class);
+    private static final Logger logger = LogManager.getLogger(OpenERPSaleableResourceWorker.class);
 
-    public OpenERPSaleableResourceWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPSaleableResourceWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
+        this.odooURL = odooURL;
         this.openMRSWebClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
     }
@@ -44,7 +46,7 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
                 logger.info(String.format("Resource is not a saleable resource. Ignoring. Event [%s]", event.getId()));
                 return;
             }
-            openERPContext.execute(mapToOpenERPRequest(event, resource));
+            openERPContext.execute(mapToOpenERPRequest(event, resource), odooURL);
         } catch (Exception e) {
             logger.error(String.format("Error occurred while trying to process Saleable Event [%s]", event.getId()), e);
             throw new RuntimeException(String.format("Error occurred while trying to process Saleable Event [%s]", event.getId()), e);

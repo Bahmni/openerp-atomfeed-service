@@ -19,18 +19,19 @@ import java.util.Map;
 
 public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
 
-    private static Logger logger = LogManager.getLogger(OpenERPLabOrderTypeServiceEventWorker.class);
-
-    private OpenERPContext openERPContext;
-    private String feedUrl;
-    private OpenMRSWebClient webClient;
-    private String urlPrefix;
+    private static final Logger logger = LogManager.getLogger(OpenERPLabOrderTypeServiceEventWorker.class);
+    private final OpenERPContext openERPContext;
+    private final String feedUrl;
+    private final String odooURL;
+    private final OpenMRSWebClient webClient;
+    private final String urlPrefix;
     private Map<String, OpenMRSLabOrderTypeEvent> labOrderTypeEventMap = new HashMap<>();
 
 
-    public OpenERPLabOrderTypeServiceEventWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPLabOrderTypeServiceEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
+        this.odooURL = odooURL;
         this.webClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
         labOrderTypeEventMap.put(OpenMRSRadiologyTestEvent.RADIOLOGY_TEST_EVENT_NAME, new OpenMRSRadiologyTestEvent());
@@ -44,7 +45,7 @@ public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
         try {
             OpenMRSLabOrderTypeEvent openMRSLabOrderTypeEvent = labOrderTypeEventMap.get(event.getTitle());
             if(openMRSLabOrderTypeEvent == null) return ;
-            openERPContext.execute(mapRequest(event, openMRSLabOrderTypeEvent));
+            openERPContext.execute(mapRequest(event, openMRSLabOrderTypeEvent), odooURL);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
