@@ -1,8 +1,8 @@
 package org.bahmni.feed.openerp.client;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.job.Jobs;
@@ -25,7 +25,7 @@ public class FeedClientFactory {
 
 
     private final WorkerFactory workerFactory;
-    private static Logger logger = LoggerFactory.getLogger(FeedClientFactory.class);
+    private static final Logger logger = LogManager.getLogger(FeedClientFactory.class);
 
     public FeedClientFactory(WorkerFactory workerFactory) {
         this.workerFactory = workerFactory;
