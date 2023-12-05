@@ -55,26 +55,31 @@ public class OpenERPCustomerServiceEventWorkerTest {
 
     private OpenERPRequest createOpenERPRequest(Event event) {
         List<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(createParameter("name", "mareez naam", "string"));
-        parameters.add(createParameter("local_name", "राम बाई", "string"));
-        parameters.add(createParameter("ref", "GAN200066", "string"));
-        parameters.add(createParameter("uuid", "d6729333-bc31-4886-a864-0a6e7ae570a9", "string"));
-        parameters.add(createParameter("village", "cityVillage", "string"));
-        parameters.add(createParameter("attributes", "{\"healthCenter\":\"2\",\"givenNameLocal\":\"राम बाई\",\"class\":\"ST\"}", "string"));
-        parameters.add(createParameter("preferredAddress", "{\"address1\":\"address1\",\"address2\":\"address2\"," +
+        addToParametersIfNotEmpty(parameters,"name", "mareez naam");
+        addToParametersIfNotEmpty(parameters,"local_name", "राम बाई");
+        addToParametersIfNotEmpty(parameters,"ref", "GAN200066");
+        addToParametersIfNotEmpty(parameters,"uuid", "d6729333-bc31-4886-a864-0a6e7ae570a9");
+        addToParametersIfNotEmpty(parameters,"village", "cityVillage");
+        addToParametersIfNotEmpty(parameters,"attributes", "{\"healthCenter\":\"2\",\"givenNameLocal\":\"राम बाई\",\"class\":\"ST\"}");
+        addToParametersIfNotEmpty(parameters,"preferredAddress", "{\"address1\":\"address1\",\"address2\":\"address2\"," +
                 "\"address3\":\"address3\",\"cityVillage\":\"cityVillage\",\"countyDistrict\":\"countyDistrict\"," +
-                "\"stateProvince\":\"stateProvince\",\"country\":\"country\"}", "string"));
+                "\"stateProvince\":\"stateProvince\",\"country\":\"country\"}");
 
-        parameters.add(createParameter("category", "create.customer", "string"));
+        addToParametersIfNotEmpty(parameters,"category", "create.customer");
 
-        parameters.add(createParameter("feed_uri", "www.openmrs.com", "string"));
-        parameters.add(createParameter("last_read_entry_id", event.getId(), "string"));
-        parameters.add(createParameter("feed_uri_for_last_read_entry", event.getFeedUri(), "string"));
+        addToParametersIfNotEmpty(parameters,"feed_uri", "www.openmrs.com");
+        addToParametersIfNotEmpty(parameters,"last_read_entry_id", event.getId());
+        addToParametersIfNotEmpty(parameters,"feed_uri_for_last_read_entry", event.getFeedUri());
 
 
         return new OpenERPRequest("atom.event.worker", "process_event", parameters);
     }
 
+    private void addToParametersIfNotEmpty(List<Parameter> parameters, String name, String value) {
+        if (value != null && !value.isEmpty()) {
+            parameters.add(new Parameter(name, value));
+        }
+    }
     private Entry createEntry() throws FileNotFoundException {
         Entry entry = new Entry();
         ArrayList<Content> contents = new ArrayList<Content>();
