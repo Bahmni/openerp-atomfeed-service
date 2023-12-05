@@ -70,10 +70,10 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     public String getOdooURIForJob(Jobs feedJob, boolean isRestEnabled) {
         if (isRestEnabled) {
             switch (feedJob) {
-                case CUSTOMER_FEED:
                 case SALEORDER_FEED:
                 case LAB_FEED:
                 case SALEABLE_FEED:  return "";
+                case CUSTOMER_FEED: return "/api/bahmni-customer";
                 case DRUG_FEED: return "/api/bahmni-drug";
                 default: throw new RuntimeException("Can not identify endpoint URI for requested Job.");
             }
