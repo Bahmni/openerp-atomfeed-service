@@ -4,9 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabOrderTypeEvent;
-import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabPanelEvent;
 import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabTestEvent;
-import org.bahmni.feed.openerp.domain.labOrderType.OpenMRSRadiologyTestEvent;
 import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -17,9 +15,9 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
+public class OpenERPLabTestServiceEventWorker implements EventWorker {
 
-    private static final Logger logger = LogManager.getLogger(OpenERPLabOrderTypeServiceEventWorker.class);
+    private static final Logger logger = LogManager.getLogger(OpenERPLabTestServiceEventWorker.class);
     private final OpenERPContext openERPContext;
     private final String feedUrl;
     private final String odooURL;
@@ -28,15 +26,13 @@ public class OpenERPLabOrderTypeServiceEventWorker implements EventWorker {
     private Map<String, OpenMRSLabOrderTypeEvent> labOrderTypeEventMap = new HashMap<>();
 
 
-    public OpenERPLabOrderTypeServiceEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPLabTestServiceEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
         this.odooURL = odooURL;
         this.webClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
-        labOrderTypeEventMap.put(OpenMRSRadiologyTestEvent.RADIOLOGY_TEST_EVENT_NAME, new OpenMRSRadiologyTestEvent());
         labOrderTypeEventMap.put(OpenMRSLabTestEvent.LAB_TEST_EVENT_NAME, new OpenMRSLabTestEvent());
-        labOrderTypeEventMap.put(OpenMRSLabPanelEvent.LAB_PANEL_EVENT_NAME, new OpenMRSLabPanelEvent());
     }
 
     @Override

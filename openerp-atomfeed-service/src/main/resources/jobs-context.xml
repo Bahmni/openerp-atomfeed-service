@@ -70,14 +70,34 @@
             <property name="targetMethod" value="execute"/>
             <property name="concurrent" value="false"/>
         </bean>
-        <bean id="openerpLabFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-            <property name="targetObject" ref="openerpLabFeedJob"/>
+        <bean id="openerpLabTestFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="openerpLabTestFeedJob"/>
+            <property name="targetMethod" value="processFeed"/>
+            <property name="concurrent" value="false"/>
+        </bean>
+        <bean id="openerpLabPanelFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="openerpLabPanelFeedJob"/>
+            <property name="targetMethod" value="processFeed"/>
+            <property name="concurrent" value="false"/>
+        </bean>
+        <bean id="openerpRadiologyTestFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="openerpRadiologyTestFeedJob"/>
             <property name="targetMethod" value="processFeed"/>
             <property name="concurrent" value="false"/>
         </bean>
 
-        <bean id="openerpLabFeedFailedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-            <property name="targetObject" ref="openerpLabFeedJob"/>
+        <bean id="openerpLabTestFeedFailedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="openerpLabTestFeedJob"/>
+            <property name="targetMethod" value="processFailedEvents"/>
+            <property name="concurrent" value="false"/>
+        </bean>
+        <bean id="openerpLabPanelFeedFailedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="openerpLabPanelFeedJob"/>
+            <property name="targetMethod" value="processFailedEvents"/>
+            <property name="concurrent" value="false"/>
+        </bean>
+        <bean id="openerpRadiologyTestFeedFailedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="openerpRadiologyTestFeedJob"/>
             <property name="targetMethod" value="processFailedEvents"/>
             <property name="concurrent" value="false"/>
         </bean>
@@ -148,15 +168,40 @@
             <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
 
-        <bean id="openerpLabFeedJobTrigger"
+        <bean id="openerpLabTestFeedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-            <property name="jobDetail" ref="openerpLabFeedQuartzJob" />
+            <property name="jobDetail" ref="openerpLabTestFeedQuartzJob" />
             <property name="cronExpression" value="0/30 * * * * ?" />
             <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
-        <bean id="openerpLabFeedFailedJobTrigger"
+        <bean id="openerpLabPanelFeedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-            <property name="jobDetail" ref="openerpLabFeedFailedQuartzJob" />
+            <property name="jobDetail" ref="openerpLabPanelFeedQuartzJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
+        </bean>
+        <bean id="openerpRadiologyTestFeedJobTrigger"
+              class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="openerpRadiologyTestFeedQuartzJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
+        </bean>
+
+        <bean id="openerpLabTestFeedFailedJobTrigger"
+              class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="openerpLabTestFeedFailedQuartzJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
+        </bean>
+        <bean id="openerpLabPanelFeedFailedJobTrigger"
+              class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="openerpLabPanelFeedFailedQuartzJob" />
+            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="startDelay" value="${scheduler.initial.delay}" />
+        </bean>
+        <bean id="openerpRadiologyTestFeedFailedJobTrigger"
+              class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="openerpRadiologyTestFeedFailedQuartzJob" />
             <property name="cronExpression" value="0/30 * * * * ?" />
             <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
@@ -200,8 +245,12 @@
                     <ref bean="openelisSaleOrderFeedFailedJobTrigger" />
                     <ref bean="eventRecordsNumberOffsetMarkerTrigger"/>
                     <ref bean="eventPublisherTrigger"/>
-                    <ref bean="openerpLabFeedJobTrigger" />
-                    <ref bean="openerpLabFeedFailedJobTrigger" />
+                    <ref bean="openerpLabTestFeedJobTrigger" />
+                    <ref bean="openerpLabPanelFeedJobTrigger" />
+                    <ref bean="openerpRadiologyTestFeedJobTrigger" />
+                    <ref bean="openerpLabTestFeedFailedJobTrigger" />
+                    <ref bean="openerpLabPanelFeedFailedJobTrigger" />
+                    <ref bean="openerpRadiologyTestFeedFailedJobTrigger" />
                     <ref bean="openerpDrugFeedQuartzJobTrigger" />
                     <ref bean="openerpDrugFeedQuartzFailedJobTrigger" />
                     <ref bean="openerpSaleableFeedJobTrigger"/>
@@ -225,7 +274,15 @@
             <constructor-arg ref="simpleFeedJob"/>
         </bean>
 
-        <bean id="openerpLabFeedJob" class="org.bahmni.feed.openerp.job.OpenERPLabFeedJob" scope="prototype">
+        <bean id="openerpLabTestFeedJob" class="org.bahmni.feed.openerp.job.OpenERPLabTestFeedJob" scope="prototype">
+            <constructor-arg ref="simpleFeedJob"/>
+        </bean>
+
+        <bean id="openerpLabPanelFeedJob" class="org.bahmni.feed.openerp.job.OpenERPLabPanelFeedJob" scope="prototype">
+            <constructor-arg ref="simpleFeedJob"/>
+        </bean>
+
+        <bean id="openerpRadiologyTestFeedJob" class="org.bahmni.feed.openerp.job.OpenERPRadiologyTestFeedJob" scope="prototype">
             <constructor-arg ref="simpleFeedJob"/>
         </bean>
 

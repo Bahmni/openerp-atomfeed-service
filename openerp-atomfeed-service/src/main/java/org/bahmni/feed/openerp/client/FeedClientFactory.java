@@ -71,7 +71,9 @@ public class FeedClientFactory {
             case SALEORDER_FEED:
             case SALEABLE_FEED:
             case DRUG_FEED:
-            case LAB_FEED:
+            case LAB_TEST_FEED:
+            case LAB_PANEL_FEED:
+            case RADIOLOGY_TEST_FEED:
                 return atomFeedProperties.getAuthenticationURI();
             case REFERENCE_DATA_FEED: return atomFeedProperties.getReferenceDataEndpointURI();
             case OPENELIS_SALEORDER_FEED: return atomFeedProperties.getOpenElisURI();

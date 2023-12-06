@@ -61,7 +61,9 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
             case SALEORDER_FEED: return saleOrderFeedUri;
             case OPENELIS_SALEORDER_FEED: return elisSaleOrderFeedUri;
             case DRUG_FEED: return drugFeedUri;
-            case LAB_FEED: return labFeedUri;
+            case LAB_TEST_FEED: return labFeedUri;
+            case LAB_PANEL_FEED: return labFeedUri;
+            case RADIOLOGY_TEST_FEED: return labFeedUri;
             case SALEABLE_FEED: return saleableFeedUri;
         }
         throw new RuntimeException("Can not identify feed URI for requested Job.");
@@ -71,9 +73,11 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         if (isRestEnabled) {
             switch (feedJob) {
                 case SALEORDER_FEED:
-                case LAB_FEED:
                 case SALEABLE_FEED:  return "";
                 case CUSTOMER_FEED: return "/api/bahmni-customer";
+                case LAB_TEST_FEED: return "/api/bahmni-lab-test";
+                case LAB_PANEL_FEED: return "/api/bahmni-lab-panel";
+                case RADIOLOGY_TEST_FEED: return "/api/bahmni-radiology-test";
                 case DRUG_FEED: return "/api/bahmni-drug";
                 default: throw new RuntimeException("Can not identify endpoint URI for requested Job.");
             }
