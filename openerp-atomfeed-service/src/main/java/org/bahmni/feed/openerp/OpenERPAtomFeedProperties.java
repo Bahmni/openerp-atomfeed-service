@@ -76,7 +76,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     public String getOdooRESTUrlEndPoint(Jobs feedJob) {
         switch (feedJob) {
             case SALEORDER_FEED:
-            case SALEABLE_FEED:  return "";
+            case SALEABLE_FEED:  return "/api/bahmni-service-sale";
             case CUSTOMER_FEED: return "/api/bahmni-customer";
             case LAB_TEST_FEED: return "/api/bahmni-lab-test";
             case LAB_PANEL_FEED: return "/api/bahmni-lab-panel";
