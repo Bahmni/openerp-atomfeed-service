@@ -1,6 +1,5 @@
 package org.bahmni.feed.openerp.worker;
 
-import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.openerp.web.client.strategy.OpenERPContext;
 import org.bahmni.openerp.web.request.OpenERPRequest;
@@ -18,6 +17,7 @@ import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
+import static org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabTestEvent.LAB_TEST_EVENT_NAME;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -65,7 +65,7 @@ public class OpenERPLabTestServiceEventWorkerTest {
 
     @Test
     public void shouldProcessLabTestEvent() throws IOException {
-        Event event = new Event("2", "test", "test", feedUri, new Date());
+        Event event = new Event("2", LAB_TEST_EVENT_NAME, LAB_TEST_EVENT_NAME, feedUri, new Date());
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
@@ -84,7 +84,7 @@ public class OpenERPLabTestServiceEventWorkerTest {
 
     @Test
     public void testTestFailedEvent() throws IOException {
-        Event event = new Event("4", "test", "test", null, new Date());
+        Event event = new Event("4", LAB_TEST_EVENT_NAME, LAB_TEST_EVENT_NAME, null, new Date());
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);

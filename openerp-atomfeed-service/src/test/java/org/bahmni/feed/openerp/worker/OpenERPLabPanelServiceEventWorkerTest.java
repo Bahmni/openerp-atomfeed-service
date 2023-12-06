@@ -17,6 +17,7 @@ import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
+import static org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabPanelEvent.LAB_PANEL_EVENT_NAME;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -58,7 +59,7 @@ public class OpenERPLabPanelServiceEventWorkerTest {
 
     @Test
     public void shouldProcessLabPanelEvent() throws Exception {
-        Event event = new Event("6", "panel", "panel", feedUri, new Date());
+        Event event = new Event("6", LAB_PANEL_EVENT_NAME, LAB_PANEL_EVENT_NAME, feedUri, new Date());
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
@@ -77,7 +78,7 @@ public class OpenERPLabPanelServiceEventWorkerTest {
 
     @Test
     public void testPanelFailedEvent() throws IOException {
-        Event event = new Event("4", "panel", "panel", null, new Date());
+        Event event = new Event("4", LAB_PANEL_EVENT_NAME, LAB_PANEL_EVENT_NAME, null, new Date());
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);

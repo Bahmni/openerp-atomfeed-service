@@ -18,16 +18,13 @@ import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
-//import static org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabPanelEvent.LAB_PANEL_EVENT_NAME;
-//import static org.bahmni.feed.openerp.domain.labOrderType.OpenMRSLabTestEvent.LAB_TEST_EVENT_NAME;
-//import static org.bahmni.feed.openerp.domain.labOrderType.OpenMRSRadiologyTestEvent.RADIOLOGY_TEST_EVENT_NAME;
+import static org.bahmni.feed.openerp.domain.labOrderType.OpenMRSRadiologyTestEvent.RADIOLOGY_TEST_EVENT_NAME;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class OpenERPRadiologyTestServiceEventWorkerTest {
-    //    @Mock
-//    private OpenERPAtomFeedProperties atomFeedProperties;
+
     @Mock
     private OpenERPContext openERPContext;
     @Mock
@@ -55,7 +52,7 @@ public class OpenERPRadiologyTestServiceEventWorkerTest {
 
     @Test
     public void shouldProcessRadiologyTestEvent() throws IOException {
-        Event event = new Event("1", "radiology", "radiology", feedUri, new Date());
+        Event event = new Event("1", RADIOLOGY_TEST_EVENT_NAME, RADIOLOGY_TEST_EVENT_NAME, feedUri, new Date());
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
@@ -74,7 +71,7 @@ public class OpenERPRadiologyTestServiceEventWorkerTest {
 
     @Test
     public void testRadiologyFailedEvent() throws IOException {
-        Event event = new Event("3", "radiology", "radiology", null, new Date());
+        Event event = new Event("3", RADIOLOGY_TEST_EVENT_NAME, RADIOLOGY_TEST_EVENT_NAME, null, new Date());
 
         worker.process(event);
         ArgumentCaptor<OpenERPRequest> erpRequestCatcher = ArgumentCaptor.forClass(OpenERPRequest.class);
