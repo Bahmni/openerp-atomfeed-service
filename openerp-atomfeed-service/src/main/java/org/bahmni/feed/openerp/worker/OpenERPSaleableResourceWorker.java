@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class OpenERPSaleableResourceWorker implements EventWorker {
 
@@ -22,16 +23,14 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
     public static final String SALEABLE_PROPERTY_NAME = "saleable";
     public static final String PRODUCT_CATEGORY = "product_category";
     private final OpenERPContext openERPContext;
-    private final String feedUrl;
     private final String odooURL;
     private final OpenMRSWebClient openMRSWebClient;
     private final String urlPrefix;
 
     private static final Logger logger = LogManager.getLogger(OpenERPSaleableResourceWorker.class);
 
-    public OpenERPSaleableResourceWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
+    public OpenERPSaleableResourceWorker(String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
-        this.feedUrl = feedUrl;
         this.odooURL = odooURL;
         this.openMRSWebClient = openMRSWebClient;
         this.urlPrefix = urlPrefix;
@@ -77,26 +76,28 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
 
     private List<Parameter> buildParameters(Event event, OpenMRSResource resource) {
         List<Parameter> parameters = new ArrayList<>();
-        parameters.add(new Parameter("name", resource.getName()));
-        parameters.add(new Parameter("uuid", resource.getUuid()));
+        addToParametersIfNotEmpty(parameters, "name", resource.getName());
+        addToParametersIfNotEmpty(parameters, "uuid", resource.getUuid());
         Boolean saleActiveStatus = isSaleableActive(resource);
         parameters.add(new Parameter("is_active", (saleActiveStatus ? "1" : "0"), "boolean"));
-
-        parameters.add(new Parameter("category", ERP_EVENT_CATEGORY));
-
-        parameters.add(new Parameter("feed_uri", event.getFeedUri()));
-        parameters.add(new Parameter("last_read_entry_id",event.getId()));
-        parameters.add(new Parameter("feed_uri_for_last_read_entry",event.getFeedUri()));
-
+        addToParametersIfNotEmpty(parameters, "category", ERP_EVENT_CATEGORY);
+        addToParametersIfNotEmpty(parameters, "feed_uri", event.getFeedUri());
+        addToParametersIfNotEmpty(parameters, "last_read_entry_id",event.getId());
+        addToParametersIfNotEmpty(parameters, "feed_uri_for_last_read_entry",event.getFeedUri());
         if (event.getFeedUri() == null) {
             parameters.add(new Parameter("is_failed_event","1","boolean"));
         }
-
         Parameter categoryParam = getProductCategoryParameter(resource);
         if (categoryParam != null) {
             parameters.add(categoryParam);
         }
         return parameters;
+    }
+
+    private void addToParametersIfNotEmpty(List<Parameter> parameters, String name, String value) {
+        if (value != null && !value.isEmpty()) {
+            parameters.add(new Parameter(name, value));
+        }
     }
 
     private Boolean isSaleableActive(OpenMRSResource resource) {
@@ -105,7 +106,7 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
         }
         if (resource.getProperties() != null) {
             String saleable = resource.getProperties().get(SALEABLE_PROPERTY_NAME);
-            if ((saleable != null) && !"".equals(saleable)) {
+            if ((saleable != null) && !saleable.isEmpty() && !Objects.equals(saleable, "")) {
                 return Boolean.valueOf(saleable);
             }
         }
@@ -115,7 +116,7 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
     private Parameter getProductCategoryParameter(OpenMRSResource resource) {
         if (resource.getProperties() != null) {
             String product_category = resource.getProperties().get(PRODUCT_CATEGORY);
-            if ((product_category != null) && !"".equals(product_category)) {
+            if ((product_category != null) && !product_category.isEmpty() && !Objects.equals(product_category, "")) {
                 return new Parameter(PRODUCT_CATEGORY, product_category);
             }
         }
