@@ -26,6 +26,7 @@ public class OpenERPLabPanelServiceEventWorker implements EventWorker {
     private Map<String, OpenMRSLabOrderTypeEvent> labOrderTypeEventMap = new HashMap<>();
 
 
+    //This event worker takes care of only lab panel master data. All the lab panel orders are handled by sale order event worker.
     public OpenERPLabPanelServiceEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;

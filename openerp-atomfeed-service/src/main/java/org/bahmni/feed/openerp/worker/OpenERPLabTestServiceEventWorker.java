@@ -26,6 +26,7 @@ public class OpenERPLabTestServiceEventWorker implements EventWorker {
     private Map<String, OpenMRSLabOrderTypeEvent> labOrderTypeEventMap = new HashMap<>();
 
 
+    //This event worker takes care of only lab test master data. All the lab test orders are handled by sale order event worker.
     public OpenERPLabTestServiceEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
         this.feedUrl = feedUrl;
