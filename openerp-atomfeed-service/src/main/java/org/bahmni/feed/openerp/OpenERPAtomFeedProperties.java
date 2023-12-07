@@ -69,21 +69,20 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         throw new RuntimeException("Can not identify feed URI for requested Job.");
     }
 
-    public String getOdooURIForJob(Jobs feedJob, boolean isRestEnabled) {
-        if (isRestEnabled) {
-            switch (feedJob) {
-                case SALEORDER_FEED:
-                case SALEABLE_FEED:  return "";
-                case CUSTOMER_FEED: return "/api/bahmni-customer";
-                case LAB_TEST_FEED: return "/api/bahmni-lab-test";
-                case LAB_PANEL_FEED: return "/api/bahmni-lab-panel";
-                case RADIOLOGY_TEST_FEED: return "/api/bahmni-radiology-test";
-                case DRUG_FEED: return "/api/bahmni-drug";
-                default: throw new RuntimeException("Can not identify endpoint URI for requested Job.");
-            }
-        }
-        else {
-            return "/xmlrpc/object";
+    public String getOdooXMLUrlEndpoint() {
+        return "xmlrpc/object";
+    }
+
+    public String getOdooRESTUrlEndPoint(Jobs feedJob) {
+        switch (feedJob) {
+            case SALEORDER_FEED:
+            case SALEABLE_FEED:  return "";
+            case CUSTOMER_FEED: return "/api/bahmni-customer";
+            case LAB_TEST_FEED: return "/api/bahmni-lab-test";
+            case LAB_PANEL_FEED: return "/api/bahmni-lab-panel";
+            case RADIOLOGY_TEST_FEED: return "/api/bahmni-radiology-test";
+            case DRUG_FEED: return "/api/bahmni-drug";
+            default: throw new RuntimeException("Can not identify endpoint URI for requested Job.");
         }
     }
     @Value("${openerp.host}")
