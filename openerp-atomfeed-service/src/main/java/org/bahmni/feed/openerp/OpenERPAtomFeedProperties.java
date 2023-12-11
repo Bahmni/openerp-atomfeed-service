@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.openerp.web.OpenERPProperties;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 @Component
 public class OpenERPAtomFeedProperties implements OpenERPProperties {
 
-    private static Logger logger = LogManager.getLogger(OpenERPAtomFeedProperties.class);
+    private static Logger logger = LoggerFactory.getLogger(OpenERPAtomFeedProperties.class);
 
     @Value("${chunking.strategy}")
     private String chunkingStrategy;
