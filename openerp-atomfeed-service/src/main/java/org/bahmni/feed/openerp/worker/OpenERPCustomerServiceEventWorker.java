@@ -23,14 +23,16 @@ import java.util.List;
 
 public class OpenERPCustomerServiceEventWorker implements EventWorker {
     OpenERPContext openERPContext;
-    private String feedUrl;
-    private OpenMRSWebClient webClient;
-    private String urlPrefix;
+    private final String feedUrl;
+    private final String odooURL;
+    private final OpenMRSWebClient webClient;
+    private final String urlPrefix;
 
     private static Logger logger = LoggerFactory.getLogger(OpenERPCustomerServiceEventWorker.class);
 
-    public OpenERPCustomerServiceEventWorker(String feedUrl, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix) {
+    public OpenERPCustomerServiceEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix) {
         this.feedUrl = feedUrl;
+        this.odooURL = odooURL;
         this.openERPContext = openERPContext;
         this.webClient = webClient;
         this.urlPrefix = urlPrefix;
@@ -39,7 +41,7 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
     @Override
     public void process(Event event) {
         try {
-            openERPContext.execute(mapRequest(event));
+            openERPContext.execute(mapRequest(event), odooURL);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -65,39 +67,43 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
 
     private List<Parameter> mapParameters(OpenMRSPatient openMRSPatient, String eventId, String feedUri, boolean isFailedEvent) {
         List<Parameter> parameters = new ArrayList<Parameter>();
-        parameters.add(createParameter("name", openMRSPatient.getName(), "string"));
-        parameters.add(createParameter("local_name", openMRSPatient.getLocalName(), "string"));
-        parameters.add(createParameter("ref", getPrimaryIdentifier(openMRSPatient).getIdentifier(), "string"));
-        parameters.add(createParameter("uuid", openMRSPatient.getUuid(), "string"));
+        addToParametersIfNotEmpty(parameters, "name", openMRSPatient.getName());
+        addToParametersIfNotEmpty(parameters, "local_name", openMRSPatient.getLocalName().isEmpty()?"-":openMRSPatient.getLocalName());
+        addToParametersIfNotEmpty(parameters,"ref", getPrimaryIdentifier(openMRSPatient).getIdentifier());
+        addToParametersIfNotEmpty(parameters, "uuid", openMRSPatient.getUuid());
         String village = identifyVillage(openMRSPatient);
         if (!StringUtils.isBlank(village)) {
-            parameters.add(createParameter("village", village, "string"));
+            addToParametersIfNotEmpty(parameters, "village", village);
         }
         OpenMRSPerson person = openMRSPatient.getPerson();
         if(person.getAttributes() != null){
-            parameters.add(createParameter("attributes", person.getAttributes().toJsonString(), "string"));
+            addToParametersIfNotEmpty(parameters,"attributes", person.getAttributes().toJsonString());
         }
         else{
-            parameters.add(createParameter("attributes", null, "string"));
+            addToParametersIfNotEmpty(parameters,"attributes", "{}");
         }
         if(person.getPreferredAddress() != null){
-            parameters.add(createParameter("preferredAddress", person.getPreferredAddress().toJsonString(), "string"));
+            addToParametersIfNotEmpty(parameters,"preferredAddress", person.getPreferredAddress().toJsonString());
         }
         else{
-            parameters.add(createParameter("preferredAddress", "{}", "string"));
+            addToParametersIfNotEmpty(parameters,"preferredAddress", "{}");
         }
-
-        parameters.add(createParameter("category", "create.customer", "string"));
+        addToParametersIfNotEmpty(parameters, "category", "create.customer");
         if((feedUrl != null && feedUrl.contains("$param.value")) || (feedUri != null && feedUri.contains("$param.value")))
             throw new RuntimeException("Junk values in the feedUrl:$param.value");
-        parameters.add(createParameter("feed_uri", feedUrl, "string"));
-        parameters.add(createParameter("last_read_entry_id", eventId, "string"));
-        parameters.add(createParameter("feed_uri_for_last_read_entry", feedUri, "string"));
+        addToParametersIfNotEmpty(parameters, "feed_uri", feedUrl);
+        addToParametersIfNotEmpty(parameters, "feed_uri_for_last_read_entry", feedUri);
+        addToParametersIfNotEmpty(parameters, "last_read_entry_id", eventId);
         if (isFailedEvent)
             parameters.add(createParameter("is_failed_event", "1", "boolean"));
         return parameters;
     }
 
+    private void addToParametersIfNotEmpty(List<Parameter> parameters, String name, String value) {
+        if (value != null && !value.isEmpty()) {
+            parameters.add(new Parameter(name, value));
+        }
+    }
     private OpenMRSPatientIdentifier getPrimaryIdentifier(OpenMRSPatient patient) {
         for (OpenMRSPatientIdentifier identifier : patient.getIdentifiers()) {
             if (identifier.isPreferred()){

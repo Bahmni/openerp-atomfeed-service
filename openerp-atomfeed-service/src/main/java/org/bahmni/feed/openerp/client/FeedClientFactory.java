@@ -31,17 +31,22 @@ public class FeedClientFactory {
         this.workerFactory = workerFactory;
     }
 
-    public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPContext openERPContext, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName) {
+    public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPContext openERPContext, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName, Boolean isRestEnabled) {
         String feedUri = openERPAtomFeedProperties.getFeedUriForJob(jobName);
+        String odooURL = openERPAtomFeedProperties.getOdooURIForJob(jobName, isRestEnabled);
         if (StringUtils.isBlank(feedUri)) {
             String message = String.format("No feed-uri defined for Job [%s][%s]", jobName, jobName.getFeedUriRef());
             logger.warn(message);
             throw new FeedException(message);
         }
-
+        if (StringUtils.isBlank(odooURL)) {
+            String message = String.format("No endpoint-URI defined for Job [%s][%s]", jobName, jobName.getFeedUriRef());
+            logger.warn(message);
+            throw new FeedException(message);
+        }
         try {
             String urlPrefix = getURLPrefix(jobName,openERPAtomFeedProperties);
-            EventWorker eventWorker = workerFactory.getWorker(jobName, feedUri, openERPContext, urlPrefix);
+            EventWorker eventWorker = workerFactory.getWorker(jobName, feedUri, odooURL, openERPContext, urlPrefix);
             return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(openERPAtomFeedProperties), transactionManager, new URI(feedUri), eventWorker) ;
         } catch (URISyntaxException e) {
             throw new RuntimeException("error for uri:" + feedUri, e);

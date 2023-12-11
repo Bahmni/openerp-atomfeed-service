@@ -164,6 +164,7 @@ public class OpenERPCustomerFeedIT {
     @Test
     public void shouldCreateCustomerInOpenERP() throws URISyntaxException, FeedException {
         String feedUrl = "http://host/patients/notifications";
+        String odooURL = "http://odoo/bahmni_customer";
         String feedname = "customer.feed.generator.uri";
         
         when(atomFeedProperties.getFeedUri(feedname)).thenReturn(feedUrl);
@@ -190,7 +191,7 @@ public class OpenERPCustomerFeedIT {
 
         when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
         when(webClientProvider.getWebClient(any(Jobs.class))).thenReturn(webClient);
-        when(workerFactory.getWorker(Jobs.CUSTOMER_FEED, feedUrl, openERPContext, "http://mrs.auth.uri")).thenReturn(openERPCustomerServiceEventWorker);
+        when(workerFactory.getWorker(Jobs.CUSTOMER_FEED, feedUrl, odooURL, openERPContext, "http://mrs.auth.uri")).thenReturn(openERPCustomerServiceEventWorker);
 
         AtomFeedClientHelper clientHelper = mock(AtomFeedClientHelper.class);
         AtomFeedClient atomFeedClient = new AtomFeedClient(allFeedsMock, allMarkersJdbc, allFailedEvents, FeedClientFactory.atomFeedProperties(atomFeedProperties),

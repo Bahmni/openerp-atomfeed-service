@@ -48,9 +48,9 @@ public class OpenMRSPersonAttributes extends ArrayList<OpenMRSPersonAttribute> i
             attrName = openMRSPersonAttribute.getAttributeType().getDisplay();
             try{
                 if (openMRSPersonAttribute.getValue() instanceof HashMap) {
-                    attrValue = ((HashMap) openMRSPersonAttribute.getValue()).get("display");
+                    attrValue = ((HashMap) openMRSPersonAttribute.getValue()).get("display").toString();
                 } else {
-                    attrValue = openMRSPersonAttribute.getValue();
+                    attrValue = openMRSPersonAttribute.getValue().toString();
                 }
             }
              catch (ClassCastException e){

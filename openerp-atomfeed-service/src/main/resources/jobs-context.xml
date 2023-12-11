@@ -248,8 +248,10 @@
 
         <bean id="atomFeedClientHelper" class="org.bahmni.feed.openerp.client.AtomFeedClientHelper" scope="prototype">
             <constructor-arg ref="openERPAtomFeedProperties"/>
+            <constructor-arg ref="environment" />
             <constructor-arg ref="atomFeedTrasactionSupport" />
             <constructor-arg ref="openERPXMLClient" />
+            <constructor-arg ref="odooRESTClient" />
         </bean>
 
         <bean id="openerpEventsOptimizerJob" class="org.bahmni.feed.openerp.job.OpenERPEventsOptimizerJob" scope="prototype">

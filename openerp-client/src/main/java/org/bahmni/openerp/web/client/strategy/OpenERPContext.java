@@ -17,8 +17,8 @@ public class OpenERPContext {
         this.openERPClient = openERPClient;
     }
 
-    public Object execute(OpenERPRequest openERPRequest) {
-        return openERPClient.execute(openERPRequest);
+    public Object execute(OpenERPRequest openERPRequest, String URL) {
+        return openERPClient.execute(openERPRequest, URL);
     }
 
 }

@@ -1,17 +1,14 @@
 package org.bahmni.openerp.web.request.builder;
 
-
-import org.apache.commons.lang3.StringEscapeUtils;
-
 public class Parameter {
 
-    private String name;
-    private String value;
-    private String type;
+    private final String name;
+    private final String value;
+    private final String type;
 
     public Parameter(String name, String value, String type) {
         this.name = name;
-        this.value = StringEscapeUtils.escapeXml(value);
+        this.value = value;
         this.type = type;
     }
 
