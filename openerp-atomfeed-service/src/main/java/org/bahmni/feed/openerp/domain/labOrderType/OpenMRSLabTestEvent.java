@@ -14,13 +14,17 @@ public class OpenMRSLabTestEvent extends OpenMRSLabOrderTypeEvent<OpenMRSLabTest
     @Override
     protected List<Parameter> buildParameters(Event event, OpenMRSLabTest openMRSLabOrderTypeEvent) {
         List<Parameter> parameters = new ArrayList<>();
-        parameters.add(new Parameter("name", openMRSLabOrderTypeEvent.getName()));
-        parameters.add(new Parameter("uuid", openMRSLabOrderTypeEvent.getUuid()));
-        parameters.add(new Parameter("is_active", openMRSLabOrderTypeEvent.getActive(), "boolean"));
-        parameters.add(new Parameter("category", "create.lab.test"));
+        addToParametersIfNotEmpty(parameters, "name", openMRSLabOrderTypeEvent.getName(), "string");
+        addToParametersIfNotEmpty(parameters, "uuid", openMRSLabOrderTypeEvent.getUuid(), "string");
+        addToParametersIfNotEmpty(parameters, "is_active", openMRSLabOrderTypeEvent.getActive(), "boolean");
+        addToParametersIfNotEmpty(parameters, "category", "create.lab.test", "string");
         return parameters;
     }
-
+    private void addToParametersIfNotEmpty(List<Parameter> parameters, String name, String value, String type) {
+        if (value != null && !value.isEmpty()) {
+            parameters.add(new Parameter(name, value, type));
+        }
+    }
     @Override
     protected OpenMRSLabTest readLabOrderTypeEvent(String openMRSLabOrderTypeEventJson) throws IOException {
         return ObjectMapperRepository.objectMapper.readValue(openMRSLabOrderTypeEventJson, OpenMRSLabTest.class);
