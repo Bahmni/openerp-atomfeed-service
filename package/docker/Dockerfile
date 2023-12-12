@@ -1,4 +1,4 @@
-FROM amazoncorretto:8
+FROM amazoncorretto:11
 
 ENV SERVER_PORT=8053
 ENV BASE_DIR=/var/run/bahmni-erp-connect
