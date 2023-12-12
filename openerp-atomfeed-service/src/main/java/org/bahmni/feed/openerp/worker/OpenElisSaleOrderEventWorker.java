@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp.worker;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.client.OpenElisWebClient;
 import org.bahmni.feed.openerp.domain.openelis.OpenElisLabOrder;
@@ -21,7 +21,7 @@ public class OpenElisSaleOrderEventWorker implements EventWorker {
     private final OpenElisWebClient webClient;
     private final String urlPrefix;
 
-    private static Logger logger = LoggerFactory.getLogger(OpenElisSaleOrderEventWorker.class);
+    private static final Logger logger = LogManager.getLogger(OpenElisSaleOrderEventWorker.class);
 
     public OpenElisSaleOrderEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenElisWebClient webClient, String urlPrefix) {
         this.feedUrl = feedUrl;
