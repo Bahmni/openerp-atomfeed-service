@@ -33,7 +33,7 @@ public class FeedClientFactory {
 
     public AtomFeedClient getFeedClient(OpenERPAtomFeedProperties openERPAtomFeedProperties, AtomFeedSpringTransactionSupport transactionManager, OpenERPContext openERPContext, AllFeeds allFeeds, AllMarkers allMarkers, AllFailedEvents allFailedEvents, Jobs jobName, Boolean isRestEnabled) {
         String feedUri = openERPAtomFeedProperties.getFeedUriForJob(jobName);
-        String odooURL = openERPAtomFeedProperties.getOdooURIForJob(jobName, isRestEnabled);
+        String odooURL = isRestEnabled ? openERPAtomFeedProperties.getOdooRESTUrlEndPoint(jobName) : openERPAtomFeedProperties.getOdooXMLUrlEndpoint();
         if (StringUtils.isBlank(feedUri)) {
             String message = String.format("No feed-uri defined for Job [%s][%s]", jobName, jobName.getFeedUriRef());
             logger.warn(message);
@@ -71,7 +71,9 @@ public class FeedClientFactory {
             case SALEORDER_FEED:
             case SALEABLE_FEED:
             case DRUG_FEED:
-            case LAB_FEED:
+            case LAB_TEST_FEED:
+            case LAB_PANEL_FEED:
+            case RADIOLOGY_TEST_FEED:
                 return atomFeedProperties.getAuthenticationURI();
             case REFERENCE_DATA_FEED: return atomFeedProperties.getReferenceDataEndpointURI();
             case OPENELIS_SALEORDER_FEED: return atomFeedProperties.getOpenElisURI();
