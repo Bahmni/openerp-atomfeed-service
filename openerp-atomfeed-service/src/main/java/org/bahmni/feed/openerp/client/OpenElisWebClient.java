@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.webclients.ConnectionDetails;
 import org.bahmni.webclients.HttpClient;
@@ -9,7 +9,7 @@ import org.bahmni.webclients.OpenElisAuthenticator;
 
 public class OpenElisWebClient extends AbstractWebClient {
 
-    private static Logger logger = LoggerFactory.getLogger(OpenElisWebClient.class);
+    private static Logger logger = LogManager.getLogger(OpenElisWebClient.class);
 
     public OpenElisWebClient(OpenERPAtomFeedProperties properties) {
         connectionDetails = connectionDetails(properties);

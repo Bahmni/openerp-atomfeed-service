@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp.worker;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.OpenMRSResource;
@@ -27,7 +27,7 @@ public class OpenERPSaleableResourceWorker implements EventWorker {
     private final OpenMRSWebClient openMRSWebClient;
     private final String urlPrefix;
 
-    private static Logger logger = LoggerFactory.getLogger(OpenERPSaleableResourceWorker.class);
+    private static final Logger logger = LogManager.getLogger(OpenERPSaleableResourceWorker.class);
 
     public OpenERPSaleableResourceWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         this.openERPContext = openERPContext;
