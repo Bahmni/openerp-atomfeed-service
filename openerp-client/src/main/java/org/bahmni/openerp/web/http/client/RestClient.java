@@ -2,8 +2,8 @@ package org.bahmni.openerp.web.http.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class RestClient {
-    private static final Logger logger = LoggerFactory.getLogger(RestClient.class);
+    private static final Logger logger = LogManager.getLogger(RestClient.class);
     private WebClient webClient;
     private String accessToken;
     private final String baseURL;

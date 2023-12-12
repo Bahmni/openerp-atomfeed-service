@@ -1,7 +1,7 @@
 package org.bahmni.feed.openerp.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.webclients.ConnectionDetails;
 import org.bahmni.webclients.HttpClient;
@@ -9,7 +9,7 @@ import org.bahmni.webclients.openmrs.OpenMRSLoginAuthenticator;
 
 public class OpenMRSWebClient extends AbstractWebClient {
 
-    private static Logger logger = LoggerFactory.getLogger(OpenMRSWebClient.class);
+    private static Logger logger = LogManager.getLogger(OpenMRSWebClient.class);
 
     public OpenMRSWebClient(OpenERPAtomFeedProperties properties) {
         connectionDetails = connectionDetails(properties);

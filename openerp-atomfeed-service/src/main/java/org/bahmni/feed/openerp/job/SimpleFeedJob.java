@@ -1,14 +1,14 @@
 package org.bahmni.feed.openerp.job;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bahmni.feed.openerp.FeedException;
 import org.bahmni.feed.openerp.client.AtomFeedClientHelper;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
 
 public class SimpleFeedJob {
-    private static Logger logger = LoggerFactory.getLogger(SimpleFeedJob.class);
+    private static Logger logger = LogManager.getLogger(SimpleFeedJob.class);
 
     private AtomFeedClientHelper atomFeedClientHelper;
     private AtomFeedClient atomFeedClient;
