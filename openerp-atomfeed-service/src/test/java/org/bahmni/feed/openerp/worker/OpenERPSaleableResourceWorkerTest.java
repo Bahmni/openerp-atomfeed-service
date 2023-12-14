@@ -61,7 +61,7 @@ public class OpenERPSaleableResourceWorkerTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        worker = new OpenERPSaleableResourceWorker(feedUri, odooURL, openERPContext, webClient, "https://mybahmni/");
+        worker = new OpenERPSaleableResourceWorker(odooURL, openERPContext, webClient, "https://mybahmni/");
         when(webClient.get(URI.create(eventUrl))).thenReturn(sampleProcedureJson);
     }
 
