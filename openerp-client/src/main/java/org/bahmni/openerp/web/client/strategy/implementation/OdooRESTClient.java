@@ -30,15 +30,7 @@ public class OdooRESTClient implements OpenERPClientStrategy {
 
     @Override
     public Object execute(OpenERPRequest openERPRequest, String URL) {
-        String requestBody = "";
-        List<Parameter> parameters = openERPRequest.getParameters();
-        for (Parameter parameter : parameters) {
-            if (parameter.getName().equals("category") && parameter.getValue().equals("create.sale.order")) {
-                requestBody = RequestBuilder.buildNewJSONObject(openERPRequest, UUID.randomUUID().toString());
-                return restClient.post(URL, requestBody);
-            }
-        }
-        requestBody = RequestBuilder.buildNewRestRequest(openERPRequest, UUID.randomUUID().toString());
+        String requestBody = RequestBuilder.buildNewRestRequest(openERPRequest);
         return restClient.post(URL, requestBody);
     }
 }

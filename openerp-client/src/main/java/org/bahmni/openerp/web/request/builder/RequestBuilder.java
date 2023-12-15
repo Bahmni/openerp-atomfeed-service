@@ -35,52 +35,18 @@ public class RequestBuilder {
         return context;
     }
 
-    public static String buildNewRestRequest(OpenERPRequest openERPRequest, String id) {
+    public static String buildNewRestRequest(OpenERPRequest openERPRequest) {
         try {
-            HashMap<String, Object> context = getRestContext(openERPRequest, id);
-            return buildRequest("rest_template.ftl", context);
-        } catch (Exception e) {
-            throw new OpenERPException(e);
-        }
-    }
-
-    private static HashMap<String, Object> getRestContext(OpenERPRequest openERPRequest, String id) {
-        HashMap<String, Object> context = new HashMap<>();
-        context.put("parametersList", openERPRequest.getParameters());
-        context.put("id", id);
-        return context;
-    }
-
-    private static String buildRequest(String templateName, HashMap<String, Object> context){
-        try {
-            Template template= FreeMarkerConfig.getConfiguration().getTemplate(templateName);
-            StringWriter writer = new StringWriter();
-            template.process(context, writer);
-            return writer.toString();
-        } catch (Exception e) {
-            throw new OpenERPException(e);
-        }
-    }
-    public static String buildNewJSONObject(OpenERPRequest openERPRequest, String id) {
-        try {
-            Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("id", id);
-
-            Map<String, Object> data = getParameters(openERPRequest);
-            Map<String, Object> params = new HashMap<>();
-            params.put("data", data);
-            requestBody.put("params", params);
-
+            HashMap<String, Object> requestBody  = getParameters(openERPRequest);
             ObjectMapper mapper = new ObjectMapper();
-            String jsonString = mapper.writeValueAsString(requestBody);
-            return jsonString;
+            return mapper.writeValueAsString(requestBody);
         } catch (Exception e) {
             throw new OpenERPException(e);
         }
     }
 
-    private static Map<String, Object> getParameters(OpenERPRequest openERPRequest) {
-        Map<String, Object> parameters = new HashMap<>();
+    private static HashMap<String, Object> getParameters(OpenERPRequest openERPRequest) {
+        HashMap<String, Object> parameters = new HashMap<>();
         for (Parameter parameter : openERPRequest.getParameters()) {
             parameters.put(parameter.getName(), parseParameterValue(parameter.getValue()));
         }
@@ -93,6 +59,17 @@ public class RequestBuilder {
             return mapper.readValue(value, Object.class);
         } catch (Exception e) {
             return value;
+        }
+    }
+
+    private static String buildRequest(String templateName, HashMap<String, Object> context){
+        try {
+            Template template= FreeMarkerConfig.getConfiguration().getTemplate(templateName);
+            StringWriter writer = new StringWriter();
+            template.process(context, writer);
+            return writer.toString();
+        } catch (Exception e) {
+            throw new OpenERPException(e);
         }
     }
 }
