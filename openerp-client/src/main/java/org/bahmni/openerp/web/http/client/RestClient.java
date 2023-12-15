@@ -36,12 +36,13 @@ public class RestClient {
     private void login() {
         if (accessToken == null) {
             OpenERPRequest openERPRequest = new OpenERPRequest("res.users", "login", Arrays.asList(new Parameter("username", username), new Parameter("password", password)));
-            String requestBody = RequestBuilder.buildNewRestRequest(openERPRequest, UUID.randomUUID().toString());
+            String requestBody = RequestBuilder.buildNewRestRequest(openERPRequest);
             WebClient client = getWebClient(baseURL);
             HttpHeaders headers = getHttpHeaders();
             Consumer<HttpHeaders> consumer = httpHeaders -> httpHeaders.addAll(headers);
             try{
                 String response = client.post().uri("api/odoo-login").headers(consumer).bodyValue(requestBody).retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
+                logger.debug("\n-----------------------------------------------------Login Initiated-----------------------------------------------------\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of Login-----------------------------------------------------", requestBody, response);
                 if (response == null) {
                     throw new OpenERPException("Login failed");
                 }
@@ -65,6 +66,7 @@ public class RestClient {
             headers.set(HttpHeaders.AUTHORIZATION, accessToken);
             Consumer<HttpHeaders> consumer = httpHeaders -> httpHeaders.addAll(headers);
             String response = client.post().uri(URL).headers(consumer).bodyValue(requestBody).retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
+            logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, requestBody, response, URL);
             if (response == null) {
                 throw new OpenERPException(String.format("Could not post to %s", URL));
             }
