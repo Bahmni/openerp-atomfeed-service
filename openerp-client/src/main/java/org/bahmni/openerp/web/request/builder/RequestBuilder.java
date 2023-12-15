@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.StringWriter;
 import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class RequestBuilder {
@@ -18,7 +17,7 @@ public class RequestBuilder {
     public static String buildNewXMLRequest(OpenERPRequest openERPRequest, Object id, String database, String password) {
         try {
             HashMap<String, Object> context = getXMLContext(openERPRequest, id, database, password);
-            return buildRequest("xml_template.ftl", context);
+            return buildRequest(context);
         } catch (Exception e) {
             throw new OpenERPException(e);
         }
@@ -62,9 +61,9 @@ public class RequestBuilder {
         }
     }
 
-    private static String buildRequest(String templateName, HashMap<String, Object> context){
+    private static String buildRequest(HashMap<String, Object> context){
         try {
-            Template template= FreeMarkerConfig.getConfiguration().getTemplate(templateName);
+            Template template= FreeMarkerConfig.getConfiguration().getTemplate("xml_template.ftl");
             StringWriter writer = new StringWriter();
             template.process(context, writer);
             return writer.toString();
