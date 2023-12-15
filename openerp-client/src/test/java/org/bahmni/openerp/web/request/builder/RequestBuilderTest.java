@@ -1,9 +1,15 @@
 package org.bahmni.openerp.web.request.builder;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.junit.Test;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+
 import static org.junit.Assert.assertEquals;
 
 public class RequestBuilderTest {
@@ -224,4 +230,70 @@ public class RequestBuilderTest {
     private void comparingStringWithoutSpaces(String requestXml, String expected) {
         assertEquals(expected.replaceAll("\\s{2,}", ""), requestXml.replaceAll("\\s{2,}", "").trim());
     }
+
+    @Test
+    public void shouldBuildNewJsonObject() throws Exception {
+
+        List<Parameter> parameters = Arrays.asList(
+                new Parameter("category", "create.sale.order", "string"),
+                new Parameter("customer_id", "GAN203012", "string"),
+                new Parameter("encounter_id", "8bb8cdbb-82f1-4aac-b610-24498bc2cf70", "string"),
+                new Parameter("feed_uri", "http://openmrs:8080/openmrs/ws/atomfeed/encounter/recent", "string"),
+                new Parameter("last_read_entry_id", "tag:atomfeed.ict4h.org:6aa022bf-395f-45b6-867b-7a5df9918d41", "string"),
+                new Parameter("feed_uri_for_last_read_entry", "http://openmrs:8080/openmrs/ws/atomfeed/encounter/6", "string"),
+                new Parameter("locationName", "General Ward", "string"),
+                new Parameter("orders", "{\"id\":\"8bb8cdbb-82f1-4aac-b610-24498bc2cf70\",\"openERPOrders\":[{\"orderId\":\"304ddc83-c3dd-4754-bef8-913b8bf68de8\",\"previousOrderId\":null,\"encounterId\":\"8bb8cdbb-82f1-4aac-b610-24498bc2cf70\",\"productId\":\"014bd216-72bd-44ae-b25a-270ed10bb2da\",\"productName\":\"Monocyte\",\"quantity\":1.0,\"quantityUnits\":\"Unit(s)\",\"action\":\"NEW\",\"visitId\":\"fcbe0bca-2638-4281-8f29-a21d4ca15fe6\",\"visitType\":\"OPD\",\"type\":\"Lab Order\",\"description\":null,\"voided\":false,\"locationName\":null,\"providerName\":\"Super Man\",\"dispensed\":\"false\",\"conceptName\":null}]}", "string")
+        );
+
+        OpenERPRequest openERPRequest = new OpenERPRequest("res.partner", "execute", parameters);
+
+        String mockUuid = UUID.randomUUID().toString();
+        String result = RequestBuilder.buildNewJSONObject(openERPRequest, mockUuid);
+
+        String expectedJson = "{\n" +
+                "    \"id\": \"" + mockUuid + "\",\n" +
+                "    \"params\": {\n" +
+                "        \"data\": {\n" +
+                "            \"category\": \"create.sale.order\",\n" +
+                "            \"customer_id\": \"GAN203012\",\n" +
+                "            \"encounter_id\": \"8bb8cdbb-82f1-4aac-b610-24498bc2cf70\",\n" +
+                "            \"feed_uri\": \"http://openmrs:8080/openmrs/ws/atomfeed/encounter/recent\",\n" +
+                "            \"last_read_entry_id\": \"tag:atomfeed.ict4h.org:6aa022bf-395f-45b6-867b-7a5df9918d41\",\n" +
+                "            \"feed_uri_for_last_read_entry\": \"http://openmrs:8080/openmrs/ws/atomfeed/encounter/6\",\n" +
+                "            \"locationName\": \"General Ward\",\n" +
+                "            \"orders\": {\n" +
+                "                \"id\": \"8bb8cdbb-82f1-4aac-b610-24498bc2cf70\",\n" +
+                "                \"openERPOrders\": [\n" +
+                "                    {\n" +
+                "                        \"orderId\": \"304ddc83-c3dd-4754-bef8-913b8bf68de8\",\n" +
+                "                        \"previousOrderId\": null,\n" +
+                "                        \"encounterId\": \"8bb8cdbb-82f1-4aac-b610-24498bc2cf70\",\n" +
+                "                        \"productId\": \"014bd216-72bd-44ae-b25a-270ed10bb2da\",\n" +
+                "                        \"productName\": \"Monocyte\",\n" +
+                "                        \"quantity\": 1.0,\n" +
+                "                        \"quantityUnits\": \"Unit(s)\",\n" +
+                "                        \"action\": \"NEW\",\n" +
+                "                        \"visitId\": \"fcbe0bca-2638-4281-8f29-a21d4ca15fe6\",\n" +
+                "                        \"visitType\": \"OPD\",\n" +
+                "                        \"type\": \"Lab Order\",\n" +
+                "                        \"description\": null,\n" +
+                "                        \"voided\": false,\n" +
+                "                        \"locationName\": null,\n" +
+                "                        \"providerName\": \"Super Man\",\n" +
+                "                        \"dispensed\": \"false\",\n" +
+                "                        \"conceptName\": null\n" +
+                "                    }\n" +
+                "                ]\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode expectedJsonNode = objectMapper.readTree(expectedJson);
+        JsonNode actualJsonNode = objectMapper.readTree(result);
+
+        assertEquals(expectedJsonNode, actualJsonNode);
+    }
+
 }
