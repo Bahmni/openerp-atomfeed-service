@@ -1,4 +1,4 @@
-package org.bahmni.openerp.web;
+package org.bahmni.openerp.web.exception;
 
 public class OpenERPException extends RuntimeException {
     public OpenERPException(String message, Throwable cause) {

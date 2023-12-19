@@ -1,6 +1,6 @@
 package org.bahmni.openerp.web.client.strategy.implementation;
 
-import org.bahmni.openerp.web.OpenERPException;
+import org.bahmni.openerp.web.exception.OpenERPException;
 import org.bahmni.openerp.web.OpenERPProperties;
 import org.bahmni.openerp.web.client.OpenERPResponseErrorValidator;
 import org.bahmni.openerp.web.client.strategy.OpenERPClientStrategy;

@@ -3,7 +3,7 @@ package org.bahmni.openerp.web.request.builder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.template.Template;
-import org.bahmni.openerp.web.OpenERPException;
+import org.bahmni.openerp.web.exception.OpenERPException;
 import org.bahmni.openerp.web.config.FreeMarkerConfig;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.springframework.stereotype.Service;
