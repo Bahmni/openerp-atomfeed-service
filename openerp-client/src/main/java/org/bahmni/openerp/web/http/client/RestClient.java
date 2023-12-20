@@ -43,20 +43,12 @@ public class RestClient {
             HttpHeaders headers = getHttpHeaders();
             Consumer<HttpHeaders> consumer = httpHeaders -> httpHeaders.addAll(headers);
             try{
-                ResponseEntity<String> responseEntity = client.post()
-                        .uri("api/odoo-login")
-                        .headers(consumer)
-                        .bodyValue(requestBody)
-                        .retrieve()
-                        .toEntity(String.class)
-                        .timeout(Duration.ofMillis(connectionTimeout))
-                        .block();
-
+                ResponseEntity<String> responseEntity = performPostRequest(client, "/api/login", consumer, requestBody);
                 HttpStatus statusCode = responseEntity.getStatusCode();
                 String response = responseEntity.getBody();
                 logger.debug("\n-----------------------------------------------------Login Initiated-----------------------------------------------------\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of Login-----------------------------------------------------", requestBody, response);
 
-                if (statusCode == HttpStatus.OK) {
+                if (statusCode != null && statusCode.is2xxSuccessful()){
                     if (response == null) {
                         throw new OpenERPException("Login failed. Response is null");
                     }
@@ -83,20 +75,13 @@ public class RestClient {
             HttpHeaders headers = getHttpHeaders();
             headers.set(HttpHeaders.AUTHORIZATION, accessToken);
             Consumer<HttpHeaders> consumer = httpHeaders -> httpHeaders.addAll(headers);
-            ResponseEntity<String> responseEntity = client.post()
-                        .uri(URL)
-                        .headers(consumer)
-                        .bodyValue(requestBody)
-                        .retrieve()
-                        .toEntity(String.class)
-                        .timeout(Duration.ofMillis(connectionTimeout))
-                        .block();
+            ResponseEntity<String> responseEntity = performPostRequest(client, URL, consumer, requestBody);
 
             HttpStatus statusCode = responseEntity.getStatusCode();
             String response = responseEntity.getBody();
             logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, requestBody, response, URL);
 
-            if(statusCode == HttpStatus.OK) {
+            if (statusCode != null && statusCode.is2xxSuccessful()) {
                 if (response == null) {
                     throw new OpenERPException(String.format("Could not post to %s", URL));
                 }
@@ -112,6 +97,17 @@ public class RestClient {
             logger.error("Post data: {}", requestBody);
             throw new RuntimeException("Could not post message", e);
         }
+    }
+
+    private ResponseEntity<String> performPostRequest(WebClient client, String uri, Consumer<HttpHeaders> consumer, String requestBody) {
+        return client.post()
+                .uri(uri)
+                .headers(consumer)
+                .bodyValue(requestBody)
+                .retrieve()
+                .toEntity(String.class)
+                .timeout(Duration.ofMillis(connectionTimeout))
+                .block();
     }
 
     private WebClient getWebClient(String baseURL) {
