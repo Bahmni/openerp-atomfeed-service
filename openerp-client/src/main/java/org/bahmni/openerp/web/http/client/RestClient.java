@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bahmni.openerp.web.OpenERPException;
+import org.bahmni.openerp.web.ResponseChecker;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.bahmni.openerp.web.request.builder.RequestBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
@@ -65,12 +67,10 @@ public class RestClient {
             HttpHeaders headers = getHttpHeaders();
             headers.set(HttpHeaders.AUTHORIZATION, accessToken);
             Consumer<HttpHeaders> consumer = httpHeaders -> httpHeaders.addAll(headers);
-            String response = client.post().uri(URL).headers(consumer).bodyValue(requestBody).retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
+            ResponseEntity<String> responseEntity = performPostRequest(client, URL, consumer, requestBody);
+            String response = responseEntity.getBody();
+            ResponseChecker.checkResponse(responseEntity, response,URL);
             logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, requestBody, response, URL);
-            if (response == null) {
-                throw new OpenERPException(String.format("Could not post to %s", URL));
-            }
-            logger.debug("Post Data output: {}", response);
             logger.debug("Post Data output: {}", response);
             return response;
         } catch (Exception e) {
@@ -80,6 +80,16 @@ public class RestClient {
         }
     }
 
+    private ResponseEntity<String> performPostRequest(WebClient client, String url, Consumer<HttpHeaders> consumer, String requestBody) {
+        return client.post()
+                .uri(url)
+                .headers(consumer)
+                .bodyValue(requestBody)
+                .retrieve()
+                .toEntity(String.class)
+                .timeout(Duration.ofMillis(connectionTimeout))
+                .block();
+    }
     private WebClient getWebClient(String baseURL) {
         if(webClient == null){
             webClient =  WebClient.builder()
