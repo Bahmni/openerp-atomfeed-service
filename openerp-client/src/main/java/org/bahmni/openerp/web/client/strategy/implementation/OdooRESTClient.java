@@ -25,7 +25,8 @@ public class OdooRESTClient implements OpenERPClientStrategy {
         final String user = openERPProperties.getUser();
         final String password = openERPProperties.getPassword();
         final int connectionTimeoutInMilliseconds = openERPProperties.getConnectionTimeoutInMilliseconds();
-        restClient = new RestClient("http://" + host + ":" + port, user, password, connectionTimeoutInMilliseconds);
+        final String dbName = openERPProperties.getDatabase();
+        restClient = new RestClient("http://" + host + ":" + port, user, password, dbName, connectionTimeoutInMilliseconds);
     }
 
     @Override
