@@ -66,9 +66,9 @@ public class RestClient {
             WebClient client = getWebClient(baseURL);
             HttpHeaders headers = getHttpHeaders();
             Consumer < HttpHeaders > consumer = httpHeaders -> httpHeaders.addAll(headers);
-            ResponseEntity<String> responseEntity = performPostRequest(client, URL, consumer, requestBody);
+            ResponseEntity<String> responseEntity = client.post().uri(URL).headers(consumer).cookie("session_id", sessionId).bodyValue(requestBody).retrieve().toEntity(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
+            ResponseChecker.checkResponse(responseEntity, URL);
             String response = responseEntity.getBody();
-            ResponseChecker.checkResponse(responseEntity, response,URL);
             logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Cookies : {}\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, sessionId, requestBody, response, URL);
             logger.debug("Post Data output: {}", response);
             return response;
@@ -77,18 +77,6 @@ public class RestClient {
             logger.error("Post data: {}", requestBody);
             throw new RuntimeException("Could not post message", e);
         }
-    }
-
-    private ResponseEntity<String> performPostRequest(WebClient client, String url, Consumer<HttpHeaders> consumer, String requestBody) {
-        return client.post()
-                .uri(url)
-                .headers(consumer)
-                .cookie("session_id", sessionId)
-                .bodyValue(requestBody)
-                .retrieve()
-                .toEntity(String.class)
-                .timeout(Duration.ofMillis(connectionTimeout))
-                .block();
     }
     private WebClient getWebClient(String baseURL) {
         if (webClient == null) {
