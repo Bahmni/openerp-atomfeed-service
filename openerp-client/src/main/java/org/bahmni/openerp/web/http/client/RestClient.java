@@ -6,7 +6,9 @@ import org.apache.logging.log4j.Logger;
 import org.bahmni.openerp.web.OpenERPException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.reactive.function.client.WebClient;
+import java.time.LocalDateTime;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ public class RestClient {
     private final String username;
     private final String password;
     private final int connectionTimeout;
-    private String sessionId;
+    private static final HashMap<String, String> session = new HashMap<>();
 
     public RestClient(String baseURL, String username, String password, int connectionTimeout, String database) {
         this.database = database;
@@ -31,28 +33,25 @@ public class RestClient {
     }
 
     private void login() {
-        if (sessionId == null) {
+        if (isSessionInvalid()) {
             String requestBody = buildLoginRequest();
             WebClient client = getWebClient(baseURL);
             HttpHeaders headers = getHttpHeaders();
-            Consumer < HttpHeaders > consumer = httpHeaders -> httpHeaders.addAll(headers);
+            Consumer<HttpHeaders> consumer = httpHeaders -> httpHeaders.addAll(headers);
             try {
                 client.post().uri("web/session/authenticate").headers(consumer).bodyValue(requestBody).exchangeToMono(loginResponse -> {
-                if(loginResponse.statusCode().is2xxSuccessful()) {
-                    try {
-                        sessionId = loginResponse.cookies().get("session_id").get(0).getValue();
-                        logger.debug("Login session_id: {}", sessionId);
-                    } catch (Exception e) {
-                        logger.warn("Failed to login for user {}", username);
-                        throw new OpenERPException(String.format("Failed to login. The login user is : %s", username));
+                    if (loginResponse.statusCode().is2xxSuccessful()) {
+                        try {
+                            session.putAll(getSession(loginResponse.cookies().get("session_id").get(0)));
+                        } catch (Exception e) {
+                            throw new OpenERPException(String.format("Failed to login. The login user is : %s, no session cookie set.", username));
+                        }
                     }
-                }
-                return loginResponse.bodyToMono(String.class);
+                    return loginResponse.bodyToMono(String.class);
                 }).timeout(Duration.ofMillis(connectionTimeout)).block();
-                logger.debug("\n-----------------------------------------------------Login Initiated-----------------------------------------------------\n* Request : {}\n* Session Id : {}\n-----------------------------------------------------End of Login-----------------------------------------------------", requestBody, sessionId);
+                logger.debug("\n-----------------------------------------------------Login Initiated-----------------------------------------------------\n* Request : {}\n* Session Id : {}\n-----------------------------------------------------End of Login-----------------------------------------------------", requestBody, session);
             } catch (Exception e) {
                 logger.warn("Failed to login for user {}", username);
-                throw new OpenERPException(String.format("Failed to login. The login user is : %s", username));
             }
         }
     }
@@ -64,8 +63,8 @@ public class RestClient {
             WebClient client = getWebClient(baseURL);
             HttpHeaders headers = getHttpHeaders();
             Consumer < HttpHeaders > consumer = httpHeaders -> httpHeaders.addAll(headers);
-            String response = client.post().uri(URL).headers(consumer).cookie("session_id", sessionId).bodyValue(requestBody).retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
-            logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Cookies : {}\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, sessionId, requestBody, response, URL);
+            String response = client.post().uri(URL).headers(consumer).cookie("session_id", session.get("session_id")).bodyValue(requestBody).retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
+            logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Cookies : {}\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, session, requestBody, response, URL);
             if (response == null) {
                 throw new OpenERPException(String.format("Could not post to %s", URL));
             }
@@ -76,6 +75,28 @@ public class RestClient {
             logger.error("Could not post to {}", URL, e);
             logger.error("Post data: {}", requestBody);
             throw new RuntimeException("Could not post message", e);
+        }
+    }
+
+    private HashMap<String, String> getSession(ResponseCookie cookie) {
+        HashMap<String, String> session = new HashMap<>();
+        session.put("session_id", cookie.getValue());
+        LocalDateTime currentDate = LocalDateTime.now();
+        LocalDateTime expiryDateTime = currentDate.plusNanos(cookie.getMaxAge().toNanos());
+        session.put("expiry", expiryDateTime.toString());
+        return session;
+    }
+
+    private boolean isSessionInvalid() {
+        try {
+            if (session.isEmpty()) {
+                return true;
+            }
+            LocalDateTime currentDate = LocalDateTime.now();
+            LocalDateTime expiryDateTime = LocalDateTime.parse(session.get("expiry"));
+            return currentDate.isAfter(expiryDateTime);
+        } catch (Exception e) {
+            return true;
         }
     }
 
