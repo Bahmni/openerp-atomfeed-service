@@ -7,13 +7,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 
 public class ResponseChecker {
-    public static void checkResponse(ResponseEntity<String> responseEntity,String URL) throws JsonProcessingException {
+    public static void checkResponse(ResponseEntity<String> responseEntity) throws JsonProcessingException {
         String response = responseEntity.getBody();
         if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-            throw new OpenERPException(String.format("Failed to post to %s. Response status: %s", URL, responseEntity.getStatusCode()));
+            throw new OdooRestException(String.format("Response status: %s", responseEntity.getStatusCode()));
         }
         if (response == null) {
-            throw new OpenERPException(String.format("Failed to post to %s. Response is null", URL));
+            throw new OdooRestException(String.format("Response is null"));
         }
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonResponse = objectMapper.readTree(response);
@@ -22,17 +22,17 @@ public class ResponseChecker {
             if (result.has("error")) {
                 String errorMsg = result.get("error").asText();
                 int status = result.get("status").asInt();
-                throw new OpenERPException(String.format("Failed to post to %s. Response status: %s. Error message: %s", URL, status, errorMsg));
+                throw new OdooRestException(String.format("Error found in result. Response status: %s.", status, errorMsg));
             }
         }
         else if (jsonResponse.has("error")) {
             JsonNode error = jsonResponse.get("error");
             String errorMsg = error.get("message").asText();
             int status = error.get("status").asInt();
-            throw new OpenERPException(String.format("Failed to post to %s. Response status: %s. Error message: %s", URL, status, errorMsg));
+            throw new OdooRestException(String.format("Error found in response. Response status: %s. Error message: %s", status, errorMsg));
         }
         else{
-            throw new OpenERPException(String.format("Failed to post to %s.", URL));
+            throw new OdooRestException(String.format("Response is empty"));
         }
     }
 }

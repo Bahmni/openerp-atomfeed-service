@@ -3,6 +3,7 @@ package org.bahmni.openerp.web.http.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bahmni.openerp.web.OdooRestException;
 import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.ResponseChecker;
 import org.springframework.http.HttpHeaders;
@@ -67,11 +68,15 @@ public class RestClient {
             HttpHeaders headers = getHttpHeaders();
             Consumer < HttpHeaders > consumer = httpHeaders -> httpHeaders.addAll(headers);
             ResponseEntity<String> responseEntity = client.post().uri(URL).headers(consumer).cookie("session_id", sessionId).bodyValue(requestBody).retrieve().toEntity(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
-            ResponseChecker.checkResponse(responseEntity, URL);
+            ResponseChecker.checkResponse(responseEntity);
             String response = responseEntity.getBody();
             logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Cookies : {}\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, sessionId, requestBody, response, URL);
             logger.debug("Post Data output: {}", response);
             return response;
+        } catch (OdooRestException e) {
+            logger.error("Could not post to {}", URL, e);
+            logger.error("Post data: {}", requestBody);
+            throw e;
         } catch (Exception e) {
             logger.error("Could not post to {}", URL, e);
             logger.error("Post data: {}", requestBody);
