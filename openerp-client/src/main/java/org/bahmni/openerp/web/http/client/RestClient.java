@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.web.reactive.function.client.WebClient;
-import java.time.LocalDateTime;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class RestClient {
     private final String username;
     private final String password;
     private final int connectionTimeout;
-    private static final HashMap<String, String> session = new HashMap<>();
+    private static ResponseCookie session;
 
     public RestClient(String baseURL, String username, String password, int connectionTimeout, String database) {
         this.database = database;
@@ -42,7 +41,7 @@ public class RestClient {
                 client.post().uri("web/session/authenticate").headers(consumer).bodyValue(requestBody).exchangeToMono(loginResponse -> {
                     if (loginResponse.statusCode().is2xxSuccessful()) {
                         try {
-                            session.putAll(getSession(loginResponse.cookies().get("session_id").get(0)));
+                            session = loginResponse.cookies().get("session_id").get(0);
                         } catch (Exception e) {
                             throw new OpenERPException(String.format("Failed to login. The login user is : %s, no session cookie set.", username));
                         }
@@ -63,7 +62,7 @@ public class RestClient {
             WebClient client = getWebClient(baseURL);
             HttpHeaders headers = getHttpHeaders();
             Consumer < HttpHeaders > consumer = httpHeaders -> httpHeaders.addAll(headers);
-            String response = client.post().uri(URL).headers(consumer).cookie("session_id", session.get("session_id")).bodyValue(requestBody).retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
+            String response = client.post().uri(URL).headers(consumer).cookie("session_id", session.getValue()).bodyValue(requestBody).retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
             logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Cookies : {}\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, session, requestBody, response, URL);
             if (response == null) {
                 throw new OpenERPException(String.format("Could not post to %s", URL));
@@ -78,23 +77,12 @@ public class RestClient {
         }
     }
 
-    private HashMap<String, String> getSession(ResponseCookie cookie) {
-        HashMap<String, String> session = new HashMap<>();
-        session.put("session_id", cookie.getValue());
-        LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime expiryDateTime = currentDate.plusNanos(cookie.getMaxAge().toNanos());
-        session.put("expiry", expiryDateTime.toString());
-        return session;
-    }
-
     private boolean isSessionInvalid() {
         try {
-            if (session.isEmpty()) {
+            if (session == null) {
                 return true;
             }
-            LocalDateTime currentDate = LocalDateTime.now();
-            LocalDateTime expiryDateTime = LocalDateTime.parse(session.get("expiry"));
-            return currentDate.isAfter(expiryDateTime);
+            return session.getMaxAge().isNegative();
         } catch (Exception e) {
             return true;
         }
