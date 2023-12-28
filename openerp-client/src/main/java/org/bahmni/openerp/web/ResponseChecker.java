@@ -22,7 +22,7 @@ public class ResponseChecker {
             if (result.has("error")) {
                 String errorMsg = result.get("error").asText();
                 int status = result.get("status").asInt();
-                throw new OdooRestException(String.format("Error found in result. Response status: %s.", status, errorMsg));
+                throw new OdooRestException(String.format("Error found in result. Response status: %s. Error message: %s", status, errorMsg));
             }
         }
         else if (jsonResponse.has("error")) {
