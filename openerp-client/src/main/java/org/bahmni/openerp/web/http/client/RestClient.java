@@ -76,7 +76,7 @@ public class RestClient {
         } catch (OdooRestException e) {
             logger.error("Could not post to {}", URL, e);
             logger.error("Post data: {}", requestBody);
-            throw e;
+            throw new RuntimeException("Error posting message to Odoo", e);
         } catch (Exception e) {
             logger.error("Could not post to {}", URL, e);
             logger.error("Post data: {}", requestBody);
