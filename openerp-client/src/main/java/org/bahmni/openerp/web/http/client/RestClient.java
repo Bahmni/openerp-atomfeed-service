@@ -1,9 +1,8 @@
 package org.bahmni.openerp.web.http.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.bahmni.openerp.web.OdooRestException;
 
 import org.bahmni.openerp.web.OpenERPException;
@@ -18,7 +17,7 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 public class RestClient {
-    private static final Logger logger = LogManager.getLogger(RestClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestClient.class);
     private WebClient webClient;
     private final String baseURL;
     private final String database;
