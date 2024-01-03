@@ -32,42 +32,37 @@ public class RestClient {
     }
 
     private void login() {
-        if (isSessionInvalid()) {
-            String requestBody = buildLoginRequest();
-            WebClient client = getWebClient(baseURL);
-            HttpHeaders headers = getHttpHeaders();
-            Consumer<HttpHeaders> consumer = httpHeaders -> httpHeaders.addAll(headers);
-            try {
-                client.post().uri("web/session/authenticate").headers(consumer).bodyValue(requestBody).exchangeToMono(loginResponse -> {
-                    if (loginResponse.statusCode().is2xxSuccessful()) {
-                        try {
-                            session = loginResponse.cookies().get("session_id").get(0);
-                        } catch (Exception e) {
-                            throw new OpenERPException(String.format("Failed to login. The login user is : %s, no session cookie set.", username));
-                        }
-                    }
-                    return loginResponse.bodyToMono(String.class);
-                }).timeout(Duration.ofMillis(connectionTimeout)).block();
-                logger.debug("\n-----------------------------------------------------Login Initiated-----------------------------------------------------\n* Request : {}\n* Session Id : {}\n-----------------------------------------------------End of Login-----------------------------------------------------", requestBody, session);
-            } catch (Exception e) {
-                logger.warn("Failed to login for user {}", username);
-            }
+        String requestBody = buildLoginRequest();
+        WebClient client = getWebClient(baseURL);
+        HttpHeaders headers = getHttpHeaders();
+        Consumer<HttpHeaders> consumer = httpHeaders -> httpHeaders.addAll(headers);
+        try {
+            client.post().uri("web/session/authenticate").headers(consumer).bodyValue(requestBody).exchangeToMono(loginResponse -> {
+                if (loginResponse.statusCode().is2xxSuccessful()) {
+                    session = loginResponse.cookies().get("session_id").get(0);
+                }
+                return loginResponse.bodyToMono(String.class);
+            }).timeout(Duration.ofMillis(connectionTimeout)).block();
+            logger.debug("\n-----------------------------------------------------Login Initiated-----------------------------------------------------\n* Request : {}\n* Session Id : {}\n-----------------------------------------------------End of Login-----------------------------------------------------", requestBody, session);
+        } catch (Exception e) {
+            logger.warn("Failed to login for user {}", username);
+            throw new OpenERPException(String.format("Failed to login. The login user is : %s, no session cookie set.", username));
         }
     }
 
     public String post(String URL, String requestBody) {
-        try {
+        if(!isSessionValid())
             login();
+        try {
             logger.debug("Post Data: {}", requestBody);
             WebClient client = getWebClient(baseURL);
             HttpHeaders headers = getHttpHeaders();
             Consumer < HttpHeaders > consumer = httpHeaders -> httpHeaders.addAll(headers);
             String response = client.post().uri(URL).headers(consumer).cookie("session_id", session.getValue()).bodyValue(requestBody).retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
-            logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Cookies : {}\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, session, requestBody, response, URL);
+            logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Session : {}\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, session, requestBody, response, URL);
             if (response == null) {
                 throw new OpenERPException(String.format("Could not post to %s", URL));
             }
-            logger.debug("Post Data output: {}", response);
             logger.debug("Post Data output: {}", response);
             return response;
         } catch (Exception e) {
@@ -77,17 +72,10 @@ public class RestClient {
         }
     }
 
-    private boolean isSessionInvalid() {
-        try {
-            if (session == null) {
-                return true;
-            }
-            return session.getMaxAge().isNegative();
-        } catch (Exception e) {
-            return true;
-        }
+    private boolean isSessionValid() {
+        return session != null && !session.getMaxAge().isNegative();
     }
-
+    
     private WebClient getWebClient(String baseURL) {
         if (webClient == null) {
             webClient = WebClient.builder()
