@@ -1,15 +1,16 @@
 package org.bahmni.openerp.web.http.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.bahmni.openerp.web.OdooRestException;
-
 import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.ResponseChecker;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
@@ -61,24 +62,23 @@ public class RestClient {
             WebClient client = getWebClient(baseURL);
             HttpHeaders headers = getHttpHeaders();
             Consumer < HttpHeaders > consumer = httpHeaders -> httpHeaders.addAll(headers);
-            String response = client.post().uri(URL).headers(consumer).cookie("session_id", session.getValue()).bodyValue(requestBody).retrieve().bodyToMono(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
+            ResponseEntity<String> responseEntity = client.post().uri(URL).headers(consumer).cookie("session_id", session.getValue()).bodyValue(requestBody).retrieve().toEntity(String.class).timeout(Duration.ofMillis(connectionTimeout)).block();
+            ResponseChecker.checkResponse(responseEntity);
+            String response = responseEntity.getBody();
             logger.debug("\n-----------------------------------------------------{} Initiated-----------------------------------------------------\n* Session : {}\n* Request : {}\n* Response : {}\n-----------------------------------------------------End of {}-----------------------------------------------------", URL, session, requestBody, response, URL);
-            if (response == null) {
-                throw new OpenERPException(String.format("Could not post to %s", URL));
-            }
             logger.debug("Post Data output: {}", response);
             return response;
-        } catch (Exception e) {
-            logger.error("Could not post to {}", URL, e);
+        } catch (OdooRestException | JsonProcessingException e) {
+            logger.error("Post call to {} failed", URL, e);
             logger.error("Post data: {}", requestBody);
-            throw new RuntimeException("Could not post message", e);
+            throw new RuntimeException("Post call to " + URL + " failed", e);
         }
     }
-  
+
     private boolean isSessionValid() {
         return session != null && !session.getMaxAge().isNegative();
     }
-    
+
     private WebClient getWebClient(String baseURL) {
         if (webClient == null) {
             webClient = WebClient.builder()
