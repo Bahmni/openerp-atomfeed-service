@@ -3,6 +3,8 @@ package org.bahmni.feed.openerp.domain.encounter;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Date;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSDrugOrder {
     private OpenMRSConcept concept;
@@ -13,6 +15,7 @@ public class OpenMRSDrugOrder {
     private String uuid;
     private String previousOrderUuid;
     private String orderType;
+    private Date dateActivated;
     private boolean voided;
 
     public OpenMRSConcept getConcept() {
@@ -41,6 +44,10 @@ public class OpenMRSDrugOrder {
 
     public String getAction() {
         return action;
+    }
+
+    public Date getDateActivated() {
+        return dateActivated;
     }
 
     public String getUuid() {

@@ -1,6 +1,7 @@
 package org.bahmni.feed.openerp.domain.encounter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class OpenERPOrders {
@@ -21,6 +22,7 @@ public class OpenERPOrders {
             openERPOrders = new ArrayList<>();
         }
         openERPOrders.add(order);
+        Collections.sort(openERPOrders, (order1, order2) -> order1.getDateCreated().compareTo(order2.getDateCreated()));
     }
 
     public void setOpenERPOrders(List<OpenERPOrder> openERPOrders) {
