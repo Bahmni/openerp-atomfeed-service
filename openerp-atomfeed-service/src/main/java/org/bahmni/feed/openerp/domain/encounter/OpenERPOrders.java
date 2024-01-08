@@ -1,8 +1,6 @@
 package org.bahmni.feed.openerp.domain.encounter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class OpenERPOrders {
     private String id;
@@ -14,7 +12,19 @@ public class OpenERPOrders {
     }
 
     public List<OpenERPOrder> getOpenERPOrders() {
-        return openERPOrders;
+        return removeDuplicateOrders(openERPOrders);
+    }
+
+    public List<OpenERPOrder> removeDuplicateOrders(List<OpenERPOrder> orders) {
+        Map<String, OpenERPOrder> latestOrders = new LinkedHashMap<>();
+
+        for (OpenERPOrder order : orders) {
+            latestOrders.merge(order.getProductId(), order, (existingOrder, newOrder) ->
+                    (existingOrder.getDateCreated().before(newOrder.getDateCreated())) ? newOrder : existingOrder
+            );
+        }
+
+        return new ArrayList<>(latestOrders.values());
     }
 
     public void add(OpenERPOrder order) {
@@ -22,7 +32,6 @@ public class OpenERPOrders {
             openERPOrders = new ArrayList<>();
         }
         openERPOrders.add(order);
-        Collections.sort(openERPOrders, (order1, order2) -> order1.getDateCreated().compareTo(order2.getDateCreated()));
     }
 
     public void setOpenERPOrders(List<OpenERPOrder> openERPOrders) {
