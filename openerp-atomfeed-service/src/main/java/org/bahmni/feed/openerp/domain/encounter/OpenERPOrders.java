@@ -15,6 +15,7 @@ public class OpenERPOrders {
         return removeDuplicateOrders(openERPOrders);
     }
 
+    //Filters orders to keep only the latest action for each product. This is necessary for ensuring consistent and accurate quotation generation, particularly when order objects may not be in chronological order.
     public List<OpenERPOrder> removeDuplicateOrders(List<OpenERPOrder> orders) {
         Map<String, OpenERPOrder> latestOrders = new LinkedHashMap<>();
 
