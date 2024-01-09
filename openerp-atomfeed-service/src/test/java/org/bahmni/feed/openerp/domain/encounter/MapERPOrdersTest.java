@@ -1,4 +1,4 @@
-package org.bahmni.feed.openerp.domain.labOrderType.encounter;
+package org.bahmni.feed.openerp.domain.encounter;
 
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.domain.encounter.MapERPOrders;

@@ -1,7 +1,5 @@
-package org.bahmni.feed.openerp.domain.labOrderType.encounter;
+package org.bahmni.feed.openerp.domain.encounter;
 
-import org.bahmni.feed.openerp.domain.encounter.OpenERPOrder;
-import org.bahmni.feed.openerp.domain.encounter.OpenERPOrders;
 import org.junit.Test;
 import java.util.Arrays;
 import java.util.Date;
