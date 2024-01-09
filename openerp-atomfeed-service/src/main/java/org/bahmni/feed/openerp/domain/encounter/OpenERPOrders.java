@@ -1,7 +1,6 @@
 package org.bahmni.feed.openerp.domain.encounter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class OpenERPOrders {
     private String id;
@@ -13,7 +12,20 @@ public class OpenERPOrders {
     }
 
     public List<OpenERPOrder> getOpenERPOrders() {
-        return openERPOrders;
+        return removeDuplicateOrders(openERPOrders);
+    }
+
+    //Filters orders to keep only the latest action for each product. This is necessary for ensuring consistent and accurate quotation generation, particularly when order objects may not be in chronological order.
+    public List<OpenERPOrder> removeDuplicateOrders(List<OpenERPOrder> orders) {
+        Map<String, OpenERPOrder> latestOrders = new LinkedHashMap<>();
+
+        for (OpenERPOrder order : orders) {
+            latestOrders.merge(order.getProductId(), order, (existingOrder, newOrder) ->
+                    (existingOrder.getDateCreated().before(newOrder.getDateCreated())) ? newOrder : existingOrder
+            );
+        }
+
+        return new ArrayList<>(latestOrders.values());
     }
 
     public void add(OpenERPOrder order) {

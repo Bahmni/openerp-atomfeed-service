@@ -1,11 +1,14 @@
 package org.bahmni.feed.openerp.domain.encounter;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenMRSOrder {
     private OpenMRSConcept concept;
     private String action;
+    private Date dateCreated;
     private String uuid;
     private String orderType;
     private String orderNumber;
@@ -19,6 +22,10 @@ public class OpenMRSOrder {
 
     public String getAction() {
         return action;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
     }
 
     public String getUuid() {

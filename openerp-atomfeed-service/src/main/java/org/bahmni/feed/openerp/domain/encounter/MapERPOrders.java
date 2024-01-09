@@ -64,6 +64,7 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             openERPOrder.setProductId(drugOrder.getDrugUuid());
             openERPOrder.setProductName(drugOrder.getDrugName());
             openERPOrder.setAction(drugOrder.getAction());
+            openERPOrder.setDateCreated(drugOrder.getDateActivated());
             openERPOrder.setQuantity(drugOrder.getQuantity());
             openERPOrder.setQuantityUnits(drugOrder.getQuantityUnits());
             openERPOrder.setVoided(drugOrder.isVoided());
@@ -87,6 +88,7 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             openERPOrder.setProductId(order.getConceptUuid());
             openERPOrder.setProductName(order.getConceptName());
             openERPOrder.setAction(order.getAction());
+            openERPOrder.setDateCreated(order.getDateCreated());
             openERPOrder.setQuantity((double) 1);
             openERPOrder.setQuantityUnits("Unit(s)");
             openERPOrder.setVoided(order.isVoided());

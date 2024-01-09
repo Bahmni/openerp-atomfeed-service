@@ -1,5 +1,7 @@
 package org.bahmni.feed.openerp.domain.encounter;
 
+import java.util.Date;
+
 public class OpenERPOrder {
     private String orderId;
     private String previousOrderId;
@@ -18,6 +20,7 @@ public class OpenERPOrder {
     private String providerName;
     private String dispensed;
     private String conceptName;
+    private Date dateCreated;
 
 
     public String getEncounterId() {
@@ -51,8 +54,6 @@ public class OpenERPOrder {
     public void setType(String type) {
         this.type = type;
     }
-
-
 
     public String getDescription() {
         return description;
@@ -117,6 +118,14 @@ public class OpenERPOrder {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public String getPreviousOrderId() {
