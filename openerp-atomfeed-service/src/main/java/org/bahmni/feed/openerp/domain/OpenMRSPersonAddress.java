@@ -18,11 +18,12 @@ public class OpenMRSPersonAddress implements Jsonify {
     private String countyDistrict;
     private String stateProvince;
     private String country;
+    private String postalCode;
 
     public OpenMRSPersonAddress() {
     }
 
-    public OpenMRSPersonAddress(String address1, String address2, String address3, String cityVillage, String countyDistrict, String stateProvince, String country) {
+    public OpenMRSPersonAddress(String address1, String address2, String address3, String cityVillage, String countyDistrict, String stateProvince, String country, String postalCode) {
         this.address1 = address1;
         this.address2 = address2;
         this.address3 = address3;
@@ -30,6 +31,7 @@ public class OpenMRSPersonAddress implements Jsonify {
         this.countyDistrict = countyDistrict;
         this.stateProvince = stateProvince;
         this.country = country;
+        this.postalCode = postalCode;
     }
 
     public String getCountry() {
@@ -87,6 +89,10 @@ public class OpenMRSPersonAddress implements Jsonify {
     public void setStateProvince(String stateProvince) {
         this.stateProvince = stateProvince;
     }
+
+    public String getPostalCode() { return postalCode; }
+
+    public void setPostalCode(String postalCode) { this.postalCode = postalCode; }
 
     @Override
     public String toJsonString() {
