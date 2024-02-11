@@ -71,7 +71,7 @@
         "cityVillage": "cityVillage",
         "stateProvince": "stateProvince",
         "country": "country",
-        "postalCode": null,
+        "postalCode": "postalCode",
         "countyDistrict": "countyDistrict",
         "address3": "address3",
         "address4": null,

@@ -26,7 +26,7 @@ public class JsonifyTest {
         openMRSPersonAttributes.add(attr2);
         openMRSPersonAttributes.add(attr3);
         openMRSPersonAddress = new OpenMRSPersonAddress("address1", "address2", "address3", "cityVillage",
-                "countyDistrict", "stateProvince", "country");
+                "countyDistrict", "stateProvince", "country", "postalCode");
     }
 
     @Test

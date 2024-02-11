@@ -63,7 +63,7 @@ public class OpenERPCustomerServiceEventWorkerTest {
         addToParametersIfNotEmpty(parameters,"attributes", "{\"healthCenter\":\"2\",\"givenNameLocal\":\"राम बाई\",\"class\":\"ST\"}");
         addToParametersIfNotEmpty(parameters,"preferredAddress", "{\"address1\":\"address1\",\"address2\":\"address2\"," +
                 "\"address3\":\"address3\",\"cityVillage\":\"cityVillage\",\"countyDistrict\":\"countyDistrict\"," +
-                "\"stateProvince\":\"stateProvince\",\"country\":\"country\"}");
+                "\"stateProvince\":\"stateProvince\",\"country\":\"country\",\"postalCode\":\"postalCode\"}");
 
         addToParametersIfNotEmpty(parameters,"category", "create.customer");
 
