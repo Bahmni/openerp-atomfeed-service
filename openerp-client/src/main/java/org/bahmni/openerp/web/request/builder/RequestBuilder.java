@@ -3,6 +3,7 @@ package org.bahmni.openerp.web.request.builder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.template.Template;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.bahmni.openerp.web.OpenERPException;
 import org.bahmni.openerp.web.config.FreeMarkerConfig;
 import org.bahmni.openerp.web.request.OpenERPRequest;
@@ -53,10 +54,21 @@ public class RequestBuilder {
     }
 
     private static Object parseParameterValue(String value) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(value, Object.class);
-        } catch (Exception e) {
+       if (value.startsWith("{") && value.endsWith("}")) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                return mapper.readValue(value, Object.class);
+            } catch (Exception e) {
+                return value;
+            }
+        } else {
+            if(NumberUtils.isCreatable(value)){
+                try {
+                    return NumberUtils.createNumber(value);
+                } catch (Exception e) {
+                    return value;
+                }
+            }
             return value;
         }
     }

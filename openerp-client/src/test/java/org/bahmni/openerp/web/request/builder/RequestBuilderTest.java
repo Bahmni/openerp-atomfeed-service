@@ -1,14 +1,10 @@
 package org.bahmni.openerp.web.request.builder;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -218,6 +214,54 @@ public class RequestBuilderTest {
         String expected = "{\"name\":\"कृपा\"}";
 
         Parameter parameter = new Parameter("name", name, "string");
+        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+        parameters.add(parameter);
+        OpenERPRequest request = new OpenERPRequest("res.partner", "execute", parameters);
+
+        String requestXml = RequestBuilder.buildNewRestRequest(request);
+
+        comparingStringWithoutSpaces(requestXml, expected);
+    }
+
+    @Test
+    public void shouldReturnStringEvenWhenRESTRequestStartsWithANumber() throws Exception {
+
+        String name = "6 - DENTAL - Surgical Extraction of tooth including LA - 1200 - D";
+        String expected = "{\"name\":\"6 - DENTAL - Surgical Extraction of tooth including LA - 1200 - D\"}";
+
+        Parameter parameter = new Parameter("name", name, "string");
+        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+        parameters.add(parameter);
+        OpenERPRequest request = new OpenERPRequest("res.partner", "execute", parameters);
+
+        String requestXml = RequestBuilder.buildNewRestRequest(request);
+
+        comparingStringWithoutSpaces(requestXml, expected);
+    }
+
+    @Test
+    public void shouldReturnNumberWhenRESTRequestIsANumber() throws Exception {
+
+        String number = "62380";
+        String expected = "{\"number\":62380}";
+
+        Parameter parameter = new Parameter("number", number, "string");
+        ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+        parameters.add(parameter);
+        OpenERPRequest request = new OpenERPRequest("res.partner", "execute", parameters);
+
+        String requestXml = RequestBuilder.buildNewRestRequest(request);
+
+        comparingStringWithoutSpaces(requestXml, expected);
+    }
+
+    @Test
+    public void shouldReturnNumberWhenRESTRequestIsADecimal() throws Exception {
+
+        String number = "62380.9";
+        String expected = "{\"number\":62380.9}";
+
+        Parameter parameter = new Parameter("number", number, "string");
         ArrayList<Parameter> parameters = new ArrayList<Parameter>();
         parameters.add(parameter);
         OpenERPRequest request = new OpenERPRequest("res.partner", "execute", parameters);
