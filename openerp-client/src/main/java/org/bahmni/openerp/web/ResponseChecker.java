@@ -28,10 +28,11 @@ public class ResponseChecker {
         else if (jsonResponse.has("error")) {
             JsonNode error = jsonResponse.get("error");
             String errorMsg = error.get("message").asText();
-            int status = error.get("status").asInt();
+            int status = error.has("status") ? error.get("status").asInt() : error.get("code").asInt();
+            if (status == 100 || status == 403) throw new OdooSessionExpiredException();
             throw new OdooRestException(String.format("Error found in response. Response status: %s. Error message: %s", status, errorMsg));
         }
-        else{
+        else {
             throw new OdooRestException(String.format("Response is empty"));
         }
     }

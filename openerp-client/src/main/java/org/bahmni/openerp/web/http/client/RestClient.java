@@ -2,6 +2,7 @@ package org.bahmni.openerp.web.http.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bahmni.openerp.web.OdooSessionExpiredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.bahmni.openerp.web.OdooRestException;
@@ -72,6 +73,10 @@ public class RestClient {
             logger.error("Post call to {} failed", URL, e);
             logger.error("Post data: {}", requestBody);
             throw new RuntimeException("Post call to " + URL + " failed", e);
+        } catch (OdooSessionExpiredException e) {
+            logger.warn("Session expired for user {}. Recreating user session.", username);
+            login();
+            return post(URL, requestBody);
         }
     }
 
