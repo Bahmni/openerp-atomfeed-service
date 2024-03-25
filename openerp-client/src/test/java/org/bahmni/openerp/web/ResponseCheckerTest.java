@@ -77,4 +77,28 @@ public class ResponseCheckerTest {
         });
         assertEquals("Response is empty", exception.getMessage());
     }
+
+    @Test
+    public void shouldThrowOdooSessionExpiredExceptionWhenOdooSessionExpires() {
+        ResponseEntity<String> mockResponseEntity = mock(ResponseEntity.class);
+        when(mockResponseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+        when(mockResponseEntity.getBody()).thenReturn("{\"error\":{\"message\":\"Error message\",\"code\":100}}");
+
+        OdooSessionExpiredException exception = assertThrows(OdooSessionExpiredException.class, () -> {
+            responseChecker.checkResponse(mockResponseEntity);
+        });
+        assertEquals("Odoo Session Expired", exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowOdooSessionExpiredExceptionWhenStatusIsForbidden() {
+        ResponseEntity<String> mockResponseEntity = mock(ResponseEntity.class);
+        when(mockResponseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+        when(mockResponseEntity.getBody()).thenReturn("{\"error\":{\"message\":\"Error message\",\"status\":403}}");
+
+        OdooSessionExpiredException exception = assertThrows(OdooSessionExpiredException.class, () -> {
+            responseChecker.checkResponse(mockResponseEntity);
+        });
+        assertEquals("Odoo Session Expired", exception.getMessage());
+    }
 }
