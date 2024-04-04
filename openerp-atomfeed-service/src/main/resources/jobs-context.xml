@@ -142,13 +142,13 @@
         <bean id="openelisSaleOrderFeedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
             <property name="jobDetail" ref="openelisSaleOrderFeedQuartzJob" />
-            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="cronExpression" value="0 0 0 1 1 ?" />
             <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
         <bean id="openelisSaleOrderFeedFailedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
             <property name="jobDetail" ref="openelisSaleOrderFeedQuartzFailedJob" />
-            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="cronExpression" value="0 0 0 1 1 ?" />
             <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
 
