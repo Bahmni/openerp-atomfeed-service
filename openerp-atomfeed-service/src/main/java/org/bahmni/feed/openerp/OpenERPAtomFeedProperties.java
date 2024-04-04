@@ -21,6 +21,9 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     @Value("${scheduler.initial.delay:60000}")
     private String schedulerInitialDelay;
 
+    @Value("${scheduler.sale.order.cron.expression:0/30 * * * * ?}")
+    private String schedulerSaleOrderCronExpression;
+
     public String getSchedulerInitialDelay() {
         return schedulerInitialDelay;
     }
@@ -215,6 +218,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         HashMap<String, String> values = new HashMap<>();
         values.put("chunking.strategy",chunkingStrategy );
         values.put("scheduler.initial.delay", schedulerInitialDelay);
+        values.put("scheduler.sale.order.cron.expression", schedulerSaleOrderCronExpression);
         values.put("customer.feed.generator.uri",customFeedUri );
         values.put("openelis.saleorder.feed.generator.uri",elisSaleOrderFeedUri );
         values.put("drug.feed.generator.uri",drugFeedUri );

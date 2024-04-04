@@ -129,13 +129,13 @@
         <bean id="saleOrderFeedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
             <property name="jobDetail" ref="openerpSaleOrderFeedQuartzJob" />
-            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="cronExpression" value="${scheduler.sale.order.cron.expression}" />
             <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
         <bean id="saleOrderFeedFailedJobTrigger"
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
             <property name="jobDetail" ref="openerpSaleOrderFeedQuartzFailedJob" />
-            <property name="cronExpression" value="0/30 * * * * ?" />
+            <property name="cronExpression" value="${scheduler.sale.order.cron.expression}" />
             <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
 

@@ -48,5 +48,6 @@ openmrs.password=${OPENMRS_ATOMFEED_PASSWORD}
 openmrs.auth.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/rest/v1/session
 
 scheduler.initial.delay=60000
+scheduler.sale.order.cron.expression=0/30 * * * * ?
 
 referencedata.endpoint=http://${OPENMRS_HOST}:${OPENMRS_PORT}/reference-data
