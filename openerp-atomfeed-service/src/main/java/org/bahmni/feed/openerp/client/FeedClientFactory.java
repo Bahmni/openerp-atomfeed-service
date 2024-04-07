@@ -76,7 +76,6 @@ public class FeedClientFactory {
             case RADIOLOGY_TEST_FEED:
                 return atomFeedProperties.getAuthenticationURI();
             case REFERENCE_DATA_FEED: return atomFeedProperties.getReferenceDataEndpointURI();
-            case OPENELIS_SALEORDER_FEED: return atomFeedProperties.getOpenElisURI();
             default: return null;
         }
     }

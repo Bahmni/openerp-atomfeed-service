@@ -18,7 +18,6 @@ public class WorkerFactory {
         switch (jobName){
             case CUSTOMER_FEED: return new OpenERPCustomerServiceEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
             case SALEORDER_FEED: return new OpenERPSaleOrderEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
-            case OPENELIS_SALEORDER_FEED: return  new OpenElisSaleOrderEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.openElisWebClient(), urlPrefix);
             case DRUG_FEED: return new OpenERPDrugServiceEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
             case LAB_TEST_FEED: return new OpenERPLabTestServiceEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
             case LAB_PANEL_FEED: return new OpenERPLabPanelServiceEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);

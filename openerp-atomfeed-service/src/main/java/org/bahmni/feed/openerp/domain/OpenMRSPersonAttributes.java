@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.worker.Jsonify;
-import org.bahmni.feed.openerp.worker.OpenElisSaleOrderEventWorker;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class OpenMRSPersonAttributes extends ArrayList<OpenMRSPersonAttribute> i
                 }
             }
              catch (ClassCastException e){
-                 Logger logger = LoggerFactory.getLogger(OpenElisSaleOrderEventWorker.class);
+                 Logger logger = LoggerFactory.getLogger(OpenMRSPersonAttributes.class);
                  logger.error("Unable to convert personAttributes {} to json string. {}", openMRSPersonAttribute.getValue().getClass(), e.getMessage());
              }
 
@@ -65,7 +64,7 @@ public class OpenMRSPersonAttributes extends ArrayList<OpenMRSPersonAttribute> i
         try {
             personAttributesJson = ObjectMapperRepository.objectMapper.writeValueAsString(personAttributes);
         } catch (IOException e) {
-            Logger logger = LoggerFactory.getLogger(OpenElisSaleOrderEventWorker.class);
+            Logger logger = LoggerFactory.getLogger(OpenMRSPersonAttributes.class);
             logger.error("Unable to convert personAttributes hash to json string. {}", e.getMessage());
         }
 
