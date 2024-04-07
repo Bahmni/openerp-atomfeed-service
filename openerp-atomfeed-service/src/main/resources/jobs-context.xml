@@ -45,17 +45,6 @@
             <property name="concurrent" value="false"/>
         </bean>
 
-        <bean id="openelisSaleOrderFeedQuartzJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-            <property name="targetObject" ref="openelisSaleOrderFeedJob"/>
-            <property name="targetMethod" value="processFeed"/>
-            <property name="concurrent" value="false"/>
-        </bean>
-        <bean id="openelisSaleOrderFeedQuartzFailedJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-            <property name="targetObject" ref="openelisSaleOrderFeedJob"/>
-            <property name="targetMethod" value="processFailedEvents"/>
-            <property name="concurrent" value="false"/>
-        </bean>
-
         <bean id="eventRecordsNumberOffsetMarkerJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
             <property name="targetObject" ref="openerpEventsOptimizerJob"/>
             <property name="targetMethod" value="execute"/>
@@ -136,19 +125,6 @@
               class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
             <property name="jobDetail" ref="openerpSaleOrderFeedQuartzFailedJob" />
             <property name="cronExpression" value="${scheduler.sale.order.cron.expression}" />
-            <property name="startDelay" value="${scheduler.initial.delay}" />
-        </bean>
-
-        <bean id="openelisSaleOrderFeedJobTrigger"
-              class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-            <property name="jobDetail" ref="openelisSaleOrderFeedQuartzJob" />
-            <property name="cronExpression" value="0 0 0 1 1 ?" />
-            <property name="startDelay" value="${scheduler.initial.delay}" />
-        </bean>
-        <bean id="openelisSaleOrderFeedFailedJobTrigger"
-              class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-            <property name="jobDetail" ref="openelisSaleOrderFeedQuartzFailedJob" />
-            <property name="cronExpression" value="0 0 0 1 1 ?" />
             <property name="startDelay" value="${scheduler.initial.delay}" />
         </bean>
 
@@ -239,8 +215,6 @@
                     <ref bean="customerFeedfailedJobTrigger" />
                     <ref bean="saleOrderFeedJobTrigger" />
                     <ref bean="saleOrderFeedFailedJobTrigger" />
-                    <ref bean="openelisSaleOrderFeedJobTrigger" />
-                    <ref bean="openelisSaleOrderFeedFailedJobTrigger" />
                     <ref bean="eventRecordsNumberOffsetMarkerTrigger"/>
                     <ref bean="eventPublisherTrigger"/>
                     <ref bean="openerpLabTestFeedJobTrigger" />
@@ -292,10 +266,6 @@
         </bean>
 
         <bean id="openerpSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenERPSaleOrderFeedJob" scope="prototype" >
-            <constructor-arg ref="simpleFeedJob"/>
-        </bean>
-
-        <bean id="openelisSaleOrderFeedJob" class="org.bahmni.feed.openerp.job.OpenElisSaleOrderFeedJob" scope="prototype" >
             <constructor-arg ref="simpleFeedJob"/>
         </bean>
 

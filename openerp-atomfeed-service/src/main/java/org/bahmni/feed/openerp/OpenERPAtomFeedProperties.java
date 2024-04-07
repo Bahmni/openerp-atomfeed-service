@@ -41,10 +41,6 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     @Value("${customer.feed.generator.uri}")
     private String customFeedUri;
 
-
-    @Value("${openelis.saleorder.feed.generator.uri:}")
-    private String elisSaleOrderFeedUri;
-
     @Value("${drug.feed.generator.uri}")
     private String drugFeedUri;
 
@@ -62,7 +58,6 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         switch (feedJob){
             case CUSTOMER_FEED: return customFeedUri;
             case SALEORDER_FEED: return saleOrderFeedUri;
-            case OPENELIS_SALEORDER_FEED: return elisSaleOrderFeedUri;
             case DRUG_FEED: return drugFeedUri;
             case LAB_TEST_FEED: return labFeedUri;
             case LAB_PANEL_FEED: return labFeedUri;
@@ -158,27 +153,6 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         return openmrsAuthUri;
     }
 
-    @Value("${openelis.uri:}")
-    private String openElisUri;
-
-    public String getOpenElisURI() {
-        return openElisUri;
-    }
-
-    @Value("${openelis.user:}")
-    private String openElisUser;
-
-    public String getOpenElisUser() {
-        return openElisUser;
-    }
-
-    @Value("${openelis.password:}")
-    private String openElisPwd;
-
-    public String getOpenElisPassword() {
-        return openElisPwd;
-    }
-
     @Value("${openmrs.user}")
     private String openmrsUser;
 
@@ -220,7 +194,6 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         values.put("scheduler.initial.delay", schedulerInitialDelay);
         values.put("scheduler.sale.order.cron.expression", schedulerSaleOrderCronExpression);
         values.put("customer.feed.generator.uri",customFeedUri );
-        values.put("openelis.saleorder.feed.generator.uri",elisSaleOrderFeedUri );
         values.put("drug.feed.generator.uri",drugFeedUri );
         values.put("lab.feed.generator.uri",labFeedUri );
         values.put("saleorder.feed.generator.uri", saleOrderFeedUri);
@@ -232,8 +205,6 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         values.put("openerp.replyTimeoutInMilliseconds",openErpReplyTimeOut );
         values.put("openerp.maxFailedEvents",openErpMaxFailedEvents );
         values.put("openmrs.auth.uri",openmrsAuthUri );
-        values.put("openelis.uri",openElisUri );
-        values.put("openelis.user",openElisUser );
         values.put("openmrs.user",openmrsUser );
         values.put("referencedata.endpoint",refDataEndPt);
         values.put("saleable.feed.generator.uri", saleableFeedUri);

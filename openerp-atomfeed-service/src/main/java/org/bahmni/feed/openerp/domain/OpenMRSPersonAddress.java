@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.worker.Jsonify;
-import org.bahmni.feed.openerp.worker.OpenElisSaleOrderEventWorker;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.IOException;
@@ -99,7 +98,7 @@ public class OpenMRSPersonAddress implements Jsonify {
         try {
             return ObjectMapperRepository.objectMapper.writeValueAsString(this) ;
         } catch (IOException e) {
-            Logger logger = LoggerFactory.getLogger(OpenElisSaleOrderEventWorker.class);
+            Logger logger = LoggerFactory.getLogger(OpenMRSPersonAddress.class);
             logger.error("Unable to convert personAddress hash to json string. {}", e.getMessage());
         }
         return null;

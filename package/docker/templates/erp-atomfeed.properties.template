@@ -23,7 +23,6 @@ feed.author=openerp
 customer.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfeed/patient/recent
 saleorder.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfeed/encounter/recent
 referencedata.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/reference-data/ws/feed/recent
-openelis.saleorder.feed.generator.uri=http://${OPENELIS_HOST}:${OPENELIS_PORT}/openelis/ws/feed/patient/recent
 drug.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfeed/drug/recent
 lab.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfeed/lab/recent
 saleable.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfeed/saleable/recent
@@ -38,10 +37,6 @@ openerp.password=${ODOO_ATOMFEED_PASSWORD}
 openerp.connectionTimeoutInMilliseconds=5000
 openerp.replyTimeoutInMilliseconds=20000
 openerp.maxFailedEvents=1000
-
-openelis.user=${OPENELIS_ATOMFEED_USER}
-openelis.password=${OPENELIS_ATOMFEED_PASSWORD}
-openelis.uri=http://${OPENELIS_HOST}:${OPENELIS_PORT}/openelis/ws/feed/patient/recent
 
 openmrs.user=${OPENMRS_ATOMFEED_USER}
 openmrs.password=${OPENMRS_ATOMFEED_PASSWORD}
