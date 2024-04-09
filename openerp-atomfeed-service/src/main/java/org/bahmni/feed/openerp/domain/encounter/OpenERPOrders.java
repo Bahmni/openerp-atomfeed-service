@@ -15,27 +15,21 @@ public class OpenERPOrders {
         return removeDuplicateOrders(openERPOrders);
     }
 
-    //Filters orders to keep only the latest action for each product. This is necessary for ensuring consistent and accurate quotation generation, particularly when order objects may not be in chronological order.
+    //Filters orders to keep only the latest action for each product except for drugs. This is necessary for ensuring consistent and accurate quotation generation, particularly when order objects may not be in chronological order.
     public List<OpenERPOrder> removeDuplicateOrders(List<OpenERPOrder> orders) {
         Map<String, OpenERPOrder> latestOrders = new LinkedHashMap<>();
+        List<OpenERPOrder> finalOrders = new ArrayList<>();
         for (OpenERPOrder order : orders) {
             if("Drug Order".equals(order.getType())) {
-                String productId = order.getProductId();
-                if (latestOrders.containsKey(productId)) {
-                    OpenERPOrder existingOrder = latestOrders.get(productId);
-                    double updatedQuantity = "NEW".equals(order.getAction()) ? existingOrder.getQuantity() + order.getQuantity() : existingOrder.getQuantity() - order.getQuantity();
-                    existingOrder.setQuantity(updatedQuantity);
-                    latestOrders.put(productId, existingOrder);
-                } else {
-                    latestOrders.put(productId, order);
-                }
+                finalOrders.add(order);
             } else {
                 latestOrders.merge(order.getProductId(), order, (existingOrder, newOrder) ->
                         (existingOrder.getDateCreated().before(newOrder.getDateCreated())) ? newOrder : existingOrder
                 );
             }
         }
-        return new ArrayList<>(latestOrders.values());
+        finalOrders.addAll(latestOrders.values());
+        return finalOrders;
     }
 
     public void add(OpenERPOrder order) {
