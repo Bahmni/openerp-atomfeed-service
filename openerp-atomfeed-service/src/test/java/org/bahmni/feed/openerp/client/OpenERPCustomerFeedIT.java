@@ -98,6 +98,7 @@ public class OpenERPCustomerFeedIT {
     
     @Autowired
     private AtomFeedSpringTransactionSupport transactionSupport;
+    private Boolean isOdoo16;
 
     @Before
     public void setUp() throws URISyntaxException {
@@ -191,7 +192,7 @@ public class OpenERPCustomerFeedIT {
 
         when(openMRSAuthenticator.authenticate("mrsuser", "mrspwd", ObjectMapperRepository.objectMapper)).thenReturn(authenticationResponse);
         when(webClientProvider.getWebClient(any(Jobs.class))).thenReturn(webClient);
-        when(workerFactory.getWorker(Jobs.CUSTOMER_FEED, feedUrl, odooURL, openERPContext, "http://mrs.auth.uri")).thenReturn(openERPCustomerServiceEventWorker);
+        when(workerFactory.getWorker(Jobs.CUSTOMER_FEED, feedUrl, odooURL, openERPContext, "http://mrs.auth.uri", atomFeedProperties, isOdoo16)).thenReturn(openERPCustomerServiceEventWorker);
 
         AtomFeedClientHelper clientHelper = mock(AtomFeedClientHelper.class);
         AtomFeedClient atomFeedClient = new AtomFeedClient(allFeedsMock, allMarkersJdbc, allFailedEvents, FeedClientFactory.atomFeedProperties(atomFeedProperties),

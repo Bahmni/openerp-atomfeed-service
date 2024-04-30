@@ -27,6 +27,7 @@ openelis.saleorder.feed.generator.uri=http://${OPENELIS_HOST}:${OPENELIS_PORT}/o
 drug.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfeed/drug/recent
 lab.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfeed/lab/recent
 saleable.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfeed/saleable/recent
+drugorder.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/rest/v1/bahmnicore/drugOrders
 
 chunking.strategy=number
 

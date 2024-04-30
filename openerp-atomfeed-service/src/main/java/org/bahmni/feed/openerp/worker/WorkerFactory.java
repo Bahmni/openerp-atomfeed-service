@@ -1,5 +1,6 @@
 package org.bahmni.feed.openerp.worker;
 
+import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.job.Jobs;
 import org.bahmni.feed.openerp.client.WebClientProvider;
 import org.bahmni.openerp.web.client.strategy.OpenERPContext;
@@ -14,10 +15,10 @@ public class WorkerFactory {
     }
 
 
-    public EventWorker getWorker(Jobs jobName, String feedUrl, String odooURL, OpenERPContext openERPContext, String urlPrefix) {
+    public EventWorker getWorker(Jobs jobName, String feedUrl, String odooURL, OpenERPContext openERPContext, String urlPrefix, OpenERPAtomFeedProperties openERPAtomFeedProperties, Boolean isOdoo16) {
         switch (jobName){
             case CUSTOMER_FEED: return new OpenERPCustomerServiceEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
-            case SALEORDER_FEED: return new OpenERPSaleOrderEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
+            case SALEORDER_FEED: return new OpenERPSaleOrderEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix, openERPAtomFeedProperties, isOdoo16);
             case OPENELIS_SALEORDER_FEED: return  new OpenElisSaleOrderEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.openElisWebClient(), urlPrefix);
             case DRUG_FEED: return new OpenERPDrugServiceEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
             case LAB_TEST_FEED: return new OpenERPLabTestServiceEventWorker(feedUrl, odooURL, openERPContext, webClientProvider.getOpenMRSWebClient(), urlPrefix);
