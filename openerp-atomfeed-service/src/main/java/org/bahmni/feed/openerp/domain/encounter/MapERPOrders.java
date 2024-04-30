@@ -8,7 +8,9 @@ import org.bahmni.openerp.web.request.builder.Parameter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapERPOrders extends OpenMRSEncounterEvent {
 
@@ -76,8 +78,7 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
 
         }
 
-
-
+        Map<String, OpenERPOrder> latestOrders = new LinkedHashMap<>();
         for (OpenMRSOrder order : openMRSEncounter.getOrders()) {
             OpenERPOrder openERPOrder = new OpenERPOrder();
             openERPOrder.setVisitId(openMRSEncounter.getVisitUuid());
@@ -95,10 +96,22 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             openERPOrder.setType(order.getOrderType());
             openERPOrder.setVisitType(getVisitType());
             openERPOrder.setProviderName(providerName);
-            openERPOrders.add(openERPOrder);
-        }
 
+            latestOrders = findLatestOrder(openERPOrder, latestOrders);
+        }
+        for (OpenERPOrder latestOrder : latestOrders.values()) {
+            openERPOrders.add(latestOrder);
+        }
         return ObjectMapperRepository.objectMapper.writeValueAsString(openERPOrders);
+    }
+
+    //Filters orders to keep only the latest action for each product. This is necessary for ensuring consistent and accurate quotation generation, particularly when order objects may not be in chronological order.
+    private Map<String, OpenERPOrder> findLatestOrder(OpenERPOrder openERPOrder, Map<String, OpenERPOrder> latestOrders) {
+        String productId = openERPOrder.getProductId();
+        if (!latestOrders.containsKey(productId) || latestOrders.get(productId).getDateCreated().before(openERPOrder.getDateCreated())) {
+            latestOrders.put(productId, openERPOrder);
+        }
+        return latestOrders;
     }
 
     private String getVisitType() {
@@ -109,6 +122,4 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
         }
         return null;
     }
-
-
 }
