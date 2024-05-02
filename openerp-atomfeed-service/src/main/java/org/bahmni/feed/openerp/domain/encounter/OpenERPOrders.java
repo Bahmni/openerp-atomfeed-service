@@ -11,6 +11,9 @@ public class OpenERPOrders {
         this.openERPOrders = new ArrayList<OpenERPOrder>();
     }
 
+    public OpenERPOrders(){
+    }
+
     public List<OpenERPOrder> getOpenERPOrders() {
         return openERPOrders;
     }
