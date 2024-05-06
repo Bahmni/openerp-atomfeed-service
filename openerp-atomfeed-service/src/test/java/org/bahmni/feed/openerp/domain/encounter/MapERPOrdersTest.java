@@ -251,7 +251,7 @@ public class MapERPOrdersTest {
         ObjectMapper objectMapper = ObjectMapperRepository.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         Object jsonObject = objectMapper.readValue(response, Object.class);
         response = objectMapper.writeValueAsString(jsonObject);
-        when(openERPAtomFeedProperties.getDrugOrderFeedUri()).thenReturn("http://example.com/drugOrders");
+        when(openERPAtomFeedProperties.getDrugOrderUri()).thenReturn("http://example.com/drugOrders");
         String apiUrl = "http://example.com/drugOrders/27b361c5-93fe-4273-8b7d-a725fe7237c6";
         when(openMRSWebClient.get(URI.create(apiUrl))).thenReturn(previousOrder);
         when(visitAttribute.getValue()).thenReturn("OPD");

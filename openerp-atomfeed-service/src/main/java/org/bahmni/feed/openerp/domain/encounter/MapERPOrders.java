@@ -140,7 +140,7 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
     }
 
     private OpenERPOrder fetchPreviousDrugOrder(String previousOrderId) {
-        String apiUrl = openERPAtomFeedProperties.getDrugOrderFeedUri() + "/" + previousOrderId;
+        String apiUrl = openERPAtomFeedProperties.getDrugOrderUri() + "/" + previousOrderId;
         final ObjectMapper mapper = new ObjectMapper();
         try {
             String response = openMRSWebClient.get(URI.create(apiUrl));

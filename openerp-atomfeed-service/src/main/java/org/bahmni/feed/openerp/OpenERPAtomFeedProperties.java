@@ -58,8 +58,8 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     @Value("${saleable.feed.generator.uri}")
     private String saleableFeedUri;
 
-    @Value("${drugorder.feed.generator.uri}")
-    private String drugOrderFeedUri;
+    @Value("${drugorder.uri}")
+    private String drugOrderUri;
 
     public String getFeedUriForJob(Jobs feedJob) {
         switch (feedJob){
@@ -92,8 +92,8 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         }
     }
 
-    public String getDrugOrderFeedUri() {
-        return drugOrderFeedUri;
+    public String getDrugOrderUri() {
+        return drugOrderUri;
     }
 
     @Value("${openerp.host}")
@@ -232,7 +232,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         values.put("drug.feed.generator.uri",drugFeedUri );
         values.put("lab.feed.generator.uri",labFeedUri );
         values.put("saleorder.feed.generator.uri", saleOrderFeedUri);
-        values.put("drugorder.feed.generator.uri", drugOrderFeedUri);
+        values.put("drugorder.uri", drugOrderUri);
         values.put("openerp.host",openErpHost );
         values.put("openerp.port",openErpPort );
         values.put("openerp.database",openErpDatabase );
