@@ -58,6 +58,9 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     @Value("${saleable.feed.generator.uri}")
     private String saleableFeedUri;
 
+    @Value("${drugorder.uri}")
+    private String drugOrderUri;
+
     public String getFeedUriForJob(Jobs feedJob) {
         switch (feedJob){
             case CUSTOMER_FEED: return customFeedUri;
@@ -88,6 +91,11 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
             default: throw new RuntimeException("Can not identify endpoint URI for requested Job.");
         }
     }
+
+    public String getDrugOrderUri() {
+        return drugOrderUri;
+    }
+
     @Value("${openerp.host}")
     private String openErpHost;
 
@@ -224,6 +232,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         values.put("drug.feed.generator.uri",drugFeedUri );
         values.put("lab.feed.generator.uri",labFeedUri );
         values.put("saleorder.feed.generator.uri", saleOrderFeedUri);
+        values.put("drugorder.uri", drugOrderUri);
         values.put("openerp.host",openErpHost );
         values.put("openerp.port",openErpPort );
         values.put("openerp.database",openErpDatabase );

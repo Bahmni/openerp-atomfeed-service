@@ -1,5 +1,6 @@
 package org.bahmni.feed.openerp.worker;
 
+import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
@@ -17,21 +18,25 @@ import java.io.IOException;
 import java.net.URI;
 
 public class OpenERPSaleOrderEventWorker implements EventWorker {
+    private final Boolean isOdoo16;
     OpenERPContext openERPContext;
     private final String feedUrl;
     private final String odooURL;
     private final OpenMRSWebClient webClient;
     private final String urlPrefix;
+    private final OpenERPAtomFeedProperties openERPAtomFeedProperties;
 
 
     private static Logger logger = LoggerFactory.getLogger(OpenERPSaleOrderEventWorker.class);
 
-    public OpenERPSaleOrderEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix) {
+    public OpenERPSaleOrderEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix, OpenERPAtomFeedProperties openERPAtomFeedProperties, Boolean isOdoo16) {
         this.feedUrl = feedUrl;
         this.odooURL = odooURL;
         this.openERPContext = openERPContext;
         this.webClient = webClient;
         this.urlPrefix = urlPrefix;
+        this.openERPAtomFeedProperties = openERPAtomFeedProperties;
+        this.isOdoo16 = isOdoo16;
     }
 
     @Override
@@ -63,7 +68,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
         String visitContent = webClient.get(URI.create(urlPrefix + visitURL));
 
         OpenMRSVisit openMRSVisit = ObjectMapperRepository.objectMapper.readValue(visitContent, OpenMRSVisit.class);
-        MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit);
+        MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, webClient, openERPAtomFeedProperties, isOdoo16);
 
         OpenERPRequest erpRequest = new OpenERPRequest("atom.event.worker", "process_event", mapERPOrders.getParameters(event.getId(), event.getFeedUri(), feedUrl));
         if (event.getFeedUri() == null)

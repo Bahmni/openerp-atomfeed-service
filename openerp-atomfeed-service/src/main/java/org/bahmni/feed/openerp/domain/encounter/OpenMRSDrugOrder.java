@@ -17,6 +17,9 @@ public class OpenMRSDrugOrder {
     private String orderType;
     private Date dateActivated;
     private boolean voided;
+    private String encounterUuid;
+    private OpenMRSVisit visit;
+    private Provider provider;
 
     public OpenMRSConcept getConcept() {
         return concept;
@@ -74,12 +77,32 @@ public class OpenMRSDrugOrder {
         return getDosingInstructions() != null ? getDosingInstructions().getQuantityUnits() : null;
     }
 
+    public String getEncounterUuid() {
+        return encounterUuid;
+    }
+
+    public String getVisitUuid() {
+        return getVisit().getUuid();
+    }
+
+    public OpenMRSVisit getVisit() {
+        return visit;
+    }
+
     public boolean isVoided() {
         return voided;
     }
 
     public String getOrderType() {
         return orderType;
+    }
+
+    public String getProviderName() {
+        return getProvider().getName();
+    }
+
+    public Provider getProvider() {
+        return provider;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -112,6 +135,22 @@ public class OpenMRSDrugOrder {
 
         public String getQuantityUnits() {
             return quantityUnits;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class OpenMRSVisit {
+        private String uuid;
+        public String getUuid() {
+            return uuid;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public class Provider {
+        private String name;
+        public String getName() {
+            return name;
         }
     }
 }

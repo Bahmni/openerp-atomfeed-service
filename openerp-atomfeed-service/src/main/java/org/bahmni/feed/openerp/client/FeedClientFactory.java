@@ -46,7 +46,7 @@ public class FeedClientFactory {
         }
         try {
             String urlPrefix = getURLPrefix(jobName,openERPAtomFeedProperties);
-            EventWorker eventWorker = workerFactory.getWorker(jobName, feedUri, odooURL, openERPContext, urlPrefix);
+            EventWorker eventWorker = workerFactory.getWorker(jobName, feedUri, odooURL, openERPContext, urlPrefix, openERPAtomFeedProperties, isRestEnabled);
             return new AtomFeedClient(allFeeds, allMarkers, allFailedEvents, atomFeedProperties(openERPAtomFeedProperties), transactionManager, new URI(feedUri), eventWorker) ;
         } catch (URISyntaxException e) {
             throw new RuntimeException("error for uri:" + feedUri, e);
