@@ -147,7 +147,7 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             OpenMRSDrugOrder previousOrder = mapper.readValue(response, OpenMRSDrugOrder.class);
             OpenERPOrder order = new OpenERPOrder();
             order.setOrderId(previousOrder.getUuid());
-            order.setPreviousOrderId(previousOrder.getUuid());
+            order.setPreviousOrderId(previousOrder.getPreviousOrderUuid());
             order.setEncounterId(previousOrder.getEncounterUuid());
             order.setProductId(previousOrder.getDrugUuid());
             order.setProductName(previousOrder.getDrugName());
