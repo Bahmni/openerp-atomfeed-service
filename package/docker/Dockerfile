@@ -12,7 +12,7 @@ RUN yum install -y gettext nc postgresql
 
 ADD https://raw.githubusercontent.com/eficode/wait-for/v2.2.3/wait-for wait-for.sh
 
-COPY package/docker/bahmni-embedded-tomcat-10-1.0-SNAPSHOT.jar /opt/bahmni-erp-connect/lib/bahmni-erp-connect.jar
+ADD https://repo.mybahmni.org/packages/build/bahmni-embedded-tomcat-10-1.0-SNAPSHOT.jar /opt/bahmni-erp-connect/lib/bahmni-erp-connect.jar
 COPY openerp-atomfeed-service/target/openerp-atomfeed-service.war /etc/bahmni-erp-connect/openerp-atomfeed-service.war
 
 RUN mkdir -p ${WAR_DIRECTORY}
