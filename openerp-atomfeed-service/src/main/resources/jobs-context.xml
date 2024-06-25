@@ -6,7 +6,10 @@
 
         <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
             <property name="dataSource" ref="dataSource" />
-            <property name="changeLog" value="classpath:sql/db_migrations.xml" />
+            <property name="changeLog" value="classpath:sql/db_migrations_odoo_connect.xml" />
+            <property name="defaultSchema" value="public" />
+            <property name="databaseChangeLogTable" value="liquibasechangelog" />
+            <property name="databaseChangeLogLockTable" value="liquibasechangeloglock" />
         </bean>
 
         <bean id="jobFilter" class="org.bahmni.feed.openerp.job.JobFilter">
