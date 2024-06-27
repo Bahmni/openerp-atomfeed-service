@@ -52,3 +52,8 @@ scheduler.initial.delay=60000
 scheduler.sale.order.cron.expression=${SCHEDULER_SALE_ORDER_CRON_EXPRESSION:0/30 * * * * ?}
 
 referencedata.endpoint=http://${OPENMRS_HOST}:${OPENMRS_PORT}/reference-data
+
+spring.datasource.url=jdbc:postgresql://${ODOO_DB_SERVER}/odoo
+spring.datasource.username=${ODOO_DB_USERNAME}
+spring.datasource.password=${ODOO_DB_PASSWORD}
+spring.datasource.driver-class-name=org.postgresql.Driver
