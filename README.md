@@ -48,7 +48,7 @@ To run Liquibase migrations on the Vagrant machine:
 
 ## Building and Packaging the Docker Image
 
-To build the project locally, ensure your machine has `Java 11` installed. Docker images for [odoo-connect](https://hub.docker.com/r/bahmni/odoo-connect/tags) are built using [GitHub Actions](/.github/workflows). Resources to build the [bahmni/odoo-connect](https://hub.docker.com/r/bahmni/odoo-connect/tags) images can be found in the [package](/package/docker/Dockerfile) directory.
+To build the project locally, ensure your machine has `Java 17` installed. Docker images for [odoo-connect](https://hub.docker.com/r/bahmni/odoo-connect/tags) are built using [GitHub Actions](/.github/workflows). Resources to build the [bahmni/odoo-connect](https://hub.docker.com/r/bahmni/odoo-connect/tags) images can be found in the [package](/package/docker/Dockerfile) directory.
 
 To build and package the project locally, run:
 

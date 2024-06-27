@@ -13,8 +13,8 @@
     <packaging>pom</packaging>
     <url>http://maven.apache.org</url>
     <properties>
-        <java.version>11</java.version>
-        <spring.version>5.3.30</spring.version>
+        <java.version>17</java.version>
+        <spring.version>6.0.19</spring.version>
         <cglib.version>2.2.2</cglib.version>
         <quartz.version>2.3.2</quartz.version>
         <atomfeed.version>1.10.2-SNAPSHOT</atomfeed.version>
@@ -30,15 +30,15 @@
         <jackson.version>2.13.5</jackson.version>
         <httpcore.version>4.4.15</httpcore.version>
         <httpClient.version>4.5.13</httpClient.version>
-        <servlet-api.version>3.0.1</servlet-api.version>
+        <servlet-api.version>6.0.0</servlet-api.version>
         <slf4j.version>2.0.9</slf4j.version>
-        <logback.version>1.3.0</logback.version>
+        <logback.version>1.3.12</logback.version>
         <web-clients.version>0.94.4-SNAPSHOT</web-clients.version>
         <skipTests>false</skipTests>
     </properties>
     <dependencyManagement>
         <dependencies>
-             <dependency>
+            <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>2.6</version>
@@ -175,7 +175,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-webflux</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.13</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.springframework.boot</groupId>
@@ -241,8 +241,8 @@
                 <version>${logback.version}</version>
             </dependency>
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
                 <version>${servlet-api.version}</version>
                 <scope>provided</scope>
             </dependency>
@@ -348,7 +348,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <argLine>-Xmx512m -XX:MaxMetaspaceSize=512m</argLine>
+                    <argLine>
+                        -Xmx512m -XX:MaxMetaspaceSize=512m
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                    </argLine>
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
