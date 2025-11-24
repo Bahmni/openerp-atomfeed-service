@@ -2,7 +2,7 @@
 set +e
 
 run_sql() {
-  PGPASSWORD="${ODOO_DB_PASSWORD}" psql --host="${ODOO_DB_SERVER}" -U "${ODOO_DB_USERNAME}" -d odoo -t -c "$1"
+  PGPASSWORD="${ODOO_DB_PASSWORD}" psql --host="${ODOO_DB_SERVER}" -U "${ODOO_DB_USERNAME}" -d "${ODOO_DB_NAME}" -t -c "$1"
 }
 
 if [ $(run_sql "select count(*) from information_schema.tables where table_name='markers' and table_schema='public';") -gt 0 ]

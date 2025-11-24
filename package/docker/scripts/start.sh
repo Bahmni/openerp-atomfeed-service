@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-
+export ODOO_DB_NAME=${ODOO_DB_NAME:-odoo}
 echo "Waiting for ${ODOO_DB_SERVER}:5432 for 3600 seconds"
 sh wait-for.sh --timeout=3600 ${ODOO_DB_SERVER}:5432
 echo "[INFO] Substituting Environment Variables"
