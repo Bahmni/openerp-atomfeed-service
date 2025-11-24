@@ -8,3 +8,4 @@ envsubst < /opt/bahmni-erp-connect/etc/erp-atomfeed.properties.template > ${WAR_
 ./update_openmrs_host_port.sh
 echo "[INFO] Starting Application"
 java -jar $SERVER_OPTS $DEBUG_OPTS /opt/bahmni-erp-connect/lib/bahmni-erp-connect.jar
+
