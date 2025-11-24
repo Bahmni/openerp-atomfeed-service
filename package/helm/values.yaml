@@ -1,0 +1,47 @@
+global:
+  nodeSelector: {}
+  affinity: {}
+  tolerations: {}
+
+replicaCount: 1
+
+metadata:
+  labels:
+    environment: dev
+
+image:
+  repository: bahmni
+  name: odoo-connect
+  tag: latest
+
+config:
+  TZ: ""
+  ODOO_DB_SERVER: ""
+  OPENMRS_HOST: ""
+  OPENMRS_PORT: ""
+  OPENELIS_HOST: ""
+  OPENELIS_PORT: ""
+  ODOO_HOST: ""
+  ODOO_PORT: ""
+    
+secrets:
+  ODOO_DB_USERNAME: ""
+  ODOO_DB_PASSWORD: ""
+  OPENMRS_ATOMFEED_USER: ""
+  OPENMRS_ATOMFEED_PASSWORD: ""
+  OPENELIS_ATOMFEED_USER: ""
+  OPENELIS_ATOMFEED_PASSWORD: ""
+  ODOO_ATOMFEED_USER: ""
+  ODOO_ATOMFEED_PASSWORD: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+autoscaling:
+  enabled: false
+
+nodeSelector: {}
+affinity: {}
+tolerations: {}
