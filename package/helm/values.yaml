@@ -34,10 +34,6 @@ secrets:
   ODOO_ATOMFEED_USER: ""
   ODOO_ATOMFEED_PASSWORD: ""
 
-service:
-  type: ClusterIP
-  port: 80
-  targetPort: 80
 
 autoscaling:
   enabled: false
