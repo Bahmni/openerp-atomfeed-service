@@ -23,6 +23,7 @@ config:
   OPENELIS_PORT: ""
   ODOO_HOST: ""
   ODOO_PORT: ""
+  ODOO_DB_NAME: ""
     
 secrets:
   ODOO_DB_USERNAME: ""

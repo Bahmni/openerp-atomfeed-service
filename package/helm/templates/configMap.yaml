@@ -4,6 +4,7 @@ metadata:
   name: {{ .Chart.Name }}-config
 data:
   TZ: "{{ .Values.global.TZ }}"
+  ODOO_DB_NAME: "{{ .Values.config.ODOO_DB_NAME }}"
   ODOO_DB_SERVER: "{{ .Values.config.ODOO_DB_HOST }}"
   OPENMRS_HOST: "{{ .Values.config.OPENMRS_HOST }}"
   OPENMRS_PORT: "{{ .Values.config.OPENMRS_PORT }}"
