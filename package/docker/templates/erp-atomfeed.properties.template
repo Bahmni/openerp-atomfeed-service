@@ -2,7 +2,7 @@
 jdbc.driverClassName=org.postgresql.Driver
 jdbc.username=${ODOO_DB_USERNAME}
 jdbc.password=${ODOO_DB_PASSWORD}
-jdbc.url=jdbc:postgresql://${ODOO_DB_SERVER}/odoo
+jdbc.url=jdbc:postgresql://${ODOO_DB_SERVER}/${ODOO_DB_NAME}
 update.atomfeed.marker=false
 
 atomdb.show_sql=false
@@ -33,7 +33,7 @@ chunking.strategy=number
 
 openerp.port=${ODOO_PORT}
 openerp.host=${ODOO_HOST}
-openerp.database=odoo
+openerp.database=${ODOO_DB_NAME}
 openerp.user=${ODOO_ATOMFEED_USER}
 openerp.password=${ODOO_ATOMFEED_PASSWORD}
 openerp.connectionTimeoutInMilliseconds=5000
@@ -53,7 +53,7 @@ scheduler.sale.order.cron.expression=${SCHEDULER_SALE_ORDER_CRON_EXPRESSION:0/30
 
 referencedata.endpoint=http://${OPENMRS_HOST}:${OPENMRS_PORT}/reference-data
 
-spring.datasource.url=jdbc:postgresql://${ODOO_DB_SERVER}/odoo
+spring.datasource.url=jdbc:postgresql://${ODOO_DB_SERVER}/${ODOO_DB_NAME}
 spring.datasource.username=${ODOO_DB_USERNAME}
 spring.datasource.password=${ODOO_DB_PASSWORD}
 spring.datasource.driver-class-name=org.postgresql.Driver
