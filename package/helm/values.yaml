@@ -16,6 +16,7 @@ image:
 
 config:
   TZ: ""
+  IS_ODOO_16: true
   ODOO_DB_HOST: ""
   OPENMRS_HOST: ""
   OPENMRS_PORT: ""
