@@ -3,6 +3,9 @@ package org.bahmni.feed.openerp.domain;
 import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -87,5 +90,19 @@ public class OpenMRSPerson {
 
     public String getLocalName() {
         return StringUtils.join(Arrays.asList(attributes.getGivenLocalName(), attributes.getMiddleLocalName(), attributes.getFamilyLocalName()), " ").trim();
+    }
+
+    public Integer getAge() {
+        if (birthdate == null) {
+            return null;
+        }
+
+        LocalDate birthLocalDate = birthdate.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+
+        LocalDate today = LocalDate.now();
+
+        return Period.between(birthLocalDate, today).getYears();
     }
 }
