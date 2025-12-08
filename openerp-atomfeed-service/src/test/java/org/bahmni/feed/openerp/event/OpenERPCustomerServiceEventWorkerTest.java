@@ -60,6 +60,8 @@ public class OpenERPCustomerServiceEventWorkerTest {
         addToParametersIfNotEmpty(parameters,"ref", "GAN200066");
         addToParametersIfNotEmpty(parameters,"uuid", "d6729333-bc31-4886-a864-0a6e7ae570a9");
         addToParametersIfNotEmpty(parameters,"village", "cityVillage");
+        addToParametersIfNotEmpty(parameters,"sex", "M");
+        addToParametersIfNotEmpty(parameters,"age", "47");
         addToParametersIfNotEmpty(parameters,"attributes", "{\"healthCenter\":\"2\",\"givenNameLocal\":\"राम बाई\",\"class\":\"ST\"}");
         addToParametersIfNotEmpty(parameters,"preferredAddress", "{\"address1\":\"address1\",\"address2\":\"address2\"," +
                 "\"address3\":\"address3\",\"cityVillage\":\"cityVillage\",\"countyDistrict\":\"countyDistrict\"," +
