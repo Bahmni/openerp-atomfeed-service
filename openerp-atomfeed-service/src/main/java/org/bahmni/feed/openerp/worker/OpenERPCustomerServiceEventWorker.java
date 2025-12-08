@@ -76,6 +76,17 @@ public class OpenERPCustomerServiceEventWorker implements EventWorker {
             addToParametersIfNotEmpty(parameters, "village", village);
         }
         OpenMRSPerson person = openMRSPatient.getPerson();
+
+         // Add Sex (Gender)
+        if (person.getGender() != null && !person.getGender().isEmpty()) {
+            addToParametersIfNotEmpty(parameters, "sex", person.getGender());
+        }
+
+        // Add Age
+        if (person.getAge() != null) {
+            addToParametersIfNotEmpty(parameters, "age", String.valueOf(person.getAge()));
+        } 
+        
         if(person.getAttributes() != null){
             addToParametersIfNotEmpty(parameters,"attributes", person.getAttributes().toJsonString());
         }
