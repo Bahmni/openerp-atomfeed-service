@@ -4,11 +4,15 @@ public class Customer {
     private final String name;
     private final String ref;
     private final String village;
+    private final Integer age;
+    private final String sex;
 
-    public Customer(String name, String ref, String village) {
+    public Customer(String name, String ref, String village, Integer age, String sex) {
         this.name = name;
         this.ref = ref;
         this.village = village;
+        this.age = age;
+        this.sex = sex;
     }
 
     public String getName() {
@@ -17,6 +21,14 @@ public class Customer {
 
     public String getRef() {
         return ref;
+    }
+
+    public Integer getAge() { 
+        return age; 
+    }
+
+    public String getSex() { 
+        return sex; 
     }
 
     @Override
