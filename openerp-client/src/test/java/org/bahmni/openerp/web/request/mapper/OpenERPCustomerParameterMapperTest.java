@@ -27,11 +27,15 @@ public class OpenERPCustomerParameterMapperTest {
         String name = "Ram Singh";
         String patientId ="GAN12345";
         String village="Ganiyari";
-        Customer customer = new Customer(name,patientId,village);
+        String sex = "M";
+        Integer age = 30;
+        Customer customer = new Customer(name,patientId,village,age,sex);
 
         List<Parameter> expectedParams = asList(createParameter("name", name, "string"),
                 createParameter("ref", patientId, "string"),
-                createParameter("village", village, "string"));
+                createParameter("village", village, "string"),
+                createParameter("sex", sex, "string"),
+                createParameter("age", age.toString(), "integer"));
 
         OpenERPRequest expectedRequest = new OpenERPRequest("res.partner", "execute", expectedParams);
 
