@@ -13,12 +13,14 @@ import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.service.EventWorker;
+import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.net.URI;
 
 public class OpenERPSaleOrderEventWorker implements EventWorker {
     private final Boolean isOdoo16;
+    private final ApplicationContext applicationContext;
     OpenERPContext openERPContext;
     private final String feedUrl;
     private final String odooURL;
@@ -29,7 +31,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
     private static Logger logger = LoggerFactory.getLogger(OpenERPSaleOrderEventWorker.class);
 
-    public OpenERPSaleOrderEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix, OpenERPAtomFeedProperties openERPAtomFeedProperties, Boolean isOdoo16) {
+    public OpenERPSaleOrderEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix, OpenERPAtomFeedProperties openERPAtomFeedProperties, Boolean isOdoo16, ApplicationContext applicationContext) {
         this.feedUrl = feedUrl;
         this.odooURL = odooURL;
         this.openERPContext = openERPContext;
@@ -37,6 +39,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
         this.urlPrefix = urlPrefix;
         this.openERPAtomFeedProperties = openERPAtomFeedProperties;
         this.isOdoo16 = isOdoo16;
+        this.applicationContext = applicationContext;
     }
 
     @Override
