@@ -40,6 +40,11 @@
             <version>${web-clients.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.bahmni.module</groupId>
+            <artifactId>odoo-connect-extensions</artifactId>
+            <version>${odoo-connect-extension.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.ict4h</groupId>
             <artifactId>atomfeed-spring-server</artifactId>
             <version>${atomfeed.version}</version>

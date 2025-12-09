@@ -34,6 +34,7 @@
         <slf4j.version>2.0.9</slf4j.version>
         <logback.version>1.3.12</logback.version>
         <web-clients.version>1.1.0-SNAPSHOT</web-clients.version>
+        <odoo-connect-extension.version>1.1.0-SNAPSHOT</odoo-connect-extension.version>
         <skipTests>false</skipTests>
     </properties>
     <dependencyManagement>
