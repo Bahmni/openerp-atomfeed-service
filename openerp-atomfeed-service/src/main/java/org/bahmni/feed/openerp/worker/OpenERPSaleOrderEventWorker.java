@@ -96,6 +96,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
         List<SaleOrderParameterProvider> providers = new java.util.ArrayList<>(
                 applicationContext.getBeansOfType(SaleOrderParameterProvider.class).values()
         );
+        logger.debug("Found {} SaleOrderParameter providers", providers.size());
         if (providers.isEmpty()) {
             return java.util.Collections.emptyList();
         }
