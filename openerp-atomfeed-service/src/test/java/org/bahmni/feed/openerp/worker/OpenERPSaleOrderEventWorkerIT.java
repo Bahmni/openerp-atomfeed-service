@@ -88,7 +88,7 @@ public class OpenERPSaleOrderEventWorkerIT {
 
         String feedUrl = "http://xxxx/encounter/feed/2";
         String odooURL = "http://odooURL";
-        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,odooURL,openERPContext,webClient,"http://mrs.auth.uri", atomFeedProperties, isOdoo16);
+        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl,odooURL,openERPContext,webClient,"http://mrs.auth.uri", atomFeedProperties, isOdoo16, null);
         Event event = new Event("Test",feedUrl);
         eventWorker.process(event);
     }
@@ -120,7 +120,7 @@ public class OpenERPSaleOrderEventWorkerIT {
         String odooURL = "http://odooURL";
         Event event = new Event("Test", feedUrl);
 
-        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl, odooURL, openERPContext, webClient,"http://mrs.auth.uri", atomFeedProperties, isOdoo16);
+        OpenERPSaleOrderEventWorker eventWorker = new OpenERPSaleOrderEventWorker(feedUrl, odooURL, openERPContext, webClient,"http://mrs.auth.uri", atomFeedProperties, isOdoo16, null);
         eventWorker.process(event);
 
     }

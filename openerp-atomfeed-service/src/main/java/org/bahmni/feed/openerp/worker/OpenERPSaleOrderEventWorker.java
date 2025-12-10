@@ -1,6 +1,8 @@
 package org.bahmni.feed.openerp.worker;
 
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
+import org.bahmni.feed.openerp.extension.SaleOrderParameterExtension;
+import org.bahmni.odooconnect.extensions.SaleOrderParameterProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
@@ -17,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 public class OpenERPSaleOrderEventWorker implements EventWorker {
     private final Boolean isOdoo16;
@@ -77,7 +80,26 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
         if (event.getFeedUri() == null)
             erpRequest.addParameter(createParameter("is_failed_event", "1", "boolean"));
 
+        List<Parameter> extensionParams = getExtensionParams(openMRSEncounter);
+        if (!extensionParams.isEmpty()) {
+            for (Parameter parameter : extensionParams) {
+                erpRequest.addParameter(parameter);
+            }
+        }
         return erpRequest;
+    }
+
+    private List<Parameter> getExtensionParams(OpenMRSEncounter openMRSEncounter) {
+        if (applicationContext == null) {
+            return java.util.Collections.emptyList();
+        }
+        List<SaleOrderParameterProvider> providers = new java.util.ArrayList<>(
+                applicationContext.getBeansOfType(SaleOrderParameterProvider.class).values()
+        );
+        if (providers.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+        return SaleOrderParameterExtension.getExtensionParameters(openMRSEncounter, providers, webClient);
     }
 
     private Parameter createParameter(String name, String value, String type) {
