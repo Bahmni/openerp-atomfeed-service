@@ -100,7 +100,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
         if (providers.isEmpty()) {
             return java.util.Collections.emptyList();
         }
-        return SaleOrderParameterExtension.getExtensionParameters(openMRSEncounter, providers, webClient);
+        return SaleOrderParameterExtension.getExtensionParameters(openMRSEncounter, providers, webClient, urlPrefix);
     }
 
     private Parameter createParameter(String name, String value, String type) {

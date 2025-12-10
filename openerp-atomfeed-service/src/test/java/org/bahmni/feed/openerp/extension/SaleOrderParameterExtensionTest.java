@@ -1,6 +1,5 @@
 package org.bahmni.feed.openerp.extension;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
 import org.bahmni.feed.openerp.domain.encounter.OpenMRSEncounter;
@@ -21,6 +20,7 @@ import java.util.function.BiFunction;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -36,6 +36,7 @@ public class SaleOrderParameterExtensionTest {
     private SaleOrderParameterProvider mockProvider2;
 
     private OpenMRSEncounter testEncounter;
+    private String urlPrefix = "http://localhost:8080";
 
     @Before
     public void setUp() throws Exception {
@@ -53,7 +54,7 @@ public class SaleOrderParameterExtensionTest {
         List<SaleOrderParameterProvider> providers = Collections.emptyList();
 
         List<Parameter> result = SaleOrderParameterExtension.getExtensionParameters(
-                testEncounter, providers, webClient);
+                testEncounter, providers, webClient, urlPrefix);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -72,7 +73,7 @@ public class SaleOrderParameterExtensionTest {
                 .thenReturn(extensionParams);
 
         List<Parameter> result = SaleOrderParameterExtension.getExtensionParameters(
-                testEncounter, providers, webClient);
+                testEncounter, providers, webClient, urlPrefix);
 
         assertNotNull(result);
         assertEquals(2, result.size());
@@ -110,7 +111,7 @@ public class SaleOrderParameterExtensionTest {
                 .thenReturn(params2);
 
         List<Parameter> result = SaleOrderParameterExtension.getExtensionParameters(
-                testEncounter, providers, webClient);
+                testEncounter, providers, webClient, urlPrefix);
 
         assertNotNull(result);
         assertEquals(2, result.size());
@@ -124,7 +125,7 @@ public class SaleOrderParameterExtensionTest {
         when(mockProvider1.getAdditionalParams(any(SaleOrderContext.class), any(BiFunction.class)))
                 .thenReturn(Collections.emptyMap());
 
-        SaleOrderParameterExtension.getExtensionParameters(testEncounter, providers, webClient);
+        SaleOrderParameterExtension.getExtensionParameters(testEncounter, providers, webClient, urlPrefix);
 
         ArgumentCaptor<SaleOrderContext> contextCaptor = ArgumentCaptor.forClass(SaleOrderContext.class);
         verify(mockProvider1).getAdditionalParams(contextCaptor.capture(), any(BiFunction.class));
@@ -149,7 +150,7 @@ public class SaleOrderParameterExtensionTest {
                 .thenReturn(complexParams);
 
         List<Parameter> result = SaleOrderParameterExtension.getExtensionParameters(
-                testEncounter, providers, webClient);
+                testEncounter, providers, webClient, urlPrefix);
 
         assertNotNull(result);
         assertEquals(1, result.size());
@@ -172,7 +173,7 @@ public class SaleOrderParameterExtensionTest {
                 .thenReturn(mixedParams);
 
         List<Parameter> result = SaleOrderParameterExtension.getExtensionParameters(
-                testEncounter, providers, webClient);
+                testEncounter, providers, webClient, urlPrefix);
 
         assertNotNull(result);
         assertEquals(2, result.size());
@@ -200,7 +201,7 @@ public class SaleOrderParameterExtensionTest {
         when(mockProvider1.getAdditionalParams(any(SaleOrderContext.class), any(BiFunction.class)))
                 .thenThrow(new RuntimeException("Provider failed"));
 
-        SaleOrderParameterExtension.getExtensionParameters(testEncounter, providers, webClient);
+        SaleOrderParameterExtension.getExtensionParameters(testEncounter, providers, webClient, urlPrefix);
     }
 
     @Test
@@ -212,7 +213,7 @@ public class SaleOrderParameterExtensionTest {
                 .thenReturn(Collections.emptyMap());
 
         List<Parameter> result = SaleOrderParameterExtension.getExtensionParameters(
-                testEncounter, providers, webClient);
+                testEncounter, providers, webClient, urlPrefix);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -233,11 +234,102 @@ public class SaleOrderParameterExtensionTest {
                 .thenReturn(params2);
 
         List<Parameter> result = SaleOrderParameterExtension.getExtensionParameters(
-                testEncounter, providers, webClient);
+                testEncounter, providers, webClient, urlPrefix);
 
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals("field2", result.get(0).getName());
         assertEquals("value2", result.get(0).getValue());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowExceptionWhenProviderAttemptsToAccessNonOpenMRSEndpoint() throws Exception {
+        List<SaleOrderParameterProvider> providers = new ArrayList<>();
+        providers.add(mockProvider1);
+
+        // Provider tries to call a non-OpenMRS endpoint which should be blocked
+        when(mockProvider1.getAdditionalParams(any(SaleOrderContext.class), any(BiFunction.class)))
+                .thenAnswer(invocation -> {
+                    BiFunction<String, Class<?>, Object> getFunction = invocation.getArgument(1);
+                    // Attempt to access external URL - should fail
+                    getFunction.apply("/external/api/data", String.class);
+                    return Collections.emptyMap();
+                });
+
+        SaleOrderParameterExtension.getExtensionParameters(testEncounter, providers, webClient, urlPrefix);
+    }
+
+    @Test
+    public void shouldAllowProviderToAccessOpenMRSEndpoints() throws Exception {
+        List<SaleOrderParameterProvider> providers = new ArrayList<>();
+        providers.add(mockProvider1);
+
+        String mockResponse = "{\"data\": \"test\"}";
+        when(webClient.get(eq(urlPrefix + "/openmrs/ws/rest/v1/patient/123"), eq(String.class)))
+                .thenReturn(mockResponse);
+
+        when(mockProvider1.getAdditionalParams(any(SaleOrderContext.class), any(BiFunction.class)))
+                .thenAnswer(invocation -> {
+                    BiFunction<String, Class<?>, Object> getFunction = invocation.getArgument(1);
+                    // Access valid OpenMRS endpoint - should succeed
+                    Object response = getFunction.apply("/openmrs/ws/rest/v1/patient/123", String.class);
+                    assertEquals(mockResponse, response);
+
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("patientData", response);
+                    return params;
+                });
+
+        List<Parameter> result = SaleOrderParameterExtension.getExtensionParameters(
+                testEncounter, providers, webClient, urlPrefix);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        verify(webClient).get(eq(urlPrefix + "/openmrs/ws/rest/v1/patient/123"), eq(String.class));
+    }
+
+    @Test
+    public void shouldPrependUrlPrefixWhenCallingWebClient() throws Exception {
+        List<SaleOrderParameterProvider> providers = new ArrayList<>();
+        providers.add(mockProvider1);
+
+        String mockPatientData = "{\"uuid\": \"patient-123\"}";
+        when(webClient.get(eq("http://localhost:8080/openmrs/ws/rest/v1/patient/patient-uuid-456"), eq(String.class)))
+                .thenReturn(mockPatientData);
+
+        when(mockProvider1.getAdditionalParams(any(SaleOrderContext.class), any(BiFunction.class)))
+                .thenAnswer(invocation -> {
+                    BiFunction<String, Class<?>, Object> getFunction = invocation.getArgument(1);
+                    Object response = getFunction.apply("/openmrs/ws/rest/v1/patient/patient-uuid-456", String.class);
+
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("enrichedData", response);
+                    return params;
+                });
+
+        List<Parameter> result = SaleOrderParameterExtension.getExtensionParameters(
+                testEncounter, providers, webClient, urlPrefix);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+
+        // Verify that urlPrefix was prepended to the URL
+        verify(webClient).get(eq("http://localhost:8080/openmrs/ws/rest/v1/patient/patient-uuid-456"), eq(String.class));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldBlockAccessToRelativePathsOutsideOpenMRS() throws Exception {
+        List<SaleOrderParameterProvider> providers = new ArrayList<>();
+        providers.add(mockProvider1);
+
+        when(mockProvider1.getAdditionalParams(any(SaleOrderContext.class), any(BiFunction.class)))
+                .thenAnswer(invocation -> {
+                    BiFunction<String, Class<?>, Object> getFunction = invocation.getArgument(1);
+                    // Attempt to access path outside OpenMRS - should fail
+                    getFunction.apply("/admin/secrets", String.class);
+                    return Collections.emptyMap();
+                });
+
+        SaleOrderParameterExtension.getExtensionParameters(testEncounter, providers, webClient, urlPrefix);
     }
 }

@@ -18,10 +18,10 @@ import java.util.function.BiFunction;
 
 public class SaleOrderParameterExtension {
 
-    public static List<Parameter> getExtensionParameters(OpenMRSEncounter encounter, List<SaleOrderParameterProvider> providers, OpenMRSWebClient webClient) {
+    public static List<Parameter> getExtensionParameters(OpenMRSEncounter encounter, List<SaleOrderParameterProvider> providers, OpenMRSWebClient webClient, String urlPrefix) {
         List<Parameter> parameters = new ArrayList<>();
         for (SaleOrderParameterProvider provider : providers) {
-            Map<String, Object> additionalParams = provider.getAdditionalParams(getSaleOrderContext(encounter), buildOpenMRSGetFunction(webClient));
+            Map<String, Object> additionalParams = provider.getAdditionalParams(getSaleOrderContext(encounter), buildOpenMRSGetFunction(webClient, urlPrefix));
             try {
                 parameters.addAll(mapToParameters(additionalParams));
             } catch (Exception e) {
@@ -40,10 +40,13 @@ public class SaleOrderParameterExtension {
                 .build();
     }
 
-    private static BiFunction<String, Class<?>, Object> buildOpenMRSGetFunction(OpenMRSWebClient openMRSWebClient) {
+    private static BiFunction<String, Class<?>, Object> buildOpenMRSGetFunction(OpenMRSWebClient openMRSWebClient, String urlPrefix) {
         return (url, returnType) -> {
             try {
-                return openMRSWebClient.get(url, returnType);
+                if (!url.startsWith("/openmrs")) {
+                    throw new UnsupportedOperationException("Not allowed to invoked endpoints outside of OpenMRS");
+                }
+                return openMRSWebClient.get(urlPrefix + url, returnType);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
