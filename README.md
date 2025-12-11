@@ -59,4 +59,33 @@ docker build -f package/docker/Dockerfile --no-cache -t bahmni/odoo-connect:<tag
 
 For further information, you can watch the [YouTube video](https://www.youtube.com/watch?v=xyz) giving an overview of Atom Feed sync mechanism in Bahmni.
 
+## Adding Custom Extensions
+
+The service supports adding custom parameters to sale orders through an extension mechanism. This allows you to inject additional business logic without modifying the core codebase.
+
+### How to Use Extensions
+
+1. **Create your extension JAR**:
+   - Implement the `SaleOrderParameterProvider` interface from the `odoo-connect-extensions` dependency
+   - Create a Spring XML configuration file named `*-extensions.xml` that defines your extension beans
+   - Package everything as a JAR file
+
+2. **Extend the base Docker image**:
+   - Create a Dockerfile that extends the base odoo-connect image
+   - Copy your extension JAR into the container
+
+Sample Dockerfile:
+```dockerfile
+FROM bahmni/odoo-connect:latest
+
+COPY target/systemx-odooconnect-extension-*.jar ${WAR_DIRECTORY}/WEB-INF/lib/
+```
+
+Build your custom image:
+```shell
+docker build -t my-org/odoo-connect-custom:1.0 .
+```
+
+The service will automatically discover and load all extension beans during startup.
+
 By keeping this README comprehensive, detailed, and user-friendly, we aim to make the onboarding process for new developers smoother and enhance the understanding of our synchronization processes.

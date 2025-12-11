@@ -49,6 +49,7 @@
     <import resource="classpath:applicationContext-openerp-client.xml"/>
     <import resource="classpath:erp-atomfeed-context.xml"/>
     <import resource="classpath:jobs-context.xml"/>
+    <import resource="classpath*:*-extensions.xml"/>
 
 
     <context:component-scan base-package="org.bahmni.feed.openerp">

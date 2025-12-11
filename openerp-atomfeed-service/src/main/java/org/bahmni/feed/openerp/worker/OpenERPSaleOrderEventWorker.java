@@ -1,6 +1,8 @@
 package org.bahmni.feed.openerp.worker;
 
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
+import org.bahmni.feed.openerp.extension.SaleOrderParameterExtension;
+import org.bahmni.odooconnect.extensions.SaleOrderParameterProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
@@ -13,12 +15,15 @@ import org.bahmni.openerp.web.request.OpenERPRequest;
 import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.service.EventWorker;
+import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 public class OpenERPSaleOrderEventWorker implements EventWorker {
     private final Boolean isOdoo16;
+    private final ApplicationContext applicationContext;
     OpenERPContext openERPContext;
     private final String feedUrl;
     private final String odooURL;
@@ -29,7 +34,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
     private static Logger logger = LoggerFactory.getLogger(OpenERPSaleOrderEventWorker.class);
 
-    public OpenERPSaleOrderEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix, OpenERPAtomFeedProperties openERPAtomFeedProperties, Boolean isOdoo16) {
+    public OpenERPSaleOrderEventWorker(String feedUrl, String odooURL, OpenERPContext openERPContext, OpenMRSWebClient webClient, String urlPrefix, OpenERPAtomFeedProperties openERPAtomFeedProperties, Boolean isOdoo16, ApplicationContext applicationContext) {
         this.feedUrl = feedUrl;
         this.odooURL = odooURL;
         this.openERPContext = openERPContext;
@@ -37,6 +42,7 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
         this.urlPrefix = urlPrefix;
         this.openERPAtomFeedProperties = openERPAtomFeedProperties;
         this.isOdoo16 = isOdoo16;
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -74,7 +80,27 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
         if (event.getFeedUri() == null)
             erpRequest.addParameter(createParameter("is_failed_event", "1", "boolean"));
 
+        List<Parameter> extensionParams = getExtensionParams(openMRSEncounter);
+        if (!extensionParams.isEmpty()) {
+            for (Parameter parameter : extensionParams) {
+                erpRequest.addParameter(parameter);
+            }
+        }
         return erpRequest;
+    }
+
+    private List<Parameter> getExtensionParams(OpenMRSEncounter openMRSEncounter) {
+        if (applicationContext == null) {
+            return java.util.Collections.emptyList();
+        }
+        List<SaleOrderParameterProvider> providers = new java.util.ArrayList<>(
+                applicationContext.getBeansOfType(SaleOrderParameterProvider.class).values()
+        );
+        logger.debug("Found {} SaleOrderParameter providers", providers.size());
+        if (providers.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
+        return SaleOrderParameterExtension.getExtensionParameters(openMRSEncounter, providers, webClient, urlPrefix);
     }
 
     private Parameter createParameter(String name, String value, String type) {
