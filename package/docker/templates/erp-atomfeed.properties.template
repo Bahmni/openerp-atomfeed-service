@@ -28,6 +28,8 @@ drug.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfe
 lab.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfeed/lab/recent
 saleable.feed.generator.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/atomfeed/saleable/recent
 drugorder.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/rest/v1/bahmnicore/drugOrders
+order.attribute.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/rest/v1/order
+order.billingExempt.attributeName=${BILLING_EXEMPT_ATTRIBUTE_NAME}
 
 chunking.strategy=number
 

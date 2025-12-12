@@ -1,0 +1,12 @@
+[
+  {
+    "uuid": "attr-uuid-1",
+    "display": "IS_BILLING_EXEMPT: true",
+    "value": "true",
+    "attributeType": {
+      "uuid": "attr-type-uuid-1",
+      "display": "IS_BILLING_EXEMPT",
+      "name": "IS_BILLING_EXEMPT"
+    }
+  }
+]

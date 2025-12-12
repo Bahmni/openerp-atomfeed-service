@@ -61,6 +61,12 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
     @Value("${drugorder.uri}")
     private String drugOrderUri;
 
+    @Value("${order.attribute.uri}")
+    private String orderAttributeUri;
+
+    @Value("${order.billingExempt.attributeName:''}")
+    private String billingExemptAttributeName;
+
     public String getFeedUriForJob(Jobs feedJob) {
         switch (feedJob){
             case CUSTOMER_FEED: return customFeedUri;
@@ -94,6 +100,14 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
 
     public String getDrugOrderUri() {
         return drugOrderUri;
+    }
+
+    public String getOrderAttributeUri() {
+        return orderAttributeUri;
+    }
+
+    public String getBillingExemptAttributeName() {
+        return billingExemptAttributeName;
     }
 
     @Value("${openerp.host}")

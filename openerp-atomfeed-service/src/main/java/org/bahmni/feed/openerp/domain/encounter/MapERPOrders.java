@@ -1,6 +1,7 @@
 package org.bahmni.feed.openerp.domain.encounter;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
@@ -53,12 +54,20 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
     private String mapOpenERPOrders() throws IOException {
         OpenERPOrders openERPOrders = new OpenERPOrders(openMRSEncounter.getEncounterUuid());
         List<Provider> providers = openMRSEncounter.getProviders();
+        String billingExemptAttributeName = openERPAtomFeedProperties.getBillingExemptAttributeName();
+
 
         List<OpenMRSObservation> observations = openMRSEncounter.getObservations();
         String providerName = providers.size() != 0 ? providers.get(0).getName() : "";
         for (OpenMRSDrugOrder drugOrder : openMRSEncounter.getDrugOrders()) {
             if(drugOrder.getDrugNonCoded() != null) {
                 continue;
+            }
+            if (billingExemptAttributeName != null && !billingExemptAttributeName.trim().isEmpty()) {
+                if (checkIfBillingExempt(drugOrder.getUuid())) {
+                    logger.info("Skipping drug order {} - marked as billing exempt", drugOrder.getUuid());
+                    continue;
+                }
             }
             OpenERPOrder openERPOrder = new OpenERPOrder();
             openERPOrder.setVisitId(openMRSEncounter.getVisitUuid());
@@ -95,6 +104,12 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
 
         Map<String, OpenERPOrder> latestOrders = new LinkedHashMap<>();
         for (OpenMRSOrder order : openMRSEncounter.getOrders()) {
+            if (billingExemptAttributeName != null && !billingExemptAttributeName.trim().isEmpty()) {
+                if (checkIfBillingExempt(order.getUuid())) {
+                    logger.info("Skipping order {} - marked as billing exempt", order.getUuid());
+                    continue;
+                }
+            }
             OpenERPOrder openERPOrder = new OpenERPOrder();
             openERPOrder.setVisitId(openMRSEncounter.getVisitUuid());
             openERPOrder.setOrderId(order.getUuid());
@@ -185,5 +200,40 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             }
         }
         return null;
+    }
+
+
+    private boolean checkIfBillingExempt(String orderUuid) {
+        String attributeApiUrl = openERPAtomFeedProperties.getOrderAttributeUri() + "/" + orderUuid + "/attribute";
+        String billingExemptAttributeName = openERPAtomFeedProperties.getBillingExemptAttributeName();
+        try {
+            String attributeResponse = openMRSWebClient.get(URI.create(attributeApiUrl));
+            if (attributeResponse == null || attributeResponse.trim().isEmpty()) {
+                logger.warn("Attribute API returned null/empty for order {}. Treating as non-exempt.", orderUuid);
+                return false;
+            }
+            OpenMRSOrderAttributeResponse wrapper = ObjectMapperRepository.objectMapper.readValue(
+                attributeResponse, 
+                OpenMRSOrderAttributeResponse.class
+            );
+            List<OpenMRSOrderAttribute> attributes = wrapper.getResults();
+            if (attributes == null || attributes.isEmpty()) {
+                logger.debug("No attributes found for order {}. Treating as non-exempt.", orderUuid);
+                return false;
+            }
+            for (OpenMRSOrderAttribute attribute : attributes) {
+                if (attribute.isAttributeType(billingExemptAttributeName) && attribute.hasValueTrue()) {
+                    logger.info("Order {} is marked as billing exempt - skipping sync to Odoo", orderUuid);
+                    return true;
+                }
+            }
+            logger.debug("Order {} is not billing exempt - will be synced to Odoo", orderUuid);
+            return false;
+            
+        } catch (Exception e) {
+            logger.warn("Failed to fetch/parse attributes for order {}. Error: {}. Treating as non-exempt and continuing sync.",
+                        orderUuid, e.getMessage());
+            return false;
+        }
     }
 }
