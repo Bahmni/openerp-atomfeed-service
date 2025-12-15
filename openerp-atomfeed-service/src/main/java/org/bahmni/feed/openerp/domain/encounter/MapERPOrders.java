@@ -3,6 +3,7 @@ package org.bahmni.feed.openerp.domain.encounter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.common.util.StringUtils;
 import org.bahmni.feed.openerp.ObjectMapperRepository;
 import org.bahmni.feed.openerp.OpenERPAtomFeedProperties;
 import org.bahmni.feed.openerp.client.OpenMRSWebClient;
@@ -63,11 +64,10 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
             if(drugOrder.getDrugNonCoded() != null) {
                 continue;
             }
-            if (billingExemptAttributeName != null && !billingExemptAttributeName.trim().isEmpty()) {
-                if (checkIfBillingExempt(drugOrder.getUuid())) {
-                    logger.info("Skipping drug order {} - marked as billing exempt", drugOrder.getUuid());
-                    continue;
-                }
+            if (StringUtils.isNotBlank(billingExemptAttributeName) &&
+                    checkIfBillingExempt(drugOrder.getUuid())) {
+                logger.info("Skipping order {} - marked as billing exempt", drugOrder.getUuid());
+                continue;
             }
             OpenERPOrder openERPOrder = new OpenERPOrder();
             openERPOrder.setVisitId(openMRSEncounter.getVisitUuid());
@@ -104,11 +104,10 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
 
         Map<String, OpenERPOrder> latestOrders = new LinkedHashMap<>();
         for (OpenMRSOrder order : openMRSEncounter.getOrders()) {
-            if (billingExemptAttributeName != null && !billingExemptAttributeName.trim().isEmpty()) {
-                if (checkIfBillingExempt(order.getUuid())) {
-                    logger.info("Skipping order {} - marked as billing exempt", order.getUuid());
-                    continue;
-                }
+            if (StringUtils.isNotBlank(billingExemptAttributeName) &&
+                    checkIfBillingExempt(order.getUuid())) {
+                logger.info("Skipping order {} - marked as billing exempt", order.getUuid());
+                continue;
             }
             OpenERPOrder openERPOrder = new OpenERPOrder();
             openERPOrder.setVisitId(openMRSEncounter.getVisitUuid());
@@ -204,7 +203,7 @@ public class MapERPOrders extends OpenMRSEncounterEvent {
 
 
     private boolean checkIfBillingExempt(String orderUuid) {
-        String attributeApiUrl = openERPAtomFeedProperties.getOrderAttributeUri() + "/" + orderUuid + "/attribute";
+        String attributeApiUrl = openERPAtomFeedProperties.getOrderAttributeUri(orderUuid);
         String billingExemptAttributeName = openERPAtomFeedProperties.getBillingExemptAttributeName();
         try {
             String attributeResponse = openMRSWebClient.get(URI.create(attributeApiUrl));

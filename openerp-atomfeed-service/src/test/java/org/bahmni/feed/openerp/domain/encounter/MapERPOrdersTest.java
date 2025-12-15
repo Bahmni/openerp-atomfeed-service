@@ -296,7 +296,10 @@ public class MapERPOrdersTest {
 
         // Mock web client to return billing exempt true for all orders
         when(openMRSWebClient.get(any(URI.class))).thenReturn(billingExemptTrue);
-        when(openERPAtomFeedProperties.getOrderAttributeUri()).thenReturn("http://localhost:8050/openmrs/ws/rest/v1/order");
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
         when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
 
         MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
@@ -324,7 +327,10 @@ public class MapERPOrdersTest {
 
         // Mock web client to return billing exempt false
         when(openMRSWebClient.get(any(URI.class))).thenReturn(billingExemptFalse);
-        when(openERPAtomFeedProperties.getOrderAttributeUri()).thenReturn("http://localhost:8050/openmrs/ws/rest/v1/order");
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
         when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
 
         MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
@@ -352,7 +358,10 @@ public class MapERPOrdersTest {
 
         // Mock web client to return empty attributes
         when(openMRSWebClient.get(any(URI.class))).thenReturn(emptyAttributes);
-        when(openERPAtomFeedProperties.getOrderAttributeUri()).thenReturn("http://localhost:8050/openmrs/ws/rest/v1/order");
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
         when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
 
         MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
@@ -377,7 +386,10 @@ public class MapERPOrdersTest {
 
         // Mock web client to throw exception
         when(openMRSWebClient.get(any(URI.class))).thenThrow(new RuntimeException("API call failed"));
-        when(openERPAtomFeedProperties.getOrderAttributeUri()).thenReturn("http://localhost:8050/openmrs/ws/rest/v1/order");
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
         when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
 
         MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
@@ -402,7 +414,10 @@ public class MapERPOrdersTest {
 
         // Mock web client to return null
         when(openMRSWebClient.get(any(URI.class))).thenReturn(null);
-        when(openERPAtomFeedProperties.getOrderAttributeUri()).thenReturn("http://localhost:8050/openmrs/ws/rest/v1/order");
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
         when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
 
         MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
@@ -427,7 +442,10 @@ public class MapERPOrdersTest {
 
         // Mock web client to return empty string
         when(openMRSWebClient.get(any(URI.class))).thenReturn("");
-        when(openERPAtomFeedProperties.getOrderAttributeUri()).thenReturn("http://localhost:8050/openmrs/ws/rest/v1/order");
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
         when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
 
         MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);

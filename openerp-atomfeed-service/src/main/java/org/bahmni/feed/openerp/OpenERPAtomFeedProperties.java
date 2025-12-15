@@ -102,8 +102,8 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         return drugOrderUri;
     }
 
-    public String getOrderAttributeUri() {
-        return orderAttributeUri;
+    public String getOrderAttributeUri(String orderUuid) {
+        return orderAttributeUri + "/" + orderUuid + "/attribute";
     }
 
     public String getBillingExemptAttributeName() {
