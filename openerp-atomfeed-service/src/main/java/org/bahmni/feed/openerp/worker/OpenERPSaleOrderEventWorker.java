@@ -16,6 +16,7 @@ import org.bahmni.openerp.web.request.builder.Parameter;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.service.EventWorker;
 import org.springframework.context.ApplicationContext;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 import java.net.URI;
@@ -51,6 +52,10 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
             OpenERPRequest openERPRequest = mapRequest(event);
             if (!openERPRequest.shouldERPConsumeEvent())
                 return;
+            if (isOpenERPOrdersEmpty(openERPRequest)) {
+                logger.info("Skipping event processing as openERPOrders is empty");
+                return;
+            }
             openERPContext.execute(openERPRequest, odooURL);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -105,5 +110,21 @@ public class OpenERPSaleOrderEventWorker implements EventWorker {
 
     private Parameter createParameter(String name, String value, String type) {
         return new Parameter(name, value, type);
+    }
+
+    private boolean isOpenERPOrdersEmpty(OpenERPRequest openERPRequest) {
+        try {
+            for (Parameter parameter : openERPRequest.getParameters()) {
+                if ("orders".equals(parameter.getName())) {
+                    String ordersJson = parameter.getValue();
+                    JsonNode ordersNode = ObjectMapperRepository.objectMapper.readTree(ordersJson);
+                    JsonNode openERPOrders = ordersNode.get("openERPOrders");
+                    return openERPOrders != null && openERPOrders.isArray() && openERPOrders.size() == 0;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error checking if openERPOrders is empty", e);
+        }
+        return false;
     }
 }
