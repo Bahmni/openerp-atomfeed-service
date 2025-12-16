@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -280,6 +282,150 @@ public class MapERPOrdersTest {
         Assert.assertEquals(8, parameters.size());
         OpenERPOrders finalOrders = ObjectMapperRepository.objectMapper.readValue(parameters.get(6).getValue(), OpenERPOrders.class);
         Assert.assertEquals(4, finalOrders.getOpenERPOrders().size());
+    }
+
+    @Test
+    public void shouldSkipOrdersWithBillingExemptAttributeTrue() throws Exception {
+        String encounterJson = FileConverter.convertToString("encounterResourceForOrders.json");
+        OpenMRSEncounter openMRSEncounter = ObjectMapperRepository.objectMapper.readValue(encounterJson, OpenMRSEncounter.class);
+
+        String billingExemptTrue = FileConverter.convertToString("orderAttributesBillingExemptTrue.json");
+
+        when(openMRSWebClient.get(any(URI.class))).thenReturn(billingExemptTrue);
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
+        when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
+
+        MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
+        
+        try {
+            mapERPOrders.getParameters("event-id", "http://feed-uri", "http://feed-uri");
+        } catch (Exception e) {
+            fail("Should not throw exception when orders are billing exempt: " + e.getMessage());
+        }
+
+        verify(openMRSWebClient, atLeastOnce()).get(any(URI.class));
+    }
+
+    @Test
+    public void shouldProcessOrdersWithBillingExemptAttributeFalse() throws Exception {
+        String encounterJson = FileConverter.convertToString("encounterResourceForOrders.json");
+        OpenMRSEncounter openMRSEncounter = ObjectMapperRepository.objectMapper.readValue(encounterJson, OpenMRSEncounter.class);
+
+        String billingExemptFalse = FileConverter.convertToString("orderAttributesBillingExemptFalse.json");
+
+        when(openMRSWebClient.get(any(URI.class))).thenReturn(billingExemptFalse);
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
+        when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
+
+        MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
+        
+        try {
+            mapERPOrders.getParameters("event-id", "http://feed-uri", "http://feed-uri");
+        } catch (Exception e) {
+            fail("Should not throw exception: " + e.getMessage());
+        }
+
+        verify(openMRSWebClient, atLeastOnce()).get(any(URI.class));
+    }
+
+    @Test
+    public void shouldProcessOrdersWithNoAttributes() throws Exception {
+        String encounterJson = FileConverter.convertToString("encounterResourceForOrders.json");
+        OpenMRSEncounter openMRSEncounter = ObjectMapperRepository.objectMapper.readValue(encounterJson, OpenMRSEncounter.class);
+
+        String emptyAttributes = FileConverter.convertToString("orderAttributesEmpty.json");
+
+        when(openMRSWebClient.get(any(URI.class))).thenReturn(emptyAttributes);
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
+        when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
+
+        MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
+        
+        try {
+            mapERPOrders.getParameters("event-id", "http://feed-uri", "http://feed-uri");
+        } catch (Exception e) {
+            fail("Should not throw exception when no attributes: " + e.getMessage());
+        }
+
+        verify(openMRSWebClient, atLeastOnce()).get(any(URI.class));
+    }
+
+    @Test
+    public void shouldTreatOrderAsNonExemptWhenAttributeApiCallFails() throws Exception {
+        String encounterJson = FileConverter.convertToString("encounterResourceForOrders.json");
+        OpenMRSEncounter openMRSEncounter = ObjectMapperRepository.objectMapper.readValue(encounterJson, OpenMRSEncounter.class);
+
+        when(openMRSWebClient.get(any(URI.class))).thenThrow(new RuntimeException("API call failed"));
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
+        when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
+
+        MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
+        
+        try {
+            mapERPOrders.getParameters("event-id", "http://feed-uri", "http://feed-uri");
+        } catch (Exception e) {
+            fail("Should not throw exception when attribute API fails. Orders should be treated as non-exempt: " + e.getMessage());
+        }
+
+        verify(openMRSWebClient, atLeastOnce()).get(any(URI.class));
+    }
+
+    @Test
+    public void shouldTreatOrderAsNonExemptWhenAttributeApiReturnsNull() throws Exception {
+        String encounterJson = FileConverter.convertToString("encounterResourceForOrders.json");
+        OpenMRSEncounter openMRSEncounter = ObjectMapperRepository.objectMapper.readValue(encounterJson, OpenMRSEncounter.class);
+
+        when(openMRSWebClient.get(any(URI.class))).thenReturn(null);
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
+        when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
+
+        MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
+        
+        try {
+            mapERPOrders.getParameters("event-id", "http://feed-uri", "http://feed-uri");
+        } catch (Exception e) {
+            fail("Should not throw exception when attribute API returns null: " + e.getMessage());
+        }
+
+        verify(openMRSWebClient, atLeastOnce()).get(any(URI.class));
+    }
+
+    @Test
+    public void shouldTreatOrderAsNonExemptWhenAttributeApiReturnsEmptyString() throws Exception {
+        String encounterJson = FileConverter.convertToString("encounterResourceForOrders.json");
+        OpenMRSEncounter openMRSEncounter = ObjectMapperRepository.objectMapper.readValue(encounterJson, OpenMRSEncounter.class);
+
+        when(openMRSWebClient.get(any(URI.class))).thenReturn("");
+        when(openERPAtomFeedProperties.getOrderAttributeUri(anyString())).thenAnswer(invocation -> {
+            String orderUuid = invocation.getArgument(0);
+            return "http://localhost:8050/openmrs/ws/rest/v1/order/" + orderUuid + "/attribute";
+        });
+        when(openERPAtomFeedProperties.getBillingExemptAttributeName()).thenReturn("IS_BILLING_EXEMPT");
+
+        MapERPOrders mapERPOrders = new MapERPOrders(openMRSEncounter, openMRSVisit, openMRSWebClient, openERPAtomFeedProperties, false);
+        
+        try {
+            mapERPOrders.getParameters("event-id", "http://feed-uri", "http://feed-uri");
+        } catch (Exception e) {
+            fail("Should not throw exception when attribute API returns empty string: " + e.getMessage());
+        }
+
+        verify(openMRSWebClient, atLeastOnce()).get(any(URI.class));
     }
 
 }

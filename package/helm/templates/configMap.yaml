@@ -13,4 +13,5 @@ data:
   OPENELIS_PORT: "{{ .Values.config.OPENELIS_PORT }}"
   ODOO_HOST: "{{ .Values.config.ODOO_HOST }}"
   ODOO_PORT: "{{ .Values.config.ODOO_PORT }}"
+  BILLING_EXEMPT_ATTRIBUTE_NAME: "{{ .Values.config.BILLING_EXEMPT_ATTRIBUTE_NAME }}"
   
