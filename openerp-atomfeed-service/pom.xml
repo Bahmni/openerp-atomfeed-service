@@ -13,6 +13,13 @@
     <packaging>war</packaging>
     <name>openerp-atomfeed-service</name>
     <url>http://maven.apache.org</url>
+    
+    <licenses>
+        <license>
+            <name>Mozilla Public License Version 2.0</name>
+            <url>https://www.bahmni.org/license/mplv2hd</url>
+        </license>
+    </licenses>
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
