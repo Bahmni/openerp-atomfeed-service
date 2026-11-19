@@ -19,10 +19,10 @@ public class OpenMRSWebClient extends AbstractWebClient {
 
     public OpenMRSWebClient(OpenERPAtomFeedProperties properties) {
         connectionDetails = connectionDetails(properties);
-        httpClient = new HttpClient(connectionDetails, getauthenticator(connectionDetails, properties.getOpenMRSOAuthProperties()));
+        httpClient = new HttpClient(connectionDetails, getAuthenticator(connectionDetails, properties.getOpenMRSOAuthProperties()));
     }
 
-    private static Authenticator getauthenticator(ConnectionDetails connectionDetails, Properties oauth) {
+    private static Authenticator getAuthenticator(ConnectionDetails connectionDetails, Properties oauth) {
         if (!isOAuth2Enabled(oauth)) {
             return new OpenMRSLoginAuthenticator(connectionDetails);
         }
@@ -30,7 +30,7 @@ public class OpenMRSWebClient extends AbstractWebClient {
     }
 
     private static boolean isOAuth2Enabled(Properties oauth) {
-        return "true".equalsIgnoreCase(trimmedOrNull(oauth, "oauth2.enabled"));
+        return Boolean.parseBoolean(trimmedOrNull(oauth, "openmrs.oauth.enabled"));
     }
 
     private static Authenticator createOAuth2Authenticator(ConnectionDetails connectionDetails, Properties oauth) {
