@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.Properties;
 
 @Component
 public class OpenERPAtomFeedProperties implements OpenERPProperties {
@@ -213,6 +214,27 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
 
     public String getOpenMRSPassword() {
         return openmrsPwd;
+    }
+
+    @Value("${oauth2.enabled:}")
+    private String oauth2Enabled;
+
+    @Value("${openmrs.oauth.token.url:}")
+    private String openmrsOAuthTokenUrl;
+
+    @Value("${openmrs.oauth.client.id:}")
+    private String openmrsOAuthClientId;
+
+    @Value("${openmrs.oauth.client.secret:}")
+    private String openmrsOAuthClientSecret;
+
+    public Properties getOpenMRSOAuthProperties() {
+        Properties oauth = new Properties();
+        oauth.setProperty("oauth2.enabled", oauth2Enabled);
+        oauth.setProperty("openmrs.oauth.token.url", openmrsOAuthTokenUrl);
+        oauth.setProperty("openmrs.oauth.client.id", openmrsOAuthClientId);
+        oauth.setProperty("openmrs.oauth.client.secret", openmrsOAuthClientSecret);
+        return oauth;
     }
 
     @Value("${referencedata.endpoint}")
