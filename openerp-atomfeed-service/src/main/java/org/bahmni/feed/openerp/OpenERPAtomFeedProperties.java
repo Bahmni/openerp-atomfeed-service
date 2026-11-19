@@ -216,8 +216,8 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
         return openmrsPwd;
     }
 
-    @Value("${oauth2.enabled:}")
-    private String oauth2Enabled;
+    @Value("${openmrs.oauth.enabled:}")
+    private String openmrsOauthEnabled;
 
     @Value("${openmrs.oauth.token.url:}")
     private String openmrsOAuthTokenUrl;
@@ -230,7 +230,7 @@ public class OpenERPAtomFeedProperties implements OpenERPProperties {
 
     public Properties getOpenMRSOAuthProperties() {
         Properties oauth = new Properties();
-        oauth.setProperty("oauth2.enabled", oauth2Enabled);
+        oauth.setProperty("openmrs.oauth.enabled", openmrsOauthEnabled);
         oauth.setProperty("openmrs.oauth.token.url", openmrsOAuthTokenUrl);
         oauth.setProperty("openmrs.oauth.client.id", openmrsOAuthClientId);
         oauth.setProperty("openmrs.oauth.client.secret", openmrsOAuthClientSecret);
