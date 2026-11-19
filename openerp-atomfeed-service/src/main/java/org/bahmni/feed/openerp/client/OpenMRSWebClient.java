@@ -40,7 +40,7 @@ public class OpenMRSWebClient extends AbstractWebClient {
         validateOAuth2Settings(tokenUrl, clientId, clientSecret);
         OAuth2ConnectionDetails oAuth2ConnectionDetails = new OAuth2ConnectionDetails(connectionDetails.getAuthUrl(), tokenUrl,
                 clientId, clientSecret, null, connectionDetails.getConnectionTimeout(),
-                connectionDetails.getReadTimeout(), OAuth2ConnectionDetails.DEFAULT_EXPIRY_SKEW_SECONDS);
+                connectionDetails.getReadTimeout());
         return new OpenMRSOAuthLoginAuthenticator(oAuth2ConnectionDetails);
     }
 
