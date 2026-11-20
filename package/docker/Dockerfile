@@ -8,7 +8,7 @@ ENV SERVER_OPTS="-Xms512m -Xmx1024m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=
 ENV DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,address=8002,server=y,suspend=n"
 
 # Used by envsubst command for replacing environment values at runtime
-RUN yum install -y gettext nc postgresql
+RUN yum install -y gettext nc postgresql16
 
 ADD https://raw.githubusercontent.com/eficode/wait-for/v2.2.3/wait-for wait-for.sh
 
