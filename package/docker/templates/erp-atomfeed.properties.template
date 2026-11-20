@@ -50,6 +50,11 @@ openmrs.user=${OPENMRS_ATOMFEED_USER}
 openmrs.password=${OPENMRS_ATOMFEED_PASSWORD}
 openmrs.auth.uri=http://${OPENMRS_HOST}:${OPENMRS_PORT}/openmrs/ws/rest/v1/session
 
+openmrs.oauth.enabled=${OPENMRS_OAUTH_ENABLED}
+openmrs.oauth.token.url=${OPENMRS_OAUTH_TOKEN_URL}
+openmrs.oauth.client.id=${OPENMRS_OAUTH_CLIENT_ID}
+openmrs.oauth.client.secret=${OPENMRS_OAUTH_CLIENT_SECRET}
+
 scheduler.initial.delay=60000
 scheduler.sale.order.cron.expression=${SCHEDULER_SALE_ORDER_CRON_EXPRESSION:0/30 * * * * ?}
 
