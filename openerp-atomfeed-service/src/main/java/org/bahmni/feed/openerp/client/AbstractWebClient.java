@@ -29,7 +29,7 @@ public abstract class AbstractWebClient {
 
     public ClientCookies getCookies() {
         try {
-            return httpClient.getCookies(new URI(connectionDetails.getAuthUrl()));
+            return httpClient.refreshCookies(new URI(connectionDetails.getAuthUrl()));
         } catch (URISyntaxException e) {
             getLogger().error("Unable to get Cookies", e);
         }
